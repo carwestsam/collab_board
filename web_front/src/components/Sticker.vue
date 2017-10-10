@@ -1,6 +1,9 @@
 <template>
   <div
-    v-bind:style="styleObject" class="sticker">
+    v-bind:style="styleObject"
+    v-bind:class="{select: statusProps.selected}"
+    @click="select"
+    class="sticker">
     Work
   </div>
 </template>
@@ -14,6 +17,9 @@ export default {
         height: 100,
         left: 100,
         top: 100
+      },
+      statusProps: {
+        selected: false
       }
     }
   },
@@ -26,14 +32,26 @@ export default {
         top: this.styleProps.width + 'px'
       }
     }
+  },
+  methods: {
+    select: function () {
+      if (this.statusProps.selected === false) {
+        this.statusProps.selected = true
+      } else {
+        this.statusProps.selected = false
+      }
+    }
   }
 }
 </script>
 <style lang="scss">
-.sticker{
+.sticker {
   position: absolute;
   display: block;
-  color: pink;
   background-color: yellow;
+  user-select: none;
+  &.select {
+    box-shadow: 0px 0px 2px blue;
+  }
 }
 </style>
