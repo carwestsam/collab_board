@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <paper/>
-    <sticker/>
+    <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
+    <!-- <sticker/> -->
+    {{stickers}}
   </div>
 </template>
 
@@ -11,6 +13,12 @@ import Sticker from './components/Sticker'
 
 export default {
   name: 'app',
+  computed: {
+    stickers: function () {
+      console.log(this.$store.getters.stickers)
+      return this.$store.getters.stickers
+    }
+  },
   components: {
     Paper,
     Sticker

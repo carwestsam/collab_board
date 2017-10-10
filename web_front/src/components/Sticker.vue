@@ -10,13 +10,15 @@
 <script>
 export default {
   name: 'sticker',
+  props: ['sticker'],
   data () {
     return {
       styleProps: {
         width: 100,
         height: 100,
-        left: 100,
-        top: 100
+        left: this.sticker.left || 100,
+        top: this.sticker.top || 100,
+        bg_color: this.sticker.bg_color || 'yellow'
       },
       statusProps: {
         selected: false
@@ -27,9 +29,10 @@ export default {
     styleObject: function () {
       return {
         width: this.styleProps.width + 'px',
-        height: this.styleProps.width + 'px',
-        left: this.styleProps.width + 'px',
-        top: this.styleProps.width + 'px'
+        height: this.styleProps.height + 'px',
+        left: this.styleProps.left + 'px',
+        top: this.styleProps.top + 'px',
+        'background-color': this.styleProps.bg_color
       }
     }
   },
