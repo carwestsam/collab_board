@@ -15,9 +15,11 @@ export default {
   name: 'app',
   computed: {
     stickers: function () {
-      console.log(this.$store.getters.stickers)
       return this.$store.getters.stickers
     }
+  },
+  beforeCreate () {
+    this.$store.commit('randomStickers', [])
   },
   components: {
     Paper,
