@@ -3,7 +3,6 @@
     <paper/>
     <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
     <!-- <sticker/> -->
-    {{stickers}}
   </div>
 </template>
 
