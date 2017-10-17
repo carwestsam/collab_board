@@ -2,6 +2,7 @@
   <div id="app">
     <paper/>
     <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
+    <div id="holder"></div>
     <!-- <sticker/> -->
   </div>
 </template>

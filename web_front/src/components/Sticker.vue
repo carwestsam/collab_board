@@ -3,8 +3,9 @@
     v-bind:style="styleObject"
     v-bind:class="{select: statusProps.selected}"
     @click="select"
+    v-draggable="statusProps.draggable"
     class="sticker">
-    Work
+    Work {{dataProps.id.substring(0,6)}}
   </div>
 </template>
 <script>
@@ -21,7 +22,11 @@ export default {
         bg_color: this.sticker.bg_color || 'yellow'
       },
       statusProps: {
-        selected: false
+        selected: false,
+        draggable: false
+      },
+      dataProps: {
+        id: this.sticker.id
       }
     }
   },
@@ -40,8 +45,10 @@ export default {
     select: function () {
       if (this.statusProps.selected === false) {
         this.statusProps.selected = true
+        this.statusProps.draggable = true
       } else {
         this.statusProps.selected = false
+        this.statusProps.draggable = false
       }
     }
   }
