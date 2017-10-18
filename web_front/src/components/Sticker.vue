@@ -5,11 +5,14 @@
     @mouseup="select"
     v-draggable="statusProps.draggable"
     class="sticker">
-    Work {{dataProps.id.substring(0,6)}}
+    <!-- Work {{dataProps.id.substring(0,6)}} -->
+    {{dataProps.text}}
     <textarea
       ref="textInput"
-      v-bind:style="{display: this.statusProps.editing == true ? 'block' : 'none'}"
-      v-on:blur="outsideEdit"/>
+      v-bind:style="inputOverlayStyleObject"
+      v-on:blur="outsideEdit"
+      v-model="dataProps.text"
+      class="input-overlay"/>
     
     <button 
       v-if="this.statusProps.selected"
@@ -38,7 +41,8 @@ export default {
         editing: false
       },
       dataProps: {
-        id: this.sticker.id
+        id: this.sticker.id,
+        text: this.sticker.text
       }
     }
   },
@@ -50,6 +54,15 @@ export default {
         left: this.styleProps.left + 'px',
         top: this.styleProps.top + 'px',
         'background-color': this.styleProps.bg_color
+      }
+    },
+    inputOverlayStyleObject: function () {
+      return {
+        display: this.statusProps.editing === true ? 'block' : 'none',
+        width: this.styleProps.width + 'px',
+        height: this.styleProps.height + 'px'
+        // left: this.styleProps.left + 'px',
+        // top: this.styleProps.top + 'px'
       }
     }
   },
@@ -74,6 +87,7 @@ export default {
     },
     outsideEdit: function () {
       this.statusProps.editing = false
+      this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
     }
   }
 }
@@ -84,6 +98,8 @@ export default {
   display: block;
   background-color: yellow;
   user-select: none;
+  font-size: 18px;
+  line-height: 1.2em;
   &.select {
     box-shadow: 0px 0px 2px blue;
   }
@@ -93,5 +109,13 @@ export default {
   display: block;
   right: 0;
   bottom: 0;
+}
+.input-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 18px;
+  line-height: 1.2em;
+  text-align: center;
 }
 </style>

@@ -20,6 +20,7 @@ let getStore = function () {
             id: uuid(),
             type: 'sticker',
             bg_color: '#' + getRandomInt(0, 0xffffff).toString(16),
+            text: 'Hello World',
             left: getRandomInt(0, 1000),
             top: getRandomInt(0, 1000)
           })
@@ -36,6 +37,14 @@ let getStore = function () {
             state.stickers.splice(i, 1)
             state.stickers.push(sticker)
             return
+          }
+        }
+      },
+      updateStickerText: (state, {id, text}) => {
+        for (let i = 0; i < state.stickers.length; i++) {
+          if (state.stickers[i].id === id) {
+            state.stickers[i].text = text
+            break
           }
         }
       }
