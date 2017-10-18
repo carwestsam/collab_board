@@ -6,9 +6,20 @@
     v-draggable="statusProps.draggable"
     class="sticker">
     Work {{dataProps.id.substring(0,6)}}
+    <textarea
+      ref="textInput"
+      v-bind:style="{display: this.statusProps.editing == true ? 'block' : 'none'}"
+      v-on:blur="outsideEdit"/>
+    
+    <button 
+      v-if="this.statusProps.selected"
+      @mousedown.prevent="intoEdit"
+      class='edit-button'>Edit</button>
   </div>
 </template>
 <script>
+import Vue from 'vue'
+
 export default {
   name: 'sticker',
   props: ['sticker'],
@@ -23,7 +34,8 @@ export default {
       },
       statusProps: {
         selected: false,
-        draggable: false
+        draggable: false,
+        editing: false
       },
       dataProps: {
         id: this.sticker.id
@@ -51,6 +63,17 @@ export default {
         this.statusProps.selected = false
         this.statusProps.draggable = false
       }
+    },
+    intoEdit: function () {
+      this.statusProps.editing = true
+      // let self = this
+      Vue.nextTick(() => {
+        this.$refs.textInput.focus()
+      })
+      console.log('into')
+    },
+    outsideEdit: function () {
+      this.statusProps.editing = false
     }
   }
 }
@@ -64,5 +87,11 @@ export default {
   &.select {
     box-shadow: 0px 0px 2px blue;
   }
+}
+.edit-button {
+  position: absolute;
+  display: block;
+  right: 0;
+  bottom: 0;
 }
 </style>
