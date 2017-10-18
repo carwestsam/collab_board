@@ -2,7 +2,7 @@
   <div
     v-bind:style="styleObject"
     v-bind:class="{select: statusProps.selected}"
-    @click="select"
+    @mouseup="select"
     v-draggable="statusProps.draggable"
     class="sticker">
     Work {{dataProps.id.substring(0,6)}}
@@ -43,6 +43,7 @@ export default {
   },
   methods: {
     select: function () {
+      console.log('click')
       if (this.statusProps.selected === false) {
         this.statusProps.selected = true
         this.statusProps.draggable = true
