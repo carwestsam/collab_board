@@ -55,6 +55,7 @@ Vue.directive('draggable', {
       let sy = event.screenY
       let ot = parseInt(dup.style.top)
       let ol = parseInt(dup.style.left)
+      let moved = false
 
       app.appendChild(dup)
 
@@ -64,17 +65,20 @@ Vue.directive('draggable', {
         dup.style.top = (event.screenY - sy + ot) + 'px'
         console.log('mousemove', dup.style.left, dup.style.top, event.screenX, event.screenY, sx, sy, ot, ol)
         event.preventDefault()
+        moved = true
       }
       let MouseUp = function (event) {
         console.log('moustUp')
         dup.parentNode.removeChild(dup)
         console.log(parseInt(dup.style.top), parseInt(dup.style.left))
-        vnode.context.$store.commit('moveSticker',
-          {
-            id: vnode.context.dataProps.id,
-            top: parseInt(dup.style.top),
-            left: parseInt(dup.style.left)
-          })
+        if (moved === true) {
+          vnode.context.$store.commit('moveSticker',
+            {
+              id: vnode.context.dataProps.id,
+              top: parseInt(dup.style.top),
+              left: parseInt(dup.style.left)
+            })
+        }
         document.removeEventListener('mousemove', MouseMove)
         document.removeEventListener('mouseup', MouseUp)
       }
