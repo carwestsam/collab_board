@@ -44,10 +44,9 @@ function initDrag (vnode) {
     let ol = parseInt(dup.style.left)
     let moved = false
 
-    app.appendChild(dup)
-
     // console.log(event.screenX, event.screenY)
     let MouseMove = function (event) {
+      app.appendChild(dup)
       dup.style.left = (event.screenX - sx + ol) + 'px'
       dup.style.top = (event.screenY - sy + ot) + 'px'
       // console.log('mousemove', dup.style.left, dup.style.top, event.screenX, event.screenY, sx, sy, ot, ol)
@@ -55,10 +54,10 @@ function initDrag (vnode) {
       moved = true
     }
     let MouseUp = function (event) {
-      console.log('moustUp')
-      dup.parentNode.removeChild(dup)
+      console.log('draggable: mouseUp')
       // console.log(parseInt(dup.style.top), parseInt(dup.style.left))
       if (moved === true) {
+        dup.parentNode.removeChild(dup)
         vnode.context.$store.commit('moveSticker',
           {
             id: vnode.context.dataProps.id,
@@ -66,7 +65,7 @@ function initDrag (vnode) {
             left: parseInt(dup.style.left)
           })
       }
-      vnode.context.select()
+      // vnode.context.select()
       $this.removeEventListener('mousedown', MouseDown)
       document.removeEventListener('mousemove', MouseMove)
       document.removeEventListener('mouseup', MouseUp)

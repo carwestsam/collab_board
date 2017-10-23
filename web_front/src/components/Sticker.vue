@@ -2,8 +2,8 @@
   <div
     v-bind:style="styleObject"
     v-bind:class="{select: statusProps.selected}"
-    @mouseup="select"
     v-draggable="statusProps.draggable"
+    v-selectable="statusProps.selected"
     class="sticker">
     <!-- Work {{dataProps.id.substring(0,6)}} -->
     {{dataProps.text}}
@@ -68,14 +68,12 @@ export default {
   },
   methods: {
     select: function () {
-      console.log('click')
-      if (this.statusProps.selected === false) {
-        this.statusProps.selected = true
-        this.statusProps.draggable = true
-      } else {
-        this.statusProps.selected = false
-        this.statusProps.draggable = false
-      }
+      this.statusProps.selected = true
+      this.statusProps.draggable = true
+    },
+    unselect: function () {
+      this.statusProps.selected = false
+      this.statusProps.draggable = false
     },
     intoEdit: function () {
       this.statusProps.editing = true
@@ -102,6 +100,7 @@ export default {
   line-height: 1.2em;
   &.select {
     box-shadow: 0px 0px 2px blue;
+    z-index: 100;
   }
 }
 .edit-button {
