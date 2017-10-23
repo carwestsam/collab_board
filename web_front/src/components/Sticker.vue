@@ -37,7 +37,7 @@ export default {
       },
       statusProps: {
         selected: false,
-        draggable: false,
+        draggable: true,
         editing: false
       },
       dataProps: {
@@ -69,11 +69,9 @@ export default {
   methods: {
     select: function () {
       this.statusProps.selected = true
-      this.statusProps.draggable = true
     },
     unselect: function () {
       this.statusProps.selected = false
-      this.statusProps.draggable = false
     },
     intoEdit: function () {
       this.statusProps.editing = true
