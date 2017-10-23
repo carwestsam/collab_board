@@ -11,11 +11,18 @@ class SelectMgr {
     return selectMgr
   }
   selectElement (vnode) {
-    for (let idx = 0; idx < this.selected.length; idx++) {
-      this.selected[idx].context.unselect()
-    }
+    this.unselectAll()
     this.selected.push(vnode)
-    vnode.context.select()
+    if (typeof vnode.context.select === 'function') {
+      vnode.context.select()
+    }
+  }
+  unselectAll () {
+    for (let idx = 0; idx < this.selected.length; idx++) {
+      if (typeof this.selected[idx].context.unselect === 'function') {
+        this.selected[idx].context.unselect()
+      }
+    }
   }
 }
 
@@ -24,17 +31,25 @@ let selectMgr = new SelectMgr()
 Vue.directive('selectable', {
   bind: function (el, binding, vnode) {
     el.addEventListener('mouseup', function hoho () {
-      if (typeof vnode.context.statusProps.selected === 'undefined' ||
+      if (typeof vnode.context.statusProps === 'undefined') {
+        selectMgr.unselectAll()
+        return
+      }
+      if (
+          typeof vnode.context.statusProps === 'undefined' ||
+          typeof vnode.context.statusProps.selected === 'undefined' ||
           typeof vnode.context.select !== 'function' ||
           typeof vnode.context.unselect !== 'function'
         ) {
         console.error('selectable: missing required fields')
-        return
+        // return
       }
       if (vnode.context.statusProps.selected === true) {
         console.log('unselect')
-        vnode.context.unselect()
-      } else {
+        if (typeof vnode.context.unselect === 'function') {
+          vnode.context.unselect()
+        }
+      } else if (vnode.context.statusProps.selected === false) {
         console.log('select')
         selectMgr.selectElement(vnode)
       }
