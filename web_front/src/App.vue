@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <paper/>
+    <hand/>
     <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
     <div id="holder"></div>
     <!-- <sticker/> -->
@@ -10,6 +11,7 @@
 <script>
 import Paper from './components/Paper'
 import Sticker from './components/Sticker'
+import Hand from './components/Hand'
 
 export default {
   name: 'app',
@@ -23,7 +25,8 @@ export default {
   },
   components: {
     Paper,
-    Sticker
+    Sticker,
+    Hand
   }
 }
 </script>

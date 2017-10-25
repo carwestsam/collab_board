@@ -46,12 +46,14 @@ function initDrag (vnode) {
 
     // console.log(event.screenX, event.screenY)
     let MouseMove = function (event) {
-      app.appendChild(dup)
+      if (moved === false) {
+        app.appendChild(dup)
+        moved = true
+      }
       dup.style.left = (event.screenX - sx + ol) + 'px'
       dup.style.top = (event.screenY - sy + ot) + 'px'
       // console.log('mousemove', dup.style.left, dup.style.top, event.screenX, event.screenY, sx, sy, ot, ol)
-      event.preventDefault()
-      moved = true
+      // event.preventDefault()
     }
     let MouseUp = function (event) {
       console.log('draggable: mouseUp')
@@ -113,5 +115,37 @@ Vue.directive('draggable', {
       el.addEventListener('mousedown', initDrag(vnode))
     }
     return sticker
+  }
+})
+
+Vue.directive('dropable', {
+  bind: function (el, binding, vnode) {
+    let lastStatus = false
+    let MouseMove = function (event) {
+      // console.log(event)
+      // let e = event
+      // console.log(`client: (${e.clientX}, ${e.clientY}), page: (${e.pageX}, ${e.pageY}), screen: (${e.screenX}, ${e.screenY})`)
+      // debugger
+      let rect = el.getBoundingClientRect()
+      if (rect.left <= event.clientX && event.clientX <= rect.left + rect.width &&
+          rect.top <= event.clientY && event.clientY <= rect.top + rect.height) {
+        console.log('x in')
+        if (lastStatus === false) {
+          let ce = new CustomEvent('cb_mouseover')
+          el.dispatchEvent(ce)
+        }
+        lastStatus = true
+      } else {
+        if (lastStatus === true) {
+          let ce = new CustomEvent('cb_mouseout')
+          el.dispatchEvent(ce)
+        }
+        lastStatus = false
+      }
+    }
+    document.addEventListener('mousemove', MouseMove)
+    el.addEventListener('cb_mouseover', function () {
+      console.log('cb_mouseover')
+    })
   }
 })
