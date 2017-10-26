@@ -33,44 +33,54 @@ dragManager = new DragManager()
 
 function initDrag (vnode) {
   let MouseDown = function (event) {
-    console.log('mousedown')
-    let $this = this
-    let app = document.getElementById('app')
-    let dup = this.cloneNode(true)
+    console.log('dragstart')
+    // let $this = this
+    // let app = document.getElementById('app')
+    // let dup = this.cloneNode(true)
 
     let sx = event.screenX
     let sy = event.screenY
-    let ot = parseInt(dup.style.top)
-    let ol = parseInt(dup.style.left)
+    let ot = parseInt(this.style.top)
+    let ol = parseInt(this.style.left)
     let moved = false
+    let targetLeft = this.style.left
+    let targetTop = this.style.top
+
+    event.dataTransfer.effectAllowed = 'copy'
+    event.dataTransfer.setData('text', vnode.context.id)
 
     // console.log(event.screenX, event.screenY)
     let MouseMove = function (event) {
+      // console.log('mouseMove', event)
       if (moved === false) {
-        app.appendChild(dup)
+        // app.appendChild(dup)
         moved = true
       }
-      dup.style.left = (event.screenX - sx + ol) + 'px'
-      dup.style.top = (event.screenY - sy + ot) + 'px'
-      // console.log('mousemove', dup.style.left, dup.style.top, event.screenX, event.screenY, sx, sy, ot, ol)
+      // dup.style.left = (event.screenX - sx + ol) + 'px'
+      // dup.style.top = (event.screenY - sy + ot) + 'px'
+      if (!(event.screenX === 0 && event.screenY === 0)) {
+        targetLeft = (event.screenX - sx + ol) + 'px'
+        targetTop = (event.screenY - sy + ot) + 'px'
+        // console.log('mousemove', targetLeft, targetTop, event.screenX, event.screenY, sx, sy, ot, ol)
+      }
       // event.preventDefault()
     }
     let MouseUp = function (event) {
       console.log('draggable: mouseUp')
       // console.log(parseInt(dup.style.top), parseInt(dup.style.left))
       if (moved === true) {
-        dup.parentNode.removeChild(dup)
+        // dup.parentNode.removeChild(dup)
         vnode.context.$store.commit('moveSticker',
           {
             id: vnode.context.dataProps.id,
-            top: parseInt(dup.style.top),
-            left: parseInt(dup.style.left)
+            top: parseInt(targetTop),
+            left: parseInt(targetLeft)
           })
       }
       // vnode.context.select()
-      $this.removeEventListener('mousedown', MouseDown)
-      document.removeEventListener('mousemove', MouseMove)
-      document.removeEventListener('mouseup', MouseUp)
+      // $this.removeEventListener('mousedown', MouseDown)
+      document.removeEventListener('drag', MouseMove)
+      document.removeEventListener('dragend', MouseUp)
     }
     // const holderInstance = new PlaceHolderCtrl({propsData: {visibleBlock: {width: 20, height: 20, bgColor: 'blue'}}})
     // app.appendChild(holderInstance)
@@ -79,8 +89,8 @@ function initDrag (vnode) {
     // event.dataTransfer.setData('text', JSON.stringify(sticker))
 
     // debugger
-    document.addEventListener('mousemove', MouseMove)
-    document.addEventListener('mouseup', MouseUp)
+    document.addEventListener('drag', MouseMove)
+    document.addEventListener('dragend', MouseUp)
   }
   return MouseDown
 }
@@ -100,21 +110,29 @@ Vue.directive('draggable', {
     // let targetId = vnode.context.dataProps.id
     // let sticker = vnode.context.$store.getters.getStickerById(targetId)
     // el.addEventListener('dragstart', function (event) { dragManager.dragstart(event, sticker) })
+    el.setAttribute('draggable', '' + binding.value)
+    vnode.context.cb_draggable_inited = false
     if (binding.value === true) {
-      el.addEventListener('mousedown', initDrag(vnode))
+      el.addEventListener('dragstart', initDrag(vnode))
+      vnode.context.cb_draggable_inited = true
     }
     // el.addEventListener('click', () => console.log('click'))
     // console.log('context', vnode.context)
   },
   update: function (el, binding, vnode) {
-    // el.setAttribute('draggable', binding.value)
-    let targetId = vnode.context.dataProps.id
-    // console.log(vnode, vnode.context, vnode.context.$store, vnode.context.$store.getters)
-    let sticker = vnode.context.$store.getters.getStickerById(targetId)
-    if (binding.value === true) {
-      el.addEventListener('mousedown', initDrag(vnode))
+    el.setAttribute('draggable', '' + binding.value)
+    if (binding.value === true && vnode.context.cb_draggable_inited === false) {
+      el.addEventListener('dragstart', initDrag(vnode))
+      vnode.context.cb_draggable_inited = true
     }
-    return sticker
+    // el.setAttribute('draggable', binding.value)
+    // let targetId = vnode.context.dataProps.id
+    // // console.log(vnode, vnode.context, vnode.context.$store, vnode.context.$store.getters)
+    // let sticker = vnode.context.$store.getters.getStickerById(targetId)
+    // if (binding.value === true) {
+    //   el.addEventListener('mousedown', initDrag(vnode))
+    // }
+    // return sticker
   }
 })
 
@@ -144,7 +162,7 @@ Vue.directive('dropable', {
       }
     }
     document.addEventListener('mousemove', MouseMove)
-    el.addEventListener('cb_mouseover', function () {
+    document.addEventListener('cb_mouseover', function () {
       console.log('cb_mouseover')
     })
   }
