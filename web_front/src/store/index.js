@@ -9,7 +9,8 @@ Vue.use(Vuex)
 let getStore = function () {
   return new Vuex.Store({
     state: {
-      stickers: []
+      stickers: [],
+      onHand: []
     },
     mutations: {
       randomStickers: (state, data) => {
@@ -23,6 +24,14 @@ let getStore = function () {
             text: 'Hello World',
             left: getRandomInt(0, 1000),
             top: getRandomInt(0, 1000)
+          })
+        }
+        for (let i = 0; i < 2; i++) {
+          state.onHand.push({
+            id: uuid(),
+            type: 'sticker',
+            bg_color: '#' + getRandomInt(0, 0xffffff).toString(16),
+            text: 'on Hand'
           })
         }
       },
@@ -52,6 +61,9 @@ let getStore = function () {
     getters: {
       stickers: (state) => {
         return state.stickers
+      },
+      onHand: (state) => {
+        return state.onHand
       },
       getStickerById: (state) => (id) => {
         for (let i = 0; i < state.stickers.length; i++) {

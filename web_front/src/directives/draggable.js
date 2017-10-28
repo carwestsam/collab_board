@@ -47,7 +47,7 @@ function initDrag (vnode) {
     let targetTop = this.style.top
 
     event.dataTransfer.effectAllowed = 'copy'
-    event.dataTransfer.setData('text', vnode.context.id)
+    event.dataTransfer.setData('text', 'b')
 
     // console.log(event.screenX, event.screenY)
     let MouseMove = function (event) {
@@ -138,32 +138,13 @@ Vue.directive('draggable', {
 
 Vue.directive('dropable', {
   bind: function (el, binding, vnode) {
-    let lastStatus = false
-    let MouseMove = function (event) {
-      // console.log(event)
-      // let e = event
-      // console.log(`client: (${e.clientX}, ${e.clientY}), page: (${e.pageX}, ${e.pageY}), screen: (${e.screenX}, ${e.screenY})`)
-      // debugger
-      let rect = el.getBoundingClientRect()
-      if (rect.left <= event.clientX && event.clientX <= rect.left + rect.width &&
-          rect.top <= event.clientY && event.clientY <= rect.top + rect.height) {
-        console.log('x in')
-        if (lastStatus === false) {
-          let ce = new CustomEvent('cb_mouseover')
-          el.dispatchEvent(ce)
-        }
-        lastStatus = true
-      } else {
-        if (lastStatus === true) {
-          let ce = new CustomEvent('cb_mouseout')
-          el.dispatchEvent(ce)
-        }
-        lastStatus = false
-      }
-    }
-    document.addEventListener('mousemove', MouseMove)
-    document.addEventListener('cb_mouseover', function () {
-      console.log('cb_mouseover')
+    el.addEventListener('dragover', function (event) {
+      console.log('dragover')
+      event.preventDefault()
+    })
+    el.addEventListener('drop', function (event) {
+      event.preventDefault()
+      console.log('drop', event.dataTransfer.getData('text/plain'))
     })
   }
 })

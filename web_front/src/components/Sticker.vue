@@ -6,18 +6,20 @@
     v-selectable="statusProps.selected"
     class="sticker">
     <!-- Work {{dataProps.id.substring(0,6)}} -->
-    {{dataProps.text}}
-    <textarea
-      ref="textInput"
-      v-bind:style="inputOverlayStyleObject"
-      v-on:blur="outsideEdit"
-      v-model="dataProps.text"
-      class="input-overlay"/>
-    
-    <button 
-      v-if="this.statusProps.selected"
-      @mousedown.prevent="intoEdit"
-      class='edit-button'>Edit</button>
+    <div class="sticker-inner">
+      {{dataProps.text}}
+      <textarea
+        ref="textInput"
+        v-bind:style="inputOverlayStyleObject"
+        v-on:blur="outsideEdit"
+        v-model="dataProps.text"
+        class="input-overlay"/>
+      
+      <button 
+        v-if="this.statusProps.selected"
+        @mousedown.prevent="intoEdit"
+        class='edit-button'>Edit</button>
+      </div>
   </div>
 </template>
 <script>
@@ -33,7 +35,8 @@ export default {
         height: 100,
         left: this.sticker.left || 100,
         top: this.sticker.top || 100,
-        bg_color: this.sticker.bg_color || 'yellow'
+        bg_color: this.sticker.bg_color || 'yellow',
+        styleOffset: typeof this.sticker.styleOffset === 'undefined' ? true : this.sticker.styleOffset
       },
       statusProps: {
         selected: false,
@@ -48,13 +51,26 @@ export default {
   },
   computed: {
     styleObject: function () {
-      return {
+      console.log('compute style object:', this.sticker.styleOffset, this.styleProps.styleOffset)
+      let style = {
         width: this.styleProps.width + 'px',
         height: this.styleProps.height + 'px',
         left: this.styleProps.left + 'px',
         top: this.styleProps.top + 'px',
         'background-color': this.styleProps.bg_color
       }
+      if (this.styleProps.styleOffset === false) {
+        console.log('here')
+        style.display = 'inline-block'
+        style.postion = 'relative'
+        style.float = 'left'
+        style['z-index'] = '1001'
+        delete style.left
+        delete style.top
+      } else {
+        style.position = 'absolute'
+      }
+      return style
     },
     inputOverlayStyleObject: function () {
       return {
@@ -92,7 +108,7 @@ export default {
 </script>
 <style lang="scss">
 .sticker {
-  position: absolute;
+  // position: absolute;
   display: block;
   background-color: yellow;
   user-select: none;
@@ -101,6 +117,11 @@ export default {
   &.select {
     box-shadow: 0px 0px 2px blue;
     z-index: 100;
+  }
+  .sticker-inner {
+    width: 100%;
+    height: 100%;
+    position: relative
   }
 }
 .edit-button {
