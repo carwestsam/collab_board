@@ -23,6 +23,7 @@ class SelectMgr {
         this.selected[idx].context.unselect()
       }
     }
+    this.selected = []
   }
 }
 
@@ -57,3 +58,5 @@ Vue.directive('selectable', {
     })
   }
 })
+
+export default selectMgr

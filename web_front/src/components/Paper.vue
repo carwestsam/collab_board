@@ -1,7 +1,7 @@
 <template>
   <div
     class="paper"
-    v-selectable>paper</div>
+    v-selectable v-dropable>paper</div>
 </template>
 <style lang="scss">
 .paper{

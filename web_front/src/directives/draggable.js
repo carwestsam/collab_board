@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import selectMgr from './selectable'
 // import placeHolder from '../components/PlaceHolder'
 // const PlaceHolderCtrl = Vue.extend(placeHolder)
 
@@ -30,6 +31,12 @@ class DragManager {
 }
 
 dragManager = new DragManager()
+document.addEventListener('mousemove', function (event) {
+  let $app = document.getElementById('app')
+  console.log('x,y,cx,cy,ox,oy:', event.clientX, event.clientY, $app.scrollLeft, $app.scrollTop, event.offsetX, event.offsetY)
+  // console.log($app)
+  // debugger
+})
 
 function initDrag (vnode) {
   let MouseDown = function (event) {
@@ -38,15 +45,26 @@ function initDrag (vnode) {
     // let app = document.getElementById('app')
     // let dup = this.cloneNode(true)
 
-    let sx = event.screenX
-    let sy = event.screenY
-    let ot = parseInt(this.style.top)
-    let ol = parseInt(this.style.left)
+    let $app = document.getElementById('app')
+    // let sx = event.screenX
+    // let sy = event.screenY
+    // let ot = parseInt(this.style.top)
+    // let ol = parseInt(this.style.left)
     let moved = false
     let targetLeft = this.style.left
     let targetTop = this.style.top
+    // debugger
+    let offsetX = event.offsetX
+    let offsetY = event.offsetY
+    console.log(`$app.scrollLeft: ${$app.scrollLeft}`)
+    console.log(`$app.scrollTop: ${$app.scrollTop}`)
+    console.log(`event.clientX: ${event.clientX}`)
+    console.log(`event.clientY: ${event.clientY}`)
+    console.log(`offsetX: ${offsetX}`)
+    console.log(`offsetY: ${offsetY}`)
 
     event.dataTransfer.effectAllowed = 'copy'
+    console.log(selectMgr.selected)
     event.dataTransfer.setData('text', 'b')
 
     // console.log(event.screenX, event.screenY)
@@ -59,18 +77,18 @@ function initDrag (vnode) {
       // dup.style.left = (event.screenX - sx + ol) + 'px'
       // dup.style.top = (event.screenY - sy + ot) + 'px'
       if (!(event.screenX === 0 && event.screenY === 0)) {
-        targetLeft = (event.screenX - sx + ol) + 'px'
-        targetTop = (event.screenY - sy + ot) + 'px'
-        // console.log('mousemove', targetLeft, targetTop, event.screenX, event.screenY, sx, sy, ot, ol)
+        let $app = document.getElementById('app')
+        targetLeft = $app.scrollLeft + event.clientX - offsetX + 10 + 'px'
+        targetTop = $app.scrollTop + event.clientY - offsetY + 10 + 'px'
+        console.log('mousemove', targetLeft, targetTop)
       }
       // event.preventDefault()
     }
     let MouseUp = function (event) {
-      console.log('draggable: mouseUp')
+      console.log('draggable: mouseUp', event)
       // console.log(parseInt(dup.style.top), parseInt(dup.style.left))
       if (moved === true) {
-        // dup.parentNode.removeChild(dup)
-        vnode.context.$store.commit('moveSticker',
+        vnode.context.$store.commit('moveStickerToBoard',
           {
             id: vnode.context.dataProps.id,
             top: parseInt(targetTop),
@@ -139,7 +157,7 @@ Vue.directive('draggable', {
 Vue.directive('dropable', {
   bind: function (el, binding, vnode) {
     el.addEventListener('dragover', function (event) {
-      console.log('dragover')
+      // console.log('dragover')
       event.preventDefault()
     })
     el.addEventListener('drop', function (event) {

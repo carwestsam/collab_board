@@ -17,7 +17,11 @@ export default {
   name: 'app',
   computed: {
     stickers: function () {
-      return this.$store.getters.stickers
+      let stickers = this.$store.getters.stickers.map(sticker => {
+        sticker.styleOffset = true
+        return sticker
+      })
+      return stickers
     }
   },
   beforeCreate () {
