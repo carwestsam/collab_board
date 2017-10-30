@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import selectMgr from './selectable'
+import _ from 'lodash'
 
 let dragManager = null
 class DragManager {
@@ -26,6 +27,11 @@ class DragManager {
 }
 
 dragManager = new DragManager()
+
+document.addEventListener('scroll', function (e) {
+  console.log(e)
+  debugger
+})
 
 function initDrag (vnode) {
   let MouseDown = function (event) {
@@ -118,11 +124,27 @@ Vue.directive('dropable', {
       }
     }
 
+    let handleOverFunction = function () {
+      console.log('dragover')
+      // event.preventDefault()
+    }
+    let handleOver = _.throttle(handleOverFunction, 1000)
+
     el.addEventListener('dragover', function (event) {
       // console.log('dragover')
+      handleOver()
       event.preventDefault()
     })
+    el.addEventListener('dragenter', function () {
+      console.log('enter')
+      el.classList.add('dragover')
+    })
+    el.addEventListener('dragleave', function () {
+      console.log('leave')
+      el.classList.remove('dragover')
+    })
     el.addEventListener('drop', function (event) {
+      el.classList.remove('dragover')
       let e = event
       console.log('drop', event.dataTransfer.getData('text/plain'), event)
       callbackFunc.apply(this, [e])

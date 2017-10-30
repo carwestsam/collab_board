@@ -16,7 +16,7 @@ let getStore = function () {
       randomStickers: (state, data) => {
         let getRandomInt = obj.getRandomInt
         state.stickers = []
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 10; i++) {
           state.stickers.push({
             id: uuid(),
             type: 'sticker',

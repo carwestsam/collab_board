@@ -1,6 +1,8 @@
 <template>
   <div class='hand' v-dropable="onDrop">
-    <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
+    <div class='items'>
+      <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>      
+    </div>
   </div>
 </template>
 <script>
@@ -34,19 +36,69 @@ export default {
 </script>
 
 <style lang='scss'>
+
+@keyframes expand { 
+  0% {
+    width:  150px;
+  }
+  70% {
+    width: 200px;
+  }
+  100% {
+    width: 800px;
+  }
+}
+
+@keyframes lastblink {
+  0% {
+    opacity: 0;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .hand {
   display: block;
   position: fixed;
-  background-color: yellow;
+  background-color: gray;
+  opacity: 0.3;
 
-  width: 800px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
 
   bottom: 20%;
   left: 0; 
   right: 0; 
   margin-left: auto; 
   margin-right: auto;
+  align: center;
   z-index:1001;
+  .items {
+    display: none;
+  }
+
+  &:hover {
+    width: 800px;
+    height: 150px;
+    background-color: gray;
+    opacity: 1;
+    animation-delay: 0.2s;    
+    animation: expand .2s;
+  }
+
+  &:hover > .items {
+    animation-delay: 1s;
+    display: inline-block;
+    animation: lastblink 0.41s;
+  }
+
+  &.dragover {
+    // background-color: #333333;
+    opacity: 1;
+  }
 }
 </style>
