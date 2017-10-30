@@ -53,6 +53,17 @@ let getStore = function () {
         }
       },
       moveStickerToHand: (state, {id}) => {
+        for (let i = 0; i < state.stickers.length; i++) {
+          if (state.stickers[i].id === id) {
+            let sticker = _.cloneDeep(state.stickers[i])
+            sticker.id = uuid()
+            sticker.stack = 'hand'
+            console.log('updated:', JSON.stringify(sticker))
+            state.stickers.splice(i, 1)
+            state.stickers.push(sticker)
+            return
+          }
+        }
       },
       updateStickerText: (state, {id, text}) => {
         for (let i = 0; i < state.stickers.length; i++) {

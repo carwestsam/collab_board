@@ -59,4 +59,4 @@ Vue.directive('selectable', {
   }
 })
 
-export default selectMgr
+export default SelectMgr

@@ -7,7 +7,9 @@
     class="sticker">
     <!-- Work {{dataProps.id.substring(0,6)}} -->
     <div class="sticker-inner">
-      {{dataProps.text}}
+      <div class="content">
+      {{dataProps.text}}        
+      </div>
       <textarea
         ref="textInput"
         v-bind:style="inputOverlayStyleObject"
@@ -121,7 +123,11 @@ export default {
   .sticker-inner {
     width: 100%;
     height: 100%;
-    position: relative
+    position: relative;
+    .content {
+      width: 100%;
+      overflow: scroll;
+    }
   }
 }
 .edit-button {

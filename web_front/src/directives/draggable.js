@@ -1,13 +1,10 @@
 import Vue from 'vue'
 import selectMgr from './selectable'
-// import placeHolder from '../components/PlaceHolder'
-// const PlaceHolderCtrl = Vue.extend(placeHolder)
 
 let dragManager = null
 class DragManager {
   constructor () {
-    this.onHand = false
-    this.item = null
+    this.dropped = false
   }
   static getInstance () {
     if (dragManager === null) {
@@ -17,77 +14,52 @@ class DragManager {
   }
   dragstart (ev, item) {
     console.log('dragstart', ev, item)
-    // const stickerInstance = new StickerCtol({propsData: {sticker: item}})
-    // let domElement = document.createElement('div')
-    // domElement.setAttribute('id', 'dragElement')
-    // stickerInstance.$mount('#dragElement')
     console.log(ev)
-    // debugger
     ev.dataTransfer.setData('text/plain', JSON.stringify(item))
-    // ev.dataTransfer.setDragImage(null, 0, 0)
-    // ev.dataTransfer.
-    // console.log(sticker)
+  }
+  initDrag () {
+    this.dropped = false
+  }
+  finishDrop () {
+    this.dropped = true
   }
 }
 
 dragManager = new DragManager()
-document.addEventListener('mousemove', function (event) {
-  let $app = document.getElementById('app')
-  console.log('x,y,cx,cy,ox,oy:', event.clientX, event.clientY, $app.scrollLeft, $app.scrollTop, event.offsetX, event.offsetY)
-  // console.log($app)
-  // debugger
-})
 
 function initDrag (vnode) {
   let MouseDown = function (event) {
-    console.log('dragstart')
-    // let $this = this
-    // let app = document.getElementById('app')
-    // let dup = this.cloneNode(true)
-
-    let $app = document.getElementById('app')
-    // let sx = event.screenX
-    // let sy = event.screenY
-    // let ot = parseInt(this.style.top)
-    // let ol = parseInt(this.style.left)
+    console.log('dragstart', event.offsetX, event.offsetY)
+    dragManager.initDrag()
     let moved = false
     let targetLeft = this.style.left
     let targetTop = this.style.top
     // debugger
     let offsetX = event.offsetX
     let offsetY = event.offsetY
-    console.log(`$app.scrollLeft: ${$app.scrollLeft}`)
-    console.log(`$app.scrollTop: ${$app.scrollTop}`)
-    console.log(`event.clientX: ${event.clientX}`)
-    console.log(`event.clientY: ${event.clientY}`)
-    console.log(`offsetX: ${offsetX}`)
-    console.log(`offsetY: ${offsetY}`)
 
     event.dataTransfer.effectAllowed = 'copy'
     console.log(selectMgr.selected)
     event.dataTransfer.setData('text', 'b')
 
-    // console.log(event.screenX, event.screenY)
     let MouseMove = function (event) {
-      // console.log('mouseMove', event)
       if (moved === false) {
-        // app.appendChild(dup)
         moved = true
       }
       // dup.style.left = (event.screenX - sx + ol) + 'px'
       // dup.style.top = (event.screenY - sy + ot) + 'px'
       if (!(event.screenX === 0 && event.screenY === 0)) {
         let $app = document.getElementById('app')
-        targetLeft = $app.scrollLeft + event.clientX - offsetX + 10 + 'px'
-        targetTop = $app.scrollTop + event.clientY - offsetY + 10 + 'px'
-        console.log('mousemove', targetLeft, targetTop)
+        targetLeft = $app.scrollLeft + event.clientX - offsetX - 10 + 'px'
+        targetTop = $app.scrollTop + event.clientY - offsetY - 10 + 'px'
+        // console.log('mousemove', targetLeft, targetTop)
       }
       // event.preventDefault()
     }
     let MouseUp = function (event) {
       console.log('draggable: mouseUp', event)
       // console.log(parseInt(dup.style.top), parseInt(dup.style.left))
-      if (moved === true) {
+      if (dragManager.dropped === false && moved === true) {
         vnode.context.$store.commit('moveStickerToBoard',
           {
             id: vnode.context.dataProps.id,
@@ -100,13 +72,7 @@ function initDrag (vnode) {
       document.removeEventListener('drag', MouseMove)
       document.removeEventListener('dragend', MouseUp)
     }
-    // const holderInstance = new PlaceHolderCtrl({propsData: {visibleBlock: {width: 20, height: 20, bgColor: 'blue'}}})
-    // app.appendChild(holderInstance)
-    // var dup = document.createElement('div')
 
-    // event.dataTransfer.setData('text', JSON.stringify(sticker))
-
-    // debugger
     document.addEventListener('drag', MouseMove)
     document.addEventListener('dragend', MouseUp)
   }
@@ -115,19 +81,6 @@ function initDrag (vnode) {
 
 Vue.directive('draggable', {
   bind: function (el, binding, vnode) {
-    // var s = JSON.stringify
-    // el.innerHTML =
-    //   'name: ' + s(binding.name) + '<br>' +
-    //   'value: ' + s(binding.value) + '<br>' +
-    //   'expression: ' + s(binding.expression) + '<br>' +
-    //   'argument: ' + s(binding.arg) + '<br>' +
-    //   'modifiers: ' + s(binding.modifiers) + '<br>' +
-    //   'vnode keys: ' + Object.keys(vnode).join(', ')
-    // console.log(binding.value, binding.oldValue)
-    // el.setAttribute('draggable', binding.value)
-    // let targetId = vnode.context.dataProps.id
-    // let sticker = vnode.context.$store.getters.getStickerById(targetId)
-    // el.addEventListener('dragstart', function (event) { dragManager.dragstart(event, sticker) })
     el.setAttribute('draggable', '' + binding.value)
     vnode.context.cb_draggable_inited = false
     if (binding.value === true) {
@@ -141,28 +94,39 @@ Vue.directive('draggable', {
     el.setAttribute('draggable', '' + binding.value)
     if (binding.value === true && vnode.context.cb_draggable_inited === false) {
       el.addEventListener('dragstart', initDrag(vnode))
+      el.addEventListener('mousedown', function (e) {
+        console.log('mosedown, ', e.offsetX, e.offsetY)
+      })
       vnode.context.cb_draggable_inited = true
     }
-    // el.setAttribute('draggable', binding.value)
-    // let targetId = vnode.context.dataProps.id
-    // // console.log(vnode, vnode.context, vnode.context.$store, vnode.context.$store.getters)
-    // let sticker = vnode.context.$store.getters.getStickerById(targetId)
-    // if (binding.value === true) {
-    //   el.addEventListener('mousedown', initDrag(vnode))
-    // }
-    // return sticker
   }
 })
 
 Vue.directive('dropable', {
   bind: function (el, binding, vnode) {
+    let callbackFunc = binding.value
+    if (!(typeof callbackFunc === 'function' || typeof callbackFunc === 'undefined')) {
+      console.error('dropable should assign value of funciton or undefined')
+    }
+    if (typeof callbackFunc === 'undefined') {
+      callbackFunc = function () {}
+    } else {
+      callbackFunc = function () {
+        console.log('on callback')
+        dragManager.finishDrop()
+        binding.value.apply(this, arguments)
+      }
+    }
+
     el.addEventListener('dragover', function (event) {
       // console.log('dragover')
       event.preventDefault()
     })
     el.addEventListener('drop', function (event) {
-      event.preventDefault()
-      console.log('drop', event.dataTransfer.getData('text/plain'))
+      let e = event
+      console.log('drop', event.dataTransfer.getData('text/plain'), event)
+      callbackFunc.apply(this, [e])
+      e.preventDefault()
     })
   }
 })
