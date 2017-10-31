@@ -1,11 +1,34 @@
 import Vue from 'vue'
-import selectMgr from './selectable'
+import SelectMgr from './selectable'
 import _ from 'lodash'
+let selectMgr = SelectMgr.getInstance()
 
 let dragManager = null
+
+function isDefined (obj) {
+  return typeof obj !== 'undefined'
+}
+
+function isUndefined (obj) {
+  return typeof obj === 'undefined'
+}
+
+function isDeskItem (vnode) {
+  return isDefined(vnode.context.dataProps) && isDefined(vnode.context.dataProps.id)
+}
+
+function getItemId (vnode) {
+  if (!isDeskItem(vnode)) {
+    console.error('is not desktop Item for getItemId')
+  } else {
+    return vnode.context.dataProps.id
+  }
+}
+
 class DragManager {
   constructor () {
     this.dropped = false
+    this.dragFunctions = {}
   }
   static getInstance () {
     if (dragManager === null) {
@@ -13,97 +36,120 @@ class DragManager {
     }
     return dragManager
   }
-  dragstart (ev, item) {
-    console.log('dragstart', ev, item)
-    console.log(ev)
-    ev.dataTransfer.setData('text/plain', JSON.stringify(item))
+  onDragStart (id, event, $this) {
+    if (!isDefined(this.dragFunctions[id])) {
+      console.error('drag Start function not initilized')
+      return
+    }
+    this.dragFunctions[id].dragstart.call($this, event)
   }
   initDrag () {
     this.dropped = false
   }
+  bindDrag (el, vnode) {
+    let id = vnode.context.dataProps.id
+    if (isUndefined(this.dragFunctions[id])) {
+      el.addEventListener('dragstart', function (event) {
+        dragManager.onDragStart(id, event, this)
+      })
+      this.dragFunctions[id] = {}
+    }
+    let dragDelegate = this.dragFunctions[id]
+    initDrag(vnode, dragDelegate)
+  }
   finishDrop () {
     this.dropped = true
+  }
+  removeDocumentListeners (vnode, eventTypes) {
+    let id = ''
+    if (typeof vnode === 'string') {
+      id = vnode
+    } else {
+      id = getItemId(vnode)
+    }
+    eventTypes.map(et => {
+      document.removeEventListener(et, this.dragFunctions[id][et])
+      delete this.dragFunctions[id][et]
+    })
+  }
+  removeElementListeners (vnode, el, eventTypes) {
+    let id = ''
+    if (typeof vnode === 'string') {
+      id = vnode
+    } else {
+      id = getItemId(vnode)
+    }
+    eventTypes.map(et => {
+      el.removeEventListener(et, this.dragFunctions[id][et])
+      delete this.dragFunctions[id][et]
+    })
   }
 }
 
 dragManager = new DragManager()
 
-document.addEventListener('scroll', function (e) {
-  console.log(e)
-  debugger
-})
-
-function initDrag (vnode) {
-  let MouseDown = function (event) {
-    console.log('dragstart', event.offsetX, event.offsetY)
+function initDrag (vnode, delegate) {
+  let dragStart = function (event) {
+    let id = vnode.context.dataProps.id
     dragManager.initDrag()
+    let $this = this
     let moved = false
     let targetLeft = this.style.left
     let targetTop = this.style.top
-    // debugger
     let offsetX = event.offsetX
     let offsetY = event.offsetY
 
+    if (selectMgr.selected.length === 0) {
+      selectMgr.selectElement(vnode)
+    }
+
     event.dataTransfer.effectAllowed = 'copy'
-    console.log(selectMgr.selected)
-    event.dataTransfer.setData('text', 'b')
+    event.dataTransfer.setData('text/plain', vnode.context.dataProps.text)
 
     let MouseMove = function (event) {
       if (moved === false) {
         moved = true
       }
-      // dup.style.left = (event.screenX - sx + ol) + 'px'
-      // dup.style.top = (event.screenY - sy + ot) + 'px'
       if (!(event.screenX === 0 && event.screenY === 0)) {
         let $app = document.getElementById('app')
-        targetLeft = $app.scrollLeft + event.clientX - offsetX - 10 + 'px'
-        targetTop = $app.scrollTop + event.clientY - offsetY - 10 + 'px'
-        // console.log('mousemove', targetLeft, targetTop)
+        targetLeft = $app.scrollLeft + event.clientX - offsetX - 10
+        targetTop = $app.scrollTop + event.clientY - offsetY - 10
       }
-      // event.preventDefault()
     }
+
     let MouseUp = function (event) {
-      console.log('draggable: mouseUp', event)
-      // console.log(parseInt(dup.style.top), parseInt(dup.style.left))
       if (dragManager.dropped === false && moved === true) {
-        vnode.context.$store.commit('moveStickerToBoard',
+        selectMgr.selected[0].context.$store.commit('moveStickerToBoard',
           {
-            id: vnode.context.dataProps.id,
+            id: id,
             top: parseInt(targetTop),
             left: parseInt(targetLeft)
           })
-      }
-      // vnode.context.select()
-      // $this.removeEventListener('mousedown', MouseDown)
-      document.removeEventListener('drag', MouseMove)
-      document.removeEventListener('dragend', MouseUp)
-    }
+        selectMgr.unselectAll()
+        dragManager.dropped = true
 
-    document.addEventListener('drag', MouseMove)
-    document.addEventListener('dragend', MouseUp)
+        dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
+        dragManager.removeElementListeners(id, $this, ['dragstart'])
+      }
+    }
+    delegate.drag = MouseMove
+    delegate.dragend = MouseUp
+    document.addEventListener('drag', delegate.drag)
+    document.addEventListener('dragend', delegate.dragend)
   }
-  return MouseDown
+  delegate.dragstart = dragStart
 }
 
 Vue.directive('draggable', {
   bind: function (el, binding, vnode) {
     el.setAttribute('draggable', '' + binding.value)
-    vnode.context.cb_draggable_inited = false
     if (binding.value === true) {
-      el.addEventListener('dragstart', initDrag(vnode))
-      vnode.context.cb_draggable_inited = true
+      dragManager.bindDrag(el, vnode)
     }
-    // el.addEventListener('click', () => console.log('click'))
-    // console.log('context', vnode.context)
   },
   update: function (el, binding, vnode) {
-    el.setAttribute('draggable', '' + binding.value)
-    if (binding.value === true && vnode.context.cb_draggable_inited === false) {
-      el.addEventListener('dragstart', initDrag(vnode))
-      el.addEventListener('mousedown', function (e) {
-        console.log('mosedown, ', e.offsetX, e.offsetY)
-      })
-      vnode.context.cb_draggable_inited = true
+    if (binding.value === true) {
+      dragManager.bindDrag(el, vnode)
     }
   }
 })
@@ -118,37 +164,41 @@ Vue.directive('dropable', {
       callbackFunc = function () {}
     } else {
       callbackFunc = function () {
-        console.log('on callback')
         dragManager.finishDrop()
         binding.value.apply(this, arguments)
       }
     }
 
     let handleOverFunction = function () {
-      console.log('dragover')
-      // event.preventDefault()
     }
     let handleOver = _.throttle(handleOverFunction, 1000)
 
     el.addEventListener('dragover', function (event) {
-      // console.log('dragover')
       handleOver()
       event.preventDefault()
     })
     el.addEventListener('dragenter', function () {
-      console.log('enter')
       el.classList.add('dragover')
     })
     el.addEventListener('dragleave', function () {
-      console.log('leave')
       el.classList.remove('dragover')
     })
     el.addEventListener('drop', function (event) {
       el.classList.remove('dragover')
+      let id = ''
+      if (selectMgr.selected.length === 1 && isDeskItem(selectMgr.selected[0])) {
+        id = getItemId(selectMgr.selected[0])
+      }
+
       let e = event
-      console.log('drop', event.dataTransfer.getData('text/plain'), event)
       callbackFunc.apply(this, [e])
-      e.preventDefault()
+
+      if (dragManager.dropped === true) {
+        dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
+        dragManager.removeElementListeners(id, el, ['dragstart'])
+      }
+
+      // e.preventDefault()
     })
   }
 })

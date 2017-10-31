@@ -42,7 +42,7 @@ export default {
       },
       statusProps: {
         selected: false,
-        draggable: false,
+        draggable: true,
         editing: false
       },
       dataProps: {
@@ -53,7 +53,6 @@ export default {
   },
   computed: {
     styleObject: function () {
-      console.log('compute style object:', this.sticker.styleOffset, this.styleProps.styleOffset)
       let style = {
         width: this.styleProps.width + 'px',
         height: this.styleProps.height + 'px',
@@ -62,7 +61,6 @@ export default {
         'background-color': this.styleProps.bg_color
       }
       if (this.styleProps.styleOffset === false) {
-        console.log('here')
         style.display = 'inline-block'
         style.postion = 'relative'
         style.float = 'left'
@@ -99,7 +97,6 @@ export default {
       Vue.nextTick(() => {
         this.$refs.textInput.focus()
       })
-      console.log('into')
     },
     outsideEdit: function () {
       this.statusProps.editing = false

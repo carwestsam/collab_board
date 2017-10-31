@@ -6,6 +6,9 @@ import uuid from 'uuid/v4'
 
 Vue.use(Vuex)
 
+const INIT_ONBOARD_STICKER = 10
+const INIT_ONHAND_STICKER = 3
+
 let getStore = function () {
   return new Vuex.Store({
     state: {
@@ -16,7 +19,7 @@ let getStore = function () {
       randomStickers: (state, data) => {
         let getRandomInt = obj.getRandomInt
         state.stickers = []
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < INIT_ONBOARD_STICKER; i++) {
           state.stickers.push({
             id: uuid(),
             type: 'sticker',
@@ -27,7 +30,7 @@ let getStore = function () {
             stack: 'board'
           })
         }
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < INIT_ONHAND_STICKER; i++) {
           state.stickers.push({
             id: uuid(),
             type: 'sticker',
@@ -45,7 +48,6 @@ let getStore = function () {
             sticker.top = top
             sticker.id = uuid()
             sticker.stack = 'board'
-            console.log('updated:', JSON.stringify(sticker))
             state.stickers.splice(i, 1)
             state.stickers.push(sticker)
             return
@@ -58,7 +60,6 @@ let getStore = function () {
             let sticker = _.cloneDeep(state.stickers[i])
             sticker.id = uuid()
             sticker.stack = 'hand'
-            console.log('updated:', JSON.stringify(sticker))
             state.stickers.splice(i, 1)
             state.stickers.push(sticker)
             return

@@ -14,15 +14,12 @@ export default {
   computed: {
     stickers: function () {
       let stickers = this.$store.getters.onHand
-      console.log(stickers)
       stickers = stickers.map(sticker => { sticker.styleOffset = false; return sticker })
-      console.log(stickers)
       return stickers
     }
   },
   methods: {
     onDrop: function (event) {
-      console.log('on drop', event)
       let selectMgr = SelectMgr.getInstance()
       // debugger
       let id = selectMgr.selected[0].context.dataProps.id
@@ -86,14 +83,14 @@ export default {
     height: 150px;
     background-color: gray;
     opacity: 1;
-    animation-delay: 0.2s;    
-    animation: expand .2s;
+    // animation-delay: 0.2s; 
+    animation: expand .3s;
   }
 
   &:hover > .items {
-    animation-delay: 1s;
+    // animation-delay: 1s;
     display: inline-block;
-    animation: lastblink 0.41s;
+    animation: lastblink .3s;
   }
 
   &.dragover {
