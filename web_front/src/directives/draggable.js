@@ -195,7 +195,8 @@ Vue.directive('dropable', {
 
       if (dragManager.dropped === true) {
         dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
-        dragManager.removeElementListeners(id, el, ['dragstart'])
+        selectMgr.unselectAll()
+        // dragManager.removeElementListeners(id, el, ['dragstart'])
       }
 
       // e.preventDefault()
