@@ -66,6 +66,15 @@ let getStore = function () {
           }
         }
       },
+      addStickerToHand: (state) => {
+        state.stickers.push({
+          id: uuid(),
+          type: 'sticker',
+          bg_color: '#' + obj.getRandomInt(0, 0xffffff).toString(16),
+          text: 'New Sticker',
+          stack: 'hand'
+        })
+      },
       updateStickerText: (state, {id, text}) => {
         for (let i = 0; i < state.stickers.length; i++) {
           if (state.stickers[i].id === id) {
