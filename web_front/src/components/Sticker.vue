@@ -17,10 +17,18 @@
         v-model="dataProps.text"
         class="input-overlay"/>
       
-      <button 
+      <span class="option-btns">
+        <button 
         v-if="this.statusProps.selected"
         @mousedown.prevent="intoEdit"
         class='edit-button'>Edit</button>
+        <button
+          v-if="this.statusProps.selected"
+          @mousedown.prevent="deleteSticker"
+          class="delete-button">
+          Delete
+        </button>
+      </span>
       </div>
   </div>
 </template>
@@ -101,6 +109,12 @@ export default {
     outsideEdit: function () {
       this.statusProps.editing = false
       this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
+    },
+    deleteSticker: function () {
+      let confirmDelete = confirm('Do you want to delete Sticker: \n' + this.dataProps.text + '\n')
+      if (confirmDelete) {
+        this.$store.commit('deleteItem', {id: this.dataProps.id})
+      }
     }
   }
 }
@@ -127,11 +141,16 @@ export default {
     }
   }
 }
-.edit-button {
+.option-btns {
   position: absolute;
-  display: block;
   right: 0;
   bottom: 0;
+}
+.edit-button {
+  display: inline-block;
+}
+.delete-button {
+  display: inline-block;
 }
 .input-overlay {
   position: absolute;

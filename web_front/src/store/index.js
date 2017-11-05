@@ -40,6 +40,14 @@ let getStore = function () {
           })
         }
       },
+      deleteItem: (state, {id}) => {
+        for (let i = 0; i < state.stickers.length; i++) {
+          if (state.stickers[i].id === id) {
+            state.stickers.splice(i, 1)
+            return
+          }
+        }
+      },
       moveStickerToBoard: (state, {id, top, left}) => {
         for (let i = 0; i < state.stickers.length; i++) {
           if (state.stickers[i].id === id) {
