@@ -2,7 +2,11 @@
   <div id="app">
     <paper/>
     <hand/>
-    <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
+    <!-- <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker> -->
+    <template v-for="item in items" >
+      <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
+      <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
+    </template>
     <div id="holder"></div>
     <!-- <sticker/> -->
   </div>
@@ -12,6 +16,7 @@
 import Paper from './components/Paper'
 import Sticker from './components/Sticker'
 import Hand from './components/Hand'
+import Group from './components/Group'
 
 export default {
   name: 'app',
@@ -22,6 +27,13 @@ export default {
         return sticker
       })
       return stickers
+    },
+    items: function () {
+      let items = this.$store.getters.items.map(item => {
+        item.styleOffset = true
+        return item
+      })
+      return items
     }
   },
   beforeCreate () {
@@ -30,6 +42,7 @@ export default {
   components: {
     Paper,
     Sticker,
+    Group,
     Hand
   }
 }

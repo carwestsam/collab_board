@@ -6,21 +6,33 @@ import uuid from 'uuid/v4'
 
 Vue.use(Vuex)
 
-const INIT_ONBOARD_STICKER = 10
-const INIT_ONHAND_STICKER = 3
+const INIT_ONBOARD_STICKER = 2
+const INIT_ONHAND_STICKER = 1
+const INIT_ONBOARD_GROUP = 2
 
 let getStore = function () {
   return new Vuex.Store({
     state: {
-      stickers: [],
+      items: [],
       onHand: []
     },
     mutations: {
       randomStickers: (state, data) => {
         let getRandomInt = obj.getRandomInt
         state.stickers = []
+        for (let i = 0; i < INIT_ONBOARD_GROUP; i++) {
+          state.items.push({
+            id: uuid(),
+            type: 'group',
+            bg_color: '#' + getRandomInt(0, 0xffffff).toString(16),
+            text: 'group',
+            left: getRandomInt(0, 1000),
+            top: getRandomInt(0, 1000),
+            stack: 'board'
+          })
+        }
         for (let i = 0; i < INIT_ONBOARD_STICKER; i++) {
-          state.stickers.push({
+          state.items.push({
             id: uuid(),
             type: 'sticker',
             bg_color: '#' + getRandomInt(0, 0xffffff).toString(16),
@@ -31,7 +43,7 @@ let getStore = function () {
           })
         }
         for (let i = 0; i < INIT_ONHAND_STICKER; i++) {
-          state.stickers.push({
+          state.items.push({
             id: uuid(),
             type: 'sticker',
             bg_color: '#' + getRandomInt(0, 0xffffff).toString(16),
@@ -41,41 +53,41 @@ let getStore = function () {
         }
       },
       deleteItem: (state, {id}) => {
-        for (let i = 0; i < state.stickers.length; i++) {
-          if (state.stickers[i].id === id) {
-            state.stickers.splice(i, 1)
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].id === id) {
+            state.items.splice(i, 1)
             return
           }
         }
       },
       moveStickerToBoard: (state, {id, top, left}) => {
-        for (let i = 0; i < state.stickers.length; i++) {
-          if (state.stickers[i].id === id) {
-            let sticker = _.cloneDeep(state.stickers[i])
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].id === id) {
+            let sticker = _.cloneDeep(state.items[i])
             sticker.left = left
             sticker.top = top
             sticker.id = uuid()
             sticker.stack = 'board'
-            state.stickers.splice(i, 1)
-            state.stickers.push(sticker)
+            state.items.splice(i, 1)
+            state.items.push(sticker)
             return
           }
         }
       },
       moveStickerToHand: (state, {id}) => {
-        for (let i = 0; i < state.stickers.length; i++) {
-          if (state.stickers[i].id === id) {
-            let sticker = _.cloneDeep(state.stickers[i])
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].id === id) {
+            let sticker = _.cloneDeep(state.items[i])
             sticker.id = uuid()
             sticker.stack = 'hand'
-            state.stickers.splice(i, 1)
-            state.stickers.push(sticker)
+            state.items.splice(i, 1)
+            state.items.push(sticker)
             return
           }
         }
       },
       addStickerToHand: (state) => {
-        state.stickers.push({
+        state.items.push({
           id: uuid(),
           type: 'sticker',
           bg_color: '#' + obj.getRandomInt(0, 0xffffff).toString(16),
@@ -84,9 +96,9 @@ let getStore = function () {
         })
       },
       updateStickerText: (state, {id, text}) => {
-        for (let i = 0; i < state.stickers.length; i++) {
-          if (state.stickers[i].id === id) {
-            state.stickers[i].text = text
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].id === id) {
+            state.items[i].text = text
             break
           }
         }
@@ -94,17 +106,20 @@ let getStore = function () {
     },
     getters: {
       stickers: (state) => {
-        return state.stickers.filter(sticker => sticker.stack === 'board')
+        return state.items.filter(sticker => sticker.stack === 'board')
       },
       onHand: (state) => {
-        return state.stickers.filter(sticker => sticker.stack === 'hand')
+        return state.items.filter(sticker => sticker.stack === 'hand')
       },
       getStickerById: (state) => (id) => {
-        for (let i = 0; i < state.stickers.length; i++) {
-          if (state.stickers[i].id === id) {
-            return _.cloneDeep(state.stickers[i])
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].id === id) {
+            return _.cloneDeep(state.items[i])
           }
         }
+      },
+      items: (state) => {
+        return state.items.filter(item => item.stack === 'board')
       }
     }
   })

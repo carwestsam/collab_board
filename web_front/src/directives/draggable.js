@@ -90,6 +90,7 @@ dragManager = new DragManager()
 
 function initDrag (vnode, delegate) {
   let dragStart = function (event) {
+    console.log('dragStart')
     let id = vnode.context.dataProps.id
     dragManager.initDrag()
     let $this = this
@@ -142,6 +143,7 @@ function initDrag (vnode, delegate) {
 
 Vue.directive('draggable', {
   bind: function (el, binding, vnode) {
+    console.log('binding', binding.value)
     el.setAttribute('draggable', '' + binding.value)
     if (binding.value === true) {
       dragManager.bindDrag(el, vnode)

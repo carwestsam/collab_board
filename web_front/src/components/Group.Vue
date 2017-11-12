@@ -3,50 +3,28 @@
     v-bind:style="styleObject"
     v-bind:class="{select: statusProps.selected}"
     v-draggable="statusProps.draggable"
-    v-selectable="statusProps.selected"
-    class="sticker">
-    <!-- Work {{dataProps.id.substring(0,6)}} -->
-    <div class="sticker-inner">
-      <div class="content">
-      {{dataProps.text}}        
-      </div>
-      <textarea
-        ref="textInput"
-        v-bind:style="inputOverlayStyleObject"
-        v-on:blur="outsideEdit"
-        v-model="dataProps.text"
-        class="input-overlay"/>
-      
-      <span class="option-btns">
-        <button 
-        v-if="this.statusProps.selected"
-        @mousedown.prevent="intoEdit"
-        class='edit-button'>Edit</button>
-        <button
-          v-if="this.statusProps.selected"
-          @mousedown.prevent="deleteSticker"
-          class="delete-button">
-          Delete
-        </button>
-      </span>
-      </div>
+    class="group"
+    v-selectable v-dropable>
+    <div class="group-inner">
+      Group
+    </div>  
   </div>
 </template>
 <script>
 import Vue from 'vue'
 
 export default {
-  name: 'sticker',
-  props: ['sticker'],
+  name: 'group',
+  props: ['group'],
   data () {
     return {
       styleProps: {
-        width: 100,
-        height: 100,
-        left: this.sticker.left || 100,
-        top: this.sticker.top || 100,
-        bg_color: this.sticker.bg_color || 'yellow',
-        styleOffset: typeof this.sticker.styleOffset === 'undefined' ? true : this.sticker.styleOffset
+        width: 500,
+        height: 500,
+        left: this.group.left || 500,
+        top: this.group.top || 500,
+        bg_color: this.group.bg_color || 'yellow',
+        styleOffset: typeof this.group.styleOffset === 'undefined' ? true : this.group.styleOffset
       },
       statusProps: {
         selected: false,
@@ -54,8 +32,8 @@ export default {
         editing: false
       },
       dataProps: {
-        id: this.sticker.id,
-        text: this.sticker.text
+        id: this.group.id,
+        text: this.group.text
       }
     }
   },
@@ -79,19 +57,11 @@ export default {
         style.position = 'absolute'
       }
       return style
-    },
-    inputOverlayStyleObject: function () {
-      return {
-        display: this.statusProps.editing === true ? 'block' : 'none',
-        width: this.styleProps.width + 'px',
-        height: this.styleProps.height + 'px'
-        // left: this.styleProps.left + 'px',
-        // top: this.styleProps.top + 'px'
-      }
     }
   },
   methods: {
     select: function () {
+      console.log('group select')
       this.statusProps.selected = true
       this.statusProps.draggable = true
     },
@@ -110,8 +80,8 @@ export default {
       this.statusProps.editing = false
       this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
     },
-    deleteSticker: function () {
-      let confirmDelete = confirm('Do you want to delete Sticker: \n' + this.dataProps.text + '\n')
+    delete: function () {
+      let confirmDelete = confirm('Do you want to delete Group: \n' + this.dataProps.text + '\n')
       if (confirmDelete) {
         this.$store.commit('deleteItem', {id: this.dataProps.id})
       }
@@ -119,46 +89,29 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
-.sticker {
+.group {
   // position: absolute;
   display: block;
   background-color: yellow;
   user-select: none;
-  font-size: 18px;
+  font-size: 32px;
+  text-align: left;
+  font-weight: bold;
   line-height: 1.2em;
   &.select {
-    box-shadow: 0px 0px 2px blue;
+    box-shadow: 0px 0px 10px blue;
     z-index: 100;
   }
-  .sticker-inner {
+  .group-inner {
     width: 100%;
     height: 100%;
     position: relative;
     .content {
       width: 100%;
-      height: 100%;
-      overflow: auto;
+      overflow: scroll;
     }
   }
-}
-.option-btns {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-}
-.edit-button {
-  display: inline-block;
-}
-.delete-button {
-  display: inline-block;
-}
-.input-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 18px;
-  line-height: 1.2em;
-  text-align: center;
 }
 </style>
