@@ -2,7 +2,10 @@
   <div class='hand' v-dropable="onDrop">
     <div class='items'>
       <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
-      <button class="add-new-item" @click="addItem">+</button>
+      <div class="add-new-item">
+        <button @click="addItem('sticker')">+ Sticker</button>
+        <button @click="addItem('group')">+ Group</button>
+      </div>
     </div>
   </div>
 </template>
@@ -26,8 +29,9 @@ export default {
       let id = selectMgr.selected[0].context.dataProps.id
       this.$store.commit('moveStickerToHand', {id})
     },
-    addItem: function (event) {
-      this.$store.commit('addStickerToHand')
+    addItem: function (type) {
+      console.log('b')
+      this.$store.commit('addItem', {type, stack: 'hand'})
     }
   },
   components: {
@@ -87,6 +91,13 @@ export default {
     background-color: red;
     width: 100px;
     height: 100px;
+    button {
+      font-size: 20px;
+      margin-top: 10%;
+      margin-left: 5%;
+      width: 90%;
+      float: left;
+    }
   }
 
   &:hover {

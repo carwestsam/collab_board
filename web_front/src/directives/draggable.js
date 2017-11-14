@@ -197,9 +197,11 @@ Vue.directive('dropable', {
       event.preventDefault()
     })
     el.addEventListener('dragenter', function () {
+      console.log('enter')
       el.classList.add('dragover')
     })
     el.addEventListener('dragleave', function () {
+      console.log('leave')
       el.classList.remove('dragover')
     })
     el.addEventListener('drop', function (event) {

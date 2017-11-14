@@ -6,9 +6,9 @@ import uuid from 'uuid/v4'
 
 Vue.use(Vuex)
 
-const INIT_ONBOARD_STICKER = 10
-const INIT_ONHAND_STICKER = 2
-const INIT_ONBOARD_GROUP = 2
+const INIT_ONBOARD_STICKER = 0
+const INIT_ONHAND_STICKER = 0
+const INIT_ONBOARD_GROUP = 0
 
 let getStore = function () {
   return new Vuex.Store({
@@ -126,6 +126,16 @@ let getStore = function () {
           bg_color: '#' + obj.getRandomInt(0, 0xffffff).toString(16),
           text: 'New Sticker',
           stack: 'hand'
+        })
+      },
+      addItem: (state, {type, stack}) => {
+        console.log('add item', type, stack)
+        state.items.push({
+          id: uuid(),
+          type,
+          bg_color: '#' + obj.getRandomInt(0, 0xffffff).toString(16),
+          text: 'New ' + type,
+          stack
         })
       },
       updateStickerText: (state, {id, text}) => {

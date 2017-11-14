@@ -14,6 +14,7 @@
         ref="textInput"
         v-bind:style="inputOverlayStyleObject"
         v-on:blur="outsideEdit"
+        @keydown.enter="outsideEdit"
         v-model="dataProps.text"
         class="input-overlay"/>
       

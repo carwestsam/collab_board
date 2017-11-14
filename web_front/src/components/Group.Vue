@@ -19,6 +19,7 @@
         v-bind:style="inputTitleStyleObject"
         v-model="dataProps.text"
         v-on:blur="outsideEdit"
+        @keydown.enter="outsideEdit"
         class="input-title">
       <div class="content">
         <template v-for="item in items" >
@@ -174,7 +175,7 @@ export default {
       margin-left: 5%;
       width: 90%;
       height: 90%;
-      overflow: scroll;
+      // overflow: scroll;
     }
     .input-title {
       font-size: 1em;
