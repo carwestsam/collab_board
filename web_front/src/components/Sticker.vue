@@ -120,13 +120,14 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .sticker {
   // position: absolute;
   display: block;
   background-color: yellow;
   user-select: none;
   font-size: 18px;
+  font-weight: normal;
   line-height: 1.2em;
   &.select {
     box-shadow: 0px 0px 2px blue;

@@ -68,13 +68,18 @@ class DragManager {
     this.dropped = true
   }
   removeDocumentListeners (vnode, eventTypes) {
-    let id = ''
+    if (window.DEBUG === true) {
+      debugger
+    }
+    let id = 'undefinedx'
     if (typeof vnode === 'string') {
       id = vnode
     } else {
       id = getItemId(vnode)
     }
+    console.log(eventTypes)
     eventTypes.map(et => {
+      console.log('[et] ', et, id)
       document.removeEventListener(et, this.dragFunctions[id][et])
       delete this.dragFunctions[id][et]
     })
@@ -138,6 +143,7 @@ function initDrag (vnode, delegate) {
         selectMgr.unselectAll()
         dragManager.dropped = true
 
+        console.log('mouseUP remove DocumentListeners')
         dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
         dragManager.removeElementListeners(id, $this, ['dragstart'])
       }
@@ -207,10 +213,12 @@ Vue.directive('dropable', {
       callbackFunc.apply(this, [e, id])
 
       if (dragManager.dropped === true) {
+        console.log('drop remove DocumentListeners')
         dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
         selectMgr.unselectAll()
         // dragManager.removeElementListeners(id, el, ['dragstart'])
       }
+      e.stopPropagation()
 
       // e.preventDefault()
     })
