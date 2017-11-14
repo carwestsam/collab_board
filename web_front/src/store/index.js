@@ -6,8 +6,8 @@ import uuid from 'uuid/v4'
 
 Vue.use(Vuex)
 
-const INIT_ONBOARD_STICKER = 2
-const INIT_ONHAND_STICKER = 1
+const INIT_ONBOARD_STICKER = 10
+const INIT_ONHAND_STICKER = 2
 const INIT_ONBOARD_GROUP = 2
 
 let getStore = function () {
@@ -61,12 +61,18 @@ let getStore = function () {
         }
       },
       moveStickerToBoard: (state, {id, top, left}) => {
+        let newUUID = uuid()
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].stack === id) {
+            state.items[i].stack = newUUID
+          }
+        }
         for (let i = 0; i < state.items.length; i++) {
           if (state.items[i].id === id) {
             let sticker = _.cloneDeep(state.items[i])
             sticker.left = left
             sticker.top = top
-            sticker.id = uuid()
+            sticker.id = newUUID
             sticker.stack = 'board'
             state.items.splice(i, 1)
             state.items.push(sticker)
@@ -75,11 +81,38 @@ let getStore = function () {
         }
       },
       moveStickerToHand: (state, {id}) => {
+        let newUUID = uuid()
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].stack === id) {
+            state.items[i].stack = newUUID
+          }
+        }
         for (let i = 0; i < state.items.length; i++) {
           if (state.items[i].id === id) {
             let sticker = _.cloneDeep(state.items[i])
-            sticker.id = uuid()
+            sticker.id = newUUID
             sticker.stack = 'hand'
+            state.items.splice(i, 1)
+            state.items.push(sticker)
+            return
+          }
+        }
+      },
+      moveItem: (state, {id, itemId}) => {
+        if (id === itemId) {
+          return
+        }
+        let newUUID = uuid()
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].stack === itemId) {
+            state.items[i].stack = newUUID
+          }
+        }
+        for (let i = 0; i < state.items.length; i++) {
+          if (state.items[i].id === itemId) {
+            let sticker = _.cloneDeep(state.items[i])
+            sticker.id = newUUID
+            sticker.stack = id
             state.items.splice(i, 1)
             state.items.push(sticker)
             return
@@ -118,8 +151,8 @@ let getStore = function () {
           }
         }
       },
-      items: (state) => {
-        return state.items.filter(item => item.stack === 'board')
+      items: (state) => (stack = 'board') => {
+        return state.items.filter(item => item.stack === stack)
       }
     }
   })

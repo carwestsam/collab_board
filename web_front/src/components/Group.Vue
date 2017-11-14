@@ -4,14 +4,24 @@
     v-bind:class="{select: statusProps.selected}"
     v-draggable="statusProps.draggable"
     class="group"
-    v-selectable v-dropable>
+    v-dropable="drop"
+    v-selectable>
     <div class="group-inner">
+      <div class="group-name">
       Group
-    </div>  
+      </div>
+
+      <template v-for="item in items" >
+        <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
+        <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
+      </template>
+    </div>
   </div>
 </template>
 <script>
 import Vue from 'vue'
+import Sticker from './Sticker'
+// import selectMgr from '../directives/selectable'
 
 export default {
   name: 'group',
@@ -57,6 +67,12 @@ export default {
         style.position = 'absolute'
       }
       return style
+    },
+    items: function () {
+      return this.$store.getters.items(this.dataProps.id).map(item => {
+        item.styleOffset = false
+        return item
+      })
     }
   },
   methods: {
@@ -85,7 +101,14 @@ export default {
       if (confirmDelete) {
         this.$store.commit('deleteItem', {id: this.dataProps.id})
       }
+    },
+    drop: function (event, itemId) {
+      // console.log('group drop', event, targetId)
+      this.$store.commit('moveItem', {id: this.dataProps.id, itemId})
     }
+  },
+  components: {
+    Sticker
   }
 }
 </script>
@@ -108,6 +131,9 @@ export default {
     width: 100%;
     height: 100%;
     position: relative;
+    .group-name {
+      font-size: 32px;
+    }
     .content {
       width: 100%;
       overflow: scroll;

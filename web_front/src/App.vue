@@ -29,7 +29,7 @@ export default {
       return stickers
     },
     items: function () {
-      let items = this.$store.getters.items.map(item => {
+      let items = this.$store.getters.items().map(item => {
         item.styleOffset = true
         return item
       })

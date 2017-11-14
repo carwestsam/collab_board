@@ -31,7 +31,7 @@ let selectMgr = new SelectMgr()
 
 Vue.directive('selectable', {
   bind: function (el, binding, vnode) {
-    el.addEventListener('mouseup', function hoho () {
+    el.addEventListener('mouseup', function hoho (event) {
       if (typeof vnode.context.statusProps === 'undefined') {
         selectMgr.unselectAll()
         return
@@ -54,7 +54,8 @@ Vue.directive('selectable', {
         console.log('select')
         selectMgr.selectElement(vnode)
       }
-      console.log('yes')
+      console.log('yes', vnode.context.dataProps.id)
+      event.stopPropagation()
     })
   }
 })

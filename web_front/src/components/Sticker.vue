@@ -94,6 +94,7 @@ export default {
     select: function () {
       this.statusProps.selected = true
       this.statusProps.draggable = true
+      console.log('select sticker', this.dataProps.id)
     },
     unselect: function () {
       this.statusProps.selected = false

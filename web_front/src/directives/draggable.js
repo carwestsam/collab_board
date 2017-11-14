@@ -48,11 +48,18 @@ class DragManager {
   }
   bindDrag (el, vnode) {
     let id = vnode.context.dataProps.id
+    if ((isDefined(this.dragFunctions[id]) && _.get(this.dragFunctions, id + '.$el', undefined) !== el)) {
+      _.get(this.dragFunctions, id + '.$el', undefined).removeEventListener('dragstart',
+        _.get(this.dragFunctions, id + '.startBody', undefined))
+      delete this.dragFunctions[id]
+    }
     if (isUndefined(this.dragFunctions[id])) {
-      el.addEventListener('dragstart', function (event) {
+      let funcBody = function (event) {
         dragManager.onDragStart(id, event, this)
-      })
-      this.dragFunctions[id] = {}
+        event.stopPropagation()
+      }
+      el.addEventListener('dragstart', funcBody)
+      this.dragFunctions[id] = {$el: el, startBody: funcBody}
     }
     let dragDelegate = this.dragFunctions[id]
     initDrag(vnode, dragDelegate)
@@ -87,11 +94,13 @@ class DragManager {
 }
 
 dragManager = new DragManager()
+window.dragManager = dragManager
 
 function initDrag (vnode, delegate) {
   let dragStart = function (event) {
-    console.log('dragStart')
     let id = vnode.context.dataProps.id
+    console.log('dragStart', id)
+
     dragManager.initDrag()
     let $this = this
     let moved = false
@@ -143,7 +152,6 @@ function initDrag (vnode, delegate) {
 
 Vue.directive('draggable', {
   bind: function (el, binding, vnode) {
-    console.log('binding', binding.value)
     el.setAttribute('draggable', '' + binding.value)
     if (binding.value === true) {
       dragManager.bindDrag(el, vnode)
@@ -166,6 +174,9 @@ Vue.directive('dropable', {
       callbackFunc = function () {}
     } else {
       callbackFunc = function () {
+        if (isDefined(arguments[1]) && _.get(vnode, 'context.dataProps.id', undefined) === arguments[1]) {
+          return
+        }
         dragManager.finishDrop()
         binding.value.apply(this, arguments)
       }
@@ -193,7 +204,7 @@ Vue.directive('dropable', {
       }
 
       let e = event
-      callbackFunc.apply(this, [e])
+      callbackFunc.apply(this, [e, id])
 
       if (dragManager.dropped === true) {
         dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
