@@ -46,15 +46,12 @@ Vue.directive('selectable', {
         // return
       }
       if (vnode.context.statusProps.selected === true) {
-        console.log('unselect')
         if (typeof vnode.context.unselect === 'function') {
           vnode.context.unselect()
         }
       } else if (vnode.context.statusProps.selected === false) {
-        console.log('select')
         selectMgr.selectElement(vnode)
       }
-      console.log('yes', vnode.context.dataProps.id)
       event.stopPropagation()
     })
   }

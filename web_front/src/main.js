@@ -4,6 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import getStore from './store'
 import './directives'
+import kb from 'keyboardjs'
+import {StateHistoryMgr} from './store/StateHistoryManager'
 
 Vue.config.productionTip = false
 
@@ -12,5 +14,13 @@ new Vue({
   el: '#app',
   store: getStore(),
   template: '<App/>',
-  components: { App }
+  components: { App },
+  mounted: function () {
+    kb.bind('win + z', function (e) {
+      StateHistoryMgr.getInstance().undo()
+    })
+    kb.bind('win + shift + z', function (e) {
+      StateHistoryMgr.getInstance().redo()
+    })
+  }
 })

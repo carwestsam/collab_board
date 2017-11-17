@@ -8,7 +8,7 @@
     <!-- Work {{dataProps.id.substring(0,6)}} -->
     <div class="sticker-inner">
       <div class="content">
-      {{dataProps.text}}        
+      {{dataProps.text}}
       </div>
       <textarea
         ref="textInput"
@@ -95,7 +95,6 @@ export default {
     select: function () {
       this.statusProps.selected = true
       this.statusProps.draggable = true
-      console.log('select sticker', this.dataProps.id)
     },
     unselect: function () {
       this.statusProps.selected = false
@@ -109,8 +108,10 @@ export default {
       })
     },
     outsideEdit: function () {
-      this.statusProps.editing = false
-      this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
+      if (this.statusProps.editing === true) {
+        this.statusProps.editing = false
+        this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
+      }
     },
     deleteSticker: function () {
       let confirmDelete = confirm('Do you want to delete Sticker: \n' + this.dataProps.text + '\n')

@@ -126,8 +126,10 @@ export default {
       })
     },
     outsideEdit: function () {
-      this.statusProps.editing = false
-      this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
+      if (this.statusProps.editing === true) {
+        this.statusProps.editing = false
+        this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
+      }
     },
     deleteGroup: function () {
       let confirmDelete = confirm('Do you want to delete Group: \n' + this.dataProps.text + '\n')
