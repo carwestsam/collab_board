@@ -30,7 +30,6 @@ export default {
       this.$store.commit('moveItem', {id, stack: 'hand'})
     },
     addItem: function (type) {
-      console.log('b')
       this.$store.commit('addItem', {type, stack: 'hand'})
     }
   },

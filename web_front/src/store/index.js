@@ -51,15 +51,6 @@ let storeDes = {
           stack: 'hand'
         })
       }
-    },
-    addItem: (state, {type, stack}) => {
-      state.items.push({
-        id: uuid(),
-        type,
-        bg_color: '#' + obj.getRandomInt(0, 0xffffff).toString(16),
-        text: 'New ' + type,
-        stack
-      })
     }
   },
   getters: {
@@ -154,6 +145,25 @@ new VuexConfigGenerator(storeDes).attachMutations({
       backward: (capsule, state, {id, top, left, stack}) => {
         updateStack(state, capsule['newId'], id)
         state.items.splice(capsule['index'], 0, _.cloneDeep(capsule['item']))
+        let {idx} = findItemById(state, capsule['newId'])
+        state.items.splice(idx, 1)
+      }
+    }
+  },
+  addItem: function () {
+    return {
+      forward: (capsule, state, {type, stack}) => {
+        let newId = capsule['newId'] || uuid()
+        capsule['newId'] = newId
+        state.items.push({
+          id: newId,
+          type,
+          bg_color: '#' + obj.getRandomInt(0, 0xffffff).toString(16),
+          text: 'New ' + type,
+          stack
+        })
+      },
+      backward: (capsule, state, {type, stack}) => {
         let {idx} = findItemById(state, capsule['newId'])
         state.items.splice(idx, 1)
       }
