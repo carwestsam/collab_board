@@ -91,15 +91,6 @@ let storeDes = {
         }
       }
     },
-    addStickerToHand: (state) => {
-      state.items.push({
-        id: uuid(),
-        type: 'sticker',
-        bg_color: '#' + obj.getRandomInt(0, 0xffffff).toString(16),
-        text: 'New Sticker',
-        stack: 'hand'
-      })
-    },
     addItem: (state, {type, stack}) => {
       state.items.push({
         id: uuid(),
