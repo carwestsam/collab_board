@@ -1,0 +1,14 @@
+{
+  "name": "collaborate_board_server",
+  "version": "0.1.0",
+  "description": "server for collab board",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "carwestsam <carwestsam@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
