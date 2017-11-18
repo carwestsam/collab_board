@@ -7,9 +7,17 @@ import {VuexConfigGenerator} from './StateHistoryManager'
 
 Vue.use(Vuex)
 
-const INIT_ONBOARD_STICKER = 1
+const INIT_ONBOARD_STICKER = 20
 const INIT_ONHAND_STICKER = 0
 const INIT_ONBOARD_GROUP = 1
+
+function getRandomColor (type) {
+  if (type === 'sticker') {
+    return `hsl(${obj.getRandomInt(0, 360)}, 100%,70%)`
+  } else if (type === 'group') {
+    return `hsl(${obj.getRandomInt(0, 360)}, 100%,95%)`
+  }
+}
 
 let storeDes = {
   state: {
@@ -24,7 +32,7 @@ let storeDes = {
         state.items.push({
           id: uuid(),
           type: 'group',
-          bg_color: '#' + getRandomInt(0, 0xffffff).toString(16),
+          bg_color: getRandomColor('group'),
           text: 'group',
           left: getRandomInt(0, 1000),
           top: getRandomInt(0, 1000),
@@ -35,7 +43,7 @@ let storeDes = {
         state.items.push({
           id: uuid(),
           type: 'sticker',
-          bg_color: '#' + getRandomInt(0, 0xffffff).toString(16),
+          bg_color: getRandomColor('sticker'),
           text: 'Hello World',
           left: getRandomInt(0, 1000),
           top: getRandomInt(0, 1000),
@@ -46,7 +54,7 @@ let storeDes = {
         state.items.push({
           id: uuid(),
           type: 'sticker',
-          bg_color: '#' + getRandomInt(0, 0xffffff).toString(16),
+          bg_color: getRandomColor('sticker'),
           text: 'on Hand',
           stack: 'hand'
         })
@@ -158,7 +166,7 @@ new VuexConfigGenerator(storeDes).attachMutations({
         state.items.push({
           id: newId,
           type,
-          bg_color: '#' + obj.getRandomInt(0, 0xffffff).toString(16),
+          bg_color: getRandomColor(type),
           text: 'New ' + type,
           stack
         })
