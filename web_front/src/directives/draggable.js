@@ -131,7 +131,7 @@ function initDrag (vnode, delegate) {
 
     let MouseUp = function (event) {
       if (dragManager.dropped === false && moved === true) {
-        selectMgr.selected[0].context.$store.commit('moveStickerToBoard',
+        selectMgr.selected[0].context.$store.commit('moveItemToBoard',
           {
             id: id,
             top: parseInt(targetTop),

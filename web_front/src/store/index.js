@@ -52,26 +52,6 @@ let storeDes = {
         })
       }
     },
-    moveStickerToBoard: (state, {id, top, left}) => {
-      let newUUID = uuid()
-      for (let i = 0; i < state.items.length; i++) {
-        if (state.items[i].stack === id) {
-          state.items[i].stack = newUUID
-        }
-      }
-      for (let i = 0; i < state.items.length; i++) {
-        if (state.items[i].id === id) {
-          let sticker = _.cloneDeep(state.items[i])
-          sticker.left = left
-          sticker.top = top
-          sticker.id = newUUID
-          sticker.stack = 'board'
-          state.items.splice(i, 1)
-          state.items.push(sticker)
-          return
-        }
-      }
-    },
     moveStickerToHand: (state, {id}) => {
       let newUUID = uuid()
       for (let i = 0; i < state.items.length; i++) {
@@ -199,6 +179,30 @@ new VuexConfigGenerator(storeDes).attachMutations({
         item.text = capsule['text']
         item.id = capsule['id']
         updateStack(state, capsule['newId'], capsule['id'])
+      }
+    }
+  },
+  moveItemToBoard: function () {
+    return {
+      forward: (capsule, state, {id, top, left}) => {
+        let newId = capsule['newId'] || uuid()
+        updateStack(state, id, newId)
+        let {item, idx} = findItemById(state, id)
+        let newItem = _.cloneDeep(item)
+        capsule['item'] = _.cloneDeep(item)
+        capsule['index'] = idx
+        capsule['newId'] = newId
+        newItem.left = left
+        newItem.top = top
+        newItem.id = newId
+        newItem.stack = 'board'
+        state.items.splice(idx, 1)
+        state.items.push(newItem)
+      },
+      backward: (capsule, state, {id, top, left}) => {
+        state.items.splice(capsule['index'], 0, _.cloneDeep(capsule['item']))
+        let {idx} = findItemById(state, capsule['newId'])
+        state.items.splice(idx, 1)
       }
     }
   }
