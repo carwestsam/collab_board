@@ -21,11 +21,14 @@ function getRandomColor (type) {
 
 let storeDes = {
   state: {
-    items: [],
-    onHand: []
+    items: []
   },
   mutations: {
-    randomStickers: (state, data) => {
+    initItems: (state, data) => {
+      if (typeof data !== 'undefined') {
+        state.items = _.cloneDeep(data.items)
+        return
+      }
       let getRandomInt = obj.getRandomInt
       state.stickers = []
       for (let i = 0; i < INIT_ONBOARD_GROUP; i++) {

@@ -17,6 +17,7 @@ import Paper from './components/Paper'
 import Sticker from './components/Sticker'
 import Hand from './components/Hand'
 import Group from './components/Group'
+import * as $http from 'superagent'
 
 export default {
   name: 'app',
@@ -37,7 +38,11 @@ export default {
     }
   },
   beforeCreate () {
-    this.$store.commit('randomStickers', [])
+    $http.get('http://localhost:3000').then(response => {
+      this.$store.commit('initItems', response.body)
+    }, error => {
+      console.log('err', error)
+    })
   },
   components: {
     Paper,
