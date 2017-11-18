@@ -7,9 +7,9 @@ import {VuexConfigGenerator} from './StateHistoryManager'
 
 Vue.use(Vuex)
 
-const INIT_ONBOARD_STICKER = 20
+const INIT_ONBOARD_STICKER = 1
 const INIT_ONHAND_STICKER = 0
-const INIT_ONBOARD_GROUP = 0
+const INIT_ONBOARD_GROUP = 1
 
 let storeDes = {
   state: {
@@ -150,76 +150,55 @@ let storeDes = {
   }
 }
 
+function findItemById (state, id) {
+  for (let i = 0; i < state.items.length; i++) {
+    if (state.items[i].id === id) {
+      return {
+        item: state.items[i],
+        idx: i
+      }
+    }
+  }
+}
+
+function updateStack (state, oldStack, newStack) {
+  for (let i = 0; i < state.items.length; i++) {
+    if (state.items[i].stack === oldStack) {
+      state.items[i].stack = newStack
+    }
+  }
+}
+
 new VuexConfigGenerator(storeDes).attachMutations({
   deleteItem: function () {
     return {
       forward: (capsule, state, {id}) => {
-        for (let i = 0; i < state.items.length; i++) {
-          if (state.items[i].id === id) {
-            capsule['item'] = _.cloneDeep(state.items[i])
-            capsule['index'] = i
-            state.items.splice(i, 1)
-            return
-          }
-        }
+        let {item, idx} = findItemById(state, id)
+        capsule['item'] = _.cloneDeep(item)
+        capsule['index'] = idx
+        state.items.splice(idx, 1)
       },
       backward: (capsule, state, {id}) => {
         state.items.splice(capsule['index'], 0, _.cloneDeep(capsule['item']))
       }
     }
   },
-  updateStickersStack: function () {
-    return {
-      forward: (capsule, state, {id, newId}) => {
-        for (let i = 0; i < state.items.length; i++) {
-          if (state.items[i].stack === id) {
-            state.items[i].stack = newId
-          }
-        }
-      },
-      backward: (capsule, state, {id, newId}) => {
-        for (let i = 0; i < state.items.length; i++) {
-          if (state.items[i].stack === newId) {
-            state.items[i].stack = id
-          }
-        }
-      }
-    }
-  },
   updateStickerText: function () {
     return {
       forward: (capsule, state, {id, text}) => {
-        for (let i = 0; i < state.items.length; i++) {
-          if (state.items[i].id === id) {
-            let id = capsule['newId'] || uuid()
-            let item = state.items[i]
-            capsule['text'] = item.text
-            capsule['id'] = item.id
-            capsule['newId'] = id
-            state.items[i].id = id
-            state.items[i].text = text
-            for (let i = 0; i < state.items.length; i++) {
-              if (state.items[i].stack === capsule['id']) {
-                state.items[i].stack = id
-              }
-            }
-            break
-          }
-        }
+        let {item} = findItemById(state, id)
+        let newId = capsule['newId'] || uuid()
+        capsule['text'] = item.text
+        capsule['id'] = item.id
+        item.id = capsule['newId'] = newId
+        item.text = text
+        updateStack(state, capsule['id'], capsule['newId'])
       },
       backward: (capsule, state, {id, text}) => {
-        for (let i = 0; i < state.items.length; i++) {
-          if (state.items[i].id === capsule['newId']) {
-            state.items[i].text = capsule['text']
-            state.items[i].id = capsule['id']
-            for (let i = 0; i < state.items.length; i++) {
-              if (state.items[i].stack === capsule['newId']) {
-                state.items[i].stack = capsule['id']
-              }
-            }
-            break
-          }
-        }
+        let {item} = findItemById(state, capsule['newId'])
+        item.text = capsule['text']
+        item.id = capsule['id']
+        updateStack(state, capsule['newId'], capsule['id'])
       }
     }
   }
