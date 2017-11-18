@@ -18,6 +18,7 @@ import Sticker from './components/Sticker'
 import Hand from './components/Hand'
 import Group from './components/Group'
 import * as $http from 'superagent'
+import io from 'socket.io-client'
 
 export default {
   name: 'app',
@@ -42,6 +43,8 @@ export default {
       this.$store.commit('initItems', response.body)
     }, error => {
       console.log('err', error)
+    }).then(() => {
+      io('http://localhost:3000')
     })
   },
   components: {
