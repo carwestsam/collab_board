@@ -27,7 +27,7 @@ export default {
       let selectMgr = SelectMgr.getInstance()
       // debugger
       let id = selectMgr.selected[0].context.dataProps.id
-      this.$store.commit('moveStickerToHand', {id})
+      this.$store.commit('moveItem', {id, stack: 'hand'})
     },
     addItem: function (type) {
       console.log('b')

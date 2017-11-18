@@ -52,45 +52,6 @@ let storeDes = {
         })
       }
     },
-    moveStickerToHand: (state, {id}) => {
-      let newUUID = uuid()
-      for (let i = 0; i < state.items.length; i++) {
-        if (state.items[i].stack === id) {
-          state.items[i].stack = newUUID
-        }
-      }
-      for (let i = 0; i < state.items.length; i++) {
-        if (state.items[i].id === id) {
-          let sticker = _.cloneDeep(state.items[i])
-          sticker.id = newUUID
-          sticker.stack = 'hand'
-          state.items.splice(i, 1)
-          state.items.push(sticker)
-          return
-        }
-      }
-    },
-    moveItem: (state, {id, itemId}) => {
-      if (id === itemId) {
-        return
-      }
-      let newUUID = uuid()
-      for (let i = 0; i < state.items.length; i++) {
-        if (state.items[i].stack === itemId) {
-          state.items[i].stack = newUUID
-        }
-      }
-      for (let i = 0; i < state.items.length; i++) {
-        if (state.items[i].id === itemId) {
-          let sticker = _.cloneDeep(state.items[i])
-          sticker.id = newUUID
-          sticker.stack = id
-          state.items.splice(i, 1)
-          state.items.push(sticker)
-          return
-        }
-      }
-    },
     addItem: (state, {type, stack}) => {
       state.items.push({
         id: uuid(),
@@ -173,9 +134,9 @@ new VuexConfigGenerator(storeDes).attachMutations({
       }
     }
   },
-  moveItemToBoard: function () {
+  moveItem: function () {
     return {
-      forward: (capsule, state, {id, top, left}) => {
+      forward: (capsule, state, {id, top, left, stack}) => {
         let newId = capsule['newId'] || uuid()
         updateStack(state, id, newId)
         let {item, idx} = findItemById(state, id)
@@ -183,14 +144,15 @@ new VuexConfigGenerator(storeDes).attachMutations({
         capsule['item'] = _.cloneDeep(item)
         capsule['index'] = idx
         capsule['newId'] = newId
-        newItem.left = left
-        newItem.top = top
+        newItem.left = left || 0
+        newItem.top = top || 0
         newItem.id = newId
-        newItem.stack = 'board'
+        newItem.stack = stack
         state.items.splice(idx, 1)
         state.items.push(newItem)
       },
-      backward: (capsule, state, {id, top, left}) => {
+      backward: (capsule, state, {id, top, left, stack}) => {
+        updateStack(state, capsule['newId'], id)
         state.items.splice(capsule['index'], 0, _.cloneDeep(capsule['item']))
         let {idx} = findItemById(state, capsule['newId'])
         state.items.splice(idx, 1)

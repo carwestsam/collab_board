@@ -131,11 +131,12 @@ function initDrag (vnode, delegate) {
 
     let MouseUp = function (event) {
       if (dragManager.dropped === false && moved === true) {
-        selectMgr.selected[0].context.$store.commit('moveItemToBoard',
+        selectMgr.selected[0].context.$store.commit('moveItem',
           {
             id: id,
             top: parseInt(targetTop),
-            left: parseInt(targetLeft)
+            left: parseInt(targetLeft),
+            stack: 'board'
           })
         selectMgr.unselectAll()
         dragManager.dropped = true

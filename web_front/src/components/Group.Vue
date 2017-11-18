@@ -139,7 +139,7 @@ export default {
     },
     drop: function (event, itemId) {
       // console.log('group drop', event, targetId)
-      this.$store.commit('moveItem', {id: this.dataProps.id, itemId})
+      this.$store.commit('moveItem', {id: itemId, stack: this.dataProps.id})
     }
   },
   components: {
