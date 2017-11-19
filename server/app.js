@@ -13,6 +13,10 @@ io.on('connection', function (socket) {
   socket.on('disconnect', function(){
     console.log('user disconnected')
   })
+  socket.on('mutation', function(msg) {
+    console.log('mutation:', msg)
+    socket.broadcast.emit('updates', msg)
+  })
 })
 
 http.listen(3000, () => console.log('Example app listening on port 3000'))

@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import obj from '../utils/calcUtils.js'
 import _ from 'lodash'
 import uuid from 'uuid/v4'
-import {VuexConfigGenerator} from './StateHistoryManager'
+import {VuexConfigGenerator, StateHistoryMgr} from './StateHistoryManager'
 
 Vue.use(Vuex)
 
@@ -183,7 +183,9 @@ new VuexConfigGenerator(storeDes).attachMutations({
 })
 
 let getStore = function () {
-  return new Vuex.Store(storeDes)
+  let store = new Vuex.Store(storeDes)
+  StateHistoryMgr.getInstance().setState(store.state)
+  return store
 }
 
 export default getStore
