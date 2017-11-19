@@ -1,0 +1,15 @@
+{
+  "name": "shared_components",
+  "version": "0.1.0",
+  "description": "",
+  "main": "mutationDescription.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "d3-color": "^1.0.3",
+    "uuid": "^3.1.0"
+  }
+}
