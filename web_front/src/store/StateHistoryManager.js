@@ -42,6 +42,10 @@ export class StateHistoryMgr {
   update (msg) {
     let {mutation, args, capsule, direction} = msg
     this.origin[mutation]()[direction].apply(null, [capsule, this.state, ...args])
+
+    if (direction === 'forward') {
+      shm.append(mutation, args, capsule)
+    }
   }
 
   append (key, args, capsule) {
