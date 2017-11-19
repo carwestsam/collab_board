@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import obj from '../utils/calcUtils.js'
 import _ from 'lodash'
 import uuid from 'uuid/v4'
+import * as d3 from 'd3-color'
 import {VuexConfigGenerator, StateHistoryMgr} from './StateHistoryManager'
 
 Vue.use(Vuex)
@@ -11,11 +12,21 @@ const INIT_ONBOARD_STICKER = 20
 const INIT_ONHAND_STICKER = 0
 const INIT_ONBOARD_GROUP = 1
 
+let stickerRotater = 0
+let groupRotater = 0
 function getRandomColor (type) {
   if (type === 'sticker') {
-    return `hsl(${obj.getRandomInt(0, 360)}, 100%,70%)`
+    stickerRotater = (stickerRotater + 137.5) % 360
+    // return `hsl(${stickerRotater}, 100%, 70%)`
+    let h = stickerRotater
+    let s = 80
+    let l = 90
+    let result = d3.hcl(h, s, l).toString()
+    console.log('color', result)
+    return result
   } else if (type === 'group') {
-    return `hsl(${obj.getRandomInt(0, 360)}, 100%,95%)`
+    groupRotater = (groupRotater + 45.83) % 360
+    return `hsl(${groupRotater}, 100%, 95%)`
   }
 }
 
