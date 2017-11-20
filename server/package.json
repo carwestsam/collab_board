@@ -4,12 +4,17 @@
   "description": "server for collab board",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --experimental-modules app"
   },
   "author": "carwestsam <carwestsam@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.4",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4",
+    "webpack": "^3.8.1"
+  },
+  "devDependencies": {
   }
 }

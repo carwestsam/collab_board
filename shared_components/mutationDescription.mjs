@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4'
-import {getRandomColor} from './colorGenerator'
+import {getRandomColor} from './colorGenerator.mjs'
+import _ from 'lodash'
 
 function findItemById (state, id) {
   for (let i = 0; i < state.items.length; i++) {
