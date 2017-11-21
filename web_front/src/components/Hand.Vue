@@ -27,10 +27,10 @@ export default {
       let selectMgr = SelectMgr.getInstance()
       // debugger
       let id = selectMgr.selected[0].context.dataProps.id
-      this.$store.commit('moveItem', {id, stack: 'hand'})
+      this.$store.commit('moveItem', {id, stack: 'hand-' + this.$store.getters.userId})
     },
     addItem: function (type) {
-      this.$store.commit('addItem', {type, stack: 'hand'})
+      this.$store.commit('addItem', {type, stack: 'hand-' + this.$store.getters.userId})
     }
   },
   components: {

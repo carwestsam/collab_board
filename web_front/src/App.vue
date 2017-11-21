@@ -38,6 +38,7 @@ export default {
     }
   },
   beforeCreate () {
+    this.$store.commit('initUser')
     $http.get('http://localhost:3000').then(response => {
       this.$store.commit('initItems', response.body)
     }, error => {

@@ -6,15 +6,21 @@ import uuid from 'uuid/v4'
 import {VuexConfigGenerator, StateHistoryMgr} from './StateHistoryManager'
 import {mutationDesciption} from '../../../shared_components/mutationDescription.mjs'
 import {getRandomColor} from '../../../shared_components/colorGenerator.mjs'
+import Cookies from 'js-cookie'
+
 Vue.use(Vuex)
 
 const INIT_ONBOARD_STICKER = 20
 const INIT_ONHAND_STICKER = 0
 const INIT_ONBOARD_GROUP = 1
+const USER_ID_COOKIE = 'Collaborate_board_user_id'
 
 let storeDes = {
   state: {
-    items: []
+    items: [],
+    user: {
+      id: ''
+    }
   },
   mutations: {
     initItems: (state, data) => {
@@ -55,6 +61,16 @@ let storeDes = {
           stack: 'hand'
         })
       }
+    },
+    initUser: (state) => {
+      let userId = Cookies.get(USER_ID_COOKIE)
+      if (typeof userId === 'undefined') {
+        let userId = uuid()
+        state.user.id = userId
+        Cookies.set(USER_ID_COOKIE, userId)
+      } else {
+        state.user.id = userId
+      }
     }
   },
   getters: {
@@ -62,7 +78,7 @@ let storeDes = {
       return state.items.filter(sticker => sticker.stack === 'board')
     },
     onHand: (state) => {
-      return state.items.filter(sticker => sticker.stack === 'hand')
+      return state.items.filter(sticker => sticker.stack === 'hand-' + state.user.id)
     },
     getStickerById: (state) => (id) => {
       for (let i = 0; i < state.items.length; i++) {
@@ -73,6 +89,9 @@ let storeDes = {
     },
     items: (state) => (stack = 'board') => {
       return state.items.filter(item => item.stack === stack)
+    },
+    userId: (state) => {
+      return state.user.id
     }
   }
 }
