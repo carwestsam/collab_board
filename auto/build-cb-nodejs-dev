@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build -f ./infrastructure/cb-nodejs-dev.Dockerfile -t cb-nodejs-dev .

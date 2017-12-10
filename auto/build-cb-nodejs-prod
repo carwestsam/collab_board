@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build -f ./infrastructure/cb-nodejs.Dockerfile -t carwestsam/ubuntu-16-node-8 .

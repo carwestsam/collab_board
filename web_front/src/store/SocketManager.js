@@ -6,7 +6,7 @@ class SocketManager {
   constructor () {
     console.log('init socket')
     this.callback = function () {}
-    this.socket = io('http://localhost:3000')
+    this.socket = io(process.env.BACKEND_DOMAIN)
     this.socket.on('updates', (msg) => {
       this.update(JSON.parse(msg))
     })

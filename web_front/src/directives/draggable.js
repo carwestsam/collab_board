@@ -68,9 +68,9 @@ class DragManager {
     this.dropped = true
   }
   removeDocumentListeners (vnode, eventTypes) {
-    if (window.DEBUG === true) {
-      debugger
-    }
+    // if (window.DEBUG === true) {
+    //   debugger
+    // }
     let id = 'undefinedx'
     if (typeof vnode === 'string') {
       id = vnode

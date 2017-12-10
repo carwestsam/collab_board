@@ -39,7 +39,7 @@ export default {
   },
   beforeCreate () {
     this.$store.commit('initUser')
-    $http.get('http://localhost:3000').then(response => {
+    $http.get('http://' + process.env.BACKEND_DOMAIN).then(response => {
       this.$store.commit('initItems', response.body)
     }, error => {
       console.log('err', error)
