@@ -8,5 +8,5 @@ Any suggestions please leave an issue.
 
 ### handy links
 
-https://github.com/sequelize/cli/blob/master/docs/README.md
-http://docs.sequelizejs.com/class/lib/query-interface.js~QueryInterface.html
+- [sequelize-cli README](https://github.com/sequelize/cli/blob/master/docs/README.md)
+- [sequelize queryInterface README](http://docs.sequelizejs.com/class/lib/query-interface.js~QueryInterface.html)
