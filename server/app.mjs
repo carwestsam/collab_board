@@ -25,3 +25,4 @@ io.on('connection', function (socket) {
 })
 
 httpServer.listen(3000, () => console.log('Example app listening on port 3000'))
+// be aware, it should not be port 80, because it is belongs to a non prod account in container

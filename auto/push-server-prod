@@ -1,0 +1,6 @@
+#!/bin/bash
+
+$(aws ecr get-login --no-include-email --region us-east-1)
+
+docker tag cb-server:latest 168523227096.dkr.ecr.us-east-1.amazonaws.com/cb-server:latest
+docker push 168523227096.dkr.ecr.us-east-1.amazonaws.com/cb-server:latest

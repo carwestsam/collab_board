@@ -1,4 +1,4 @@
 #!/bin/bash
 
 docker kill cb-server-dev 2>&1
-docker run --name cb-server-dev --rm -d -p 3000:3000 -v $PWD/server:/data/server -v $PWD/shared_components:/data/shared_components cb-nodejs /bin/bash -c "cd data/server; npm run start"
+docker run --name cb-server-dev --rm -d -p 3000:80 -v $PWD/server:/data/server -v $PWD/shared_components:/data/shared_components cb-nodejs /bin/bash -c "cd data/server; npm run start"

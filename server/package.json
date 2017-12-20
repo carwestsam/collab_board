@@ -15,8 +15,8 @@
   "dependencies": {
     "cors": "^2.8.4",
     "express": "^4.16.2",
-    "socket.io": "^2.0.4",
-    "nodemon": "^1.12.5"
+    "nodemon": "^1.12.5",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {
     "webpack": "^3.8.1"
