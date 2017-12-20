@@ -16,3 +16,18 @@ services:
       - ./server:/data/server
       - ./shared_components:/data/shared_components
     command: /bin/bash -c "cd data/server;npm install; npm run start"
+    depends_on:
+      - db
+    links:
+      - "db:database"
+    environment:
+      DB_URL: "postgresql://postgres:postgres@database:5432/postgres"
+  db:
+    image: postgres:9
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
