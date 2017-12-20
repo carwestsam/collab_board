@@ -1,0 +1,18 @@
+version: '3'
+services:
+  web:
+    image: cb-nodejs-dev:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./web_front:/data/web_front
+      - ./shared_components:/data/shared_components
+    command: bash -c "cd /data/web_front; npm install; npm run dev"
+  socket-server:
+    image: cb-nodejs
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/data/server
+      - ./shared_components:/data/shared_components
+    command: /bin/bash -c "cd data/server;npm install; npm run start"
