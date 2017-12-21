@@ -165,5 +165,6 @@ export default {
   line-height: 1.2em;
   text-align: center;
   z-index: 100;
+  background-color: white;
 }
 </style>

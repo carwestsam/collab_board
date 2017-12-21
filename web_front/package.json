@@ -18,10 +18,12 @@
     "js-cookie": "^2.2.0",
     "keyboardjs": "^2.4.1",
     "lodash": "^4.17.4",
+    "path-parser": "^3.0.1",
     "socket.io-client": "^2.0.4",
     "superagent": "^3.8.1",
     "uuid": "^3.1.0",
     "vue": "^2.4.2",
+    "vuetify": "^0.17.5",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

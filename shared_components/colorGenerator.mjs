@@ -1,4 +1,9 @@
-import * as d3 from 'd3-color'
+import * as d3_raw from 'd3-color'
+let d3 = d3_raw
+
+if ( d3_raw.default ) {
+  d3 = d3_raw.default
+}
 
 let sticker_rotater = 0
 let groupRotater = 0

@@ -6,8 +6,10 @@ import getStore from './store'
 import './directives'
 import kb from 'keyboardjs'
 import {StateHistoryMgr} from './store/StateHistoryManager'
+import Vuetify from 'vuetify'
 
 Vue.config.productionTip = false
+Vue.use(Vuetify)
 
 /* eslint-disable no-new */
 new Vue({
