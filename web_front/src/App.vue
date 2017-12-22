@@ -1,29 +1,51 @@
 <template>
-
   <div id="application">
-      <v-app>
-    <paper/>
-    <hand/>
-    <!-- <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker> -->
-    <template v-for="item in items" >
-      <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
-      <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
-    </template>
-    <div id="holder"></div>
-    <v-dialog v-model="dialog2" max-width="500px">
-        <v-card>
-          <v-card-title>
-            Dialog 2
-          </v-card-title>
-          <v-card-text>
-            <v-btn color="primary" dark @click.stop="dialog3 = !dialog3">Open Dialog 3</v-btn>
-          </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" flat @click.stop="dialog2=false">Close</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-       </v-app>
+    <v-app>
+      <paper/>
+      <hand/>
+      <!-- <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker> -->
+      <template v-for="item in items" >
+        <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
+        <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
+      </template>
+      <!-- <div id="holder"></div> -->
+      <v-dialog v-model="selectBoardDialog" max-width="500px" persistent>
+          <v-card>
+            <v-card-title>
+              Please Select a Board
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md text-xs-center>
+                <v-layout row wrap>
+                  <v-flex sm6>
+                    <v-card>
+                      <v-card-text>
+                        <v-text-field
+                          name="input-1"
+                          label="Board Id or URL"
+                          id="testing"></v-text-field>
+                        <v-btn color="primary" dark @click.stop="jumpToBoard">Join</v-btn>
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+                  <v-flex sm6>
+                    <v-card>
+                      <v-card-text>
+                        <v-text-field
+                          name="input-2"
+                          label="Board Id or URL"
+                          value="Will Random Generate"
+                          disabled></v-text-field>
+                        <v-btn color="primary" dark @click.stop="createBoard">Create New</v-btn>
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-app>
   </div>
 </template>
 
@@ -39,7 +61,7 @@ export default {
   // name: 'app',
   data () {
     return {
-      dialog2: true,
+      selectBoardDialog: true,
       dialog3: false
     }
   },
@@ -57,6 +79,14 @@ export default {
         return item
       })
       return items
+    }
+  },
+  methods: {
+    jumpToBoard: function () {
+      this.selectBoardDialog = false
+    },
+    createBoard: function () {
+      this.selectBoardDialog = false
     }
   },
   beforeCreate () {

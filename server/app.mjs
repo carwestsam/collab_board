@@ -6,11 +6,20 @@ app.use(cors())
 import http from 'http'
 const httpServer = http.Server(app)
 import randomboard from './templates/boards/randomboard'
+import board_template from './templates/boards/board_template'
 import {mutationDesciption} from '../shared_components/mutationDescription'
 import Socket from 'socket.io'
 const io = Socket(httpServer)
 
 app.get('/', (req, res) => res.json(randomboard))
+app.get('/room/create', (req, res) => {
+  console.log("create new board")
+  return res.send('success created a new room')
+})
+app.get('/room/:room_id', (req, res) => {
+  console.log('id: ', req.params.room_id)
+  return res.json(board_template)
+})
 
 io.on('connection', function (socket) {
   console.log("a user conneted")

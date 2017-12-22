@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/sequelize db:migrate && ./node_modules/.bin/nodemon --experimental-modules app"
+    "start": "./node_modules/.bin/sequelize db:migrate && ./node_modules/.bin/nodemon -e js,json,mjs --experimental-modules app"
   },
   "author": "carwestsam <carwestsam@gmail.com>",
   "license": "ISC",
