@@ -61,7 +61,7 @@ export default {
   // name: 'app',
   data () {
     return {
-      selectBoardDialog: true,
+      selectBoardDialog: false,
       dialog3: false
     }
   },
@@ -97,6 +97,7 @@ export default {
     let room = parser.partialTest(window.location.pathname)
     if (room) {
     } else {
+      this.selectBoardDialog = true
     }
     console.log('current path')
     $http.get('http://' + process.env.BACKEND_DOMAIN).then(response => {

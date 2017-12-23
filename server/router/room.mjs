@@ -1,0 +1,61 @@
+import express from 'express'
+import db from '../models/index'
+import uuid from 'uuid/v4'
+import board_template from '../templates/boards/board_template'
+
+const router = express.Router()
+const Board = db['Board']
+
+export default router
+
+router.get('/list', async (req, res) => {
+  let boards = await Board.findAll()
+  return res.json({boards})
+})
+
+router.post('/create', async (req, res) => {
+  let boards = []
+  if (req.body) {
+    console.log('100')
+      let item_id = "";
+    do {
+      item_id = uuid()
+      try {
+        boards = await Board.findAll({where: {item_id}})
+      } catch (e) {
+        // console.log('error', e)
+        break
+      }
+      console.log('boards:', boards)
+    } while (boards.length != 0 )
+    let newBoard = {
+      name: req.body.name,
+      item_id,
+      content: JSON.stringify(board_template)
+    }
+    return await Board.create(newBoard).then(()=>{
+      return res.status(200).json(newBoard)
+    }, err => {
+      return res.status(501).send('error', err)
+    })
+  } else {
+    return res.status(200).send('invalid create post')
+  }
+})
+
+router.get('/:room_id', (req, res) => {
+  let item_id = req.params.room_id
+  return Board.findOne({where:{item_id}})
+  .then(
+    result => {
+      console.log('result:', result)
+      if (result) {
+        res.status(200).set('Content-Type', 'application/json').send(result.content)
+      } else {
+        res.status(404).json({'error':'room not found'})
+      }
+    }, err => {
+      console.log('error in get rooms', err)
+      res.status(500).send('failed to find room')
+  })
+})
