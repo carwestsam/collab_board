@@ -22,6 +22,7 @@ services:
       - "db:database"
     environment:
       DB_URL: "postgresql://postgres:postgres@database:5432/postgres"
+      NODE_ENV: "development"
   db:
     image: postgres:9
     restart: always

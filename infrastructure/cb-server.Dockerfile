@@ -9,4 +9,4 @@ RUN bash -c "cd /data/shared_components/; npm install --production; cd /data/ser
 
 WORKDIR /data/server
 
-CMD npm start
+CMD npm run start-prod

@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/sequelize db:migrate && ./node_modules/.bin/nodemon -e js,json,mjs --experimental-modules app"
+    "start": "./node_modules/.bin/sequelize db:migrate && ./node_modules/.bin/nodemon -e js,json,mjs --experimental-modules app",
+    "start-prod": "./node_modules/.bin/sequelize db:migrate && node --experimental-modules app"
   },
   "author": "carwestsam <carwestsam@gmail.com>",
   "license": "ISC",
@@ -16,7 +17,6 @@
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
-    "nodemon": "^1.12.5",
     "pg": "^6.4.2",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.28.6",
@@ -25,6 +25,7 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "webpack": "^3.8.1"
+    "webpack": "^3.8.1",
+    "nodemon": "^1.12.5"
   }
 }
