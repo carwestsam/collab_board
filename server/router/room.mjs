@@ -15,9 +15,18 @@ function Helper () {
   }
 }
 
+async function saveBoard (item_id, json_content) {
+  return Board.update({
+    content: json_content
+  }, {
+    where: {item_id}
+  })
+}
+
 export default {
   router,
-  helper: Helper()
+  helper: Helper(),
+  saveBoard
 }
 
 router.get('/list', async (req, res) => {
@@ -28,8 +37,7 @@ router.get('/list', async (req, res) => {
 router.post('/create', async (req, res) => {
   let boards = []
   if (req.body) {
-    console.log('100')
-      let item_id = "";
+    let item_id = "";
     do {
       item_id = uuid()
       try {
@@ -71,3 +79,4 @@ router.get('/:room_id', (req, res) => {
       res.status(500).send('failed to find room')
   })
 })
+

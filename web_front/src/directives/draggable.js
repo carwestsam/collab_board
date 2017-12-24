@@ -126,7 +126,7 @@ function initDrag (vnode, delegate) {
         let $app = document.getElementById('application')
         targetLeft = $app.scrollLeft + event.clientX - offsetX - 10
         targetTop = $app.scrollTop + event.clientY - offsetY - 10
-        console.log('move', $app.scrollLeft, $app.scrollTop, targetLeft, targetTop)
+        // console.log('move', $app.scrollLeft, $app.scrollTop, targetLeft, targetTop)
         // debugger
       }
     }

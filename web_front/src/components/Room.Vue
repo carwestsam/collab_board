@@ -13,7 +13,7 @@
                   <v-card-text>
                     <v-text-field
                       name="input-1"
-                      label="Board Id or URL"
+                      label="Board Id"
                       id="testing"
                       v-model="boardId"></v-text-field>
                     <v-btn color="primary" dark @click.stop="jumpToBoard">Join</v-btn>
@@ -25,7 +25,7 @@
                   <v-card-text>
                     <v-text-field
                       name="input-2"
-                      label="Board Id or URL"
+                      label="Board Id"
                       value="Will Random Generate"
                       disabled></v-text-field>
                     <v-btn color="primary" dark @click.stop="createBoard">Create New</v-btn>
@@ -58,7 +58,11 @@ export default {
       this.selectBoardDialog = false
     },
     createBoard: function () {
-      this.selectBoardDialog = false
+      $http.post('http://' + process.env.BACKEND_DOMAIN + '/room/create', {name: 'user created board'}).then(response => {
+        console.log(response.body)
+        location.href = '/room/' + response.body.item_id
+        this.selectBoardDialog = false
+      })
     }
   },
   mounted () {

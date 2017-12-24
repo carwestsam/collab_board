@@ -31,21 +31,18 @@ app.get('/room/:room_id', (req, res, next) => {
 })
 app.use('/room', room.router)
 
-
-
 function leaveRoom (room_id, socket_id) {
   if ( !BoardSocketDict[room_id] ) {
     return
   }
   BoardSocketDict[room_id] = BoardSocketDict[room_id].filter(x => x != socket_id)
   if (BoardSocketDict[room_id].length == 0) {
-    
+    room.saveBoard(room_id, JSON.stringify(BoardDict[room_id]))
     delete SocketBoardDict[socket_id]
     delete BoardSocketDict[room_id]
     delete BoardDict[room_id]
   }
 }
-
 
 io.on('connection', function (socket) {
   console.log("a user conneted:", socket.id)
@@ -94,6 +91,13 @@ io.on('connection', function (socket) {
       }
     }} catch (e) {
       console.log('join room error', e)
+    }
+  })
+
+  socket.on('save', function() {
+    if (SocketBoardDict[socket.id]){
+      let room_id = SocketBoardDict[socket.id]
+      room.saveBoard(room_id, JSON.stringify(BoardDict[room_id]))
     }
   })
 
