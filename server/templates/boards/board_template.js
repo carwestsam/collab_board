@@ -80,8 +80,5 @@ module.exports = {
       "left": 271,
       "top": 46
     }
-  ],
-  "user": {
-    "id": "e3b4d5ae-3b2b-4939-8ab9-8bd379e99707"
-  }
+  ]
 }
