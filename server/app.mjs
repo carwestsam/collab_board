@@ -10,8 +10,6 @@ import randomboard from './templates/boards/randomboard'
 import board_template from './templates/boards/board_template'
 import {mutationDesciption} from '../shared_components/mutationDescription'
 import Socket from 'socket.io'
-import x from './router/room'
-console.log('room', x)
 import room from './router/room'
 
 const io = Socket(httpServer)
@@ -61,7 +59,6 @@ io.on('connection', function (socket) {
     if (BoardDict[room_id]){
       // socket.join(room_id)
       if (SocketBoardDict[socket.id]){
-        console.log('x')
         let oldRoom = SocketBoardDict[socket.id]
         if (room_id == oldRoom) {
           return
@@ -82,9 +79,9 @@ io.on('connection', function (socket) {
         BoardSocketDict[room_id] = [socket.id]
         SocketBoardDict[socket.id] = room_id
         socket.join(room_id)
-        console.log('boarddict', JSON.stringify(BoardDict))
-        console.log('BoardSocketDict', JSON.stringify(BoardSocketDict))
-        console.log('SocketBoardDict', JSON.stringify(SocketBoardDict))
+        // console.log('boarddict', JSON.stringify(BoardDict))
+        // console.log('BoardSocketDict', JSON.stringify(BoardSocketDict))
+        // console.log('SocketBoardDict', JSON.stringify(SocketBoardDict))
         console.log(`user ${socket.id} joind board ${room_id}`)
       } else {
         socket.emit('error', 'room not exsit')
@@ -103,9 +100,9 @@ io.on('connection', function (socket) {
 
   socket.on('mutation', function (msg) {
     let {mutation, capsule, args, direction} = JSON.parse(msg)
-    console.log('msg:', msg)
-    console.log('socket.id:', socket.id)
-    console.log('socketboarddict', SocketBoardDict[socket.id])
+    // console.log('msg:', msg)
+    // console.log('socket.id:', socket.id)
+    // console.log('socketboarddict', SocketBoardDict[socket.id])
     mutationDesciption[mutation]()[direction].apply(null, [capsule, BoardDict[SocketBoardDict[socket.id]], ...args])
     socket.broadcast.to(SocketBoardDict[socket.id]).emit('updates', msg)
   })

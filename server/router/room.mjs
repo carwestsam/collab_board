@@ -43,10 +43,9 @@ router.post('/create', async (req, res) => {
       try {
         boards = await Board.findAll({where: {item_id}})
       } catch (e) {
-        // console.log('error', e)
+        console.log('error', e)
         break
       }
-      console.log('boards:', boards)
     } while (boards.length != 0 )
     let newBoard = {
       name: req.body.name,
@@ -68,7 +67,6 @@ router.get('/:room_id', (req, res) => {
   return Board.findOne({where:{item_id}})
   .then(
     result => {
-      // console.log('result:', result)
       if (result) {
         res.status(200).set('Content-Type', 'application/json').send(result.content)
       } else {
