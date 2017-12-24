@@ -6,7 +6,19 @@ import board_template from '../templates/boards/board_template'
 const router = express.Router()
 const Board = db['Board']
 
-export default router
+function Helper () {
+  return {
+    getRoom : async (item_id) => {
+      let board = await Board.findOne({where: {item_id}})
+      return board ? JSON.parse(board.content) : board
+    }
+  }
+}
+
+export default {
+  router,
+  helper: Helper()
+}
 
 router.get('/list', async (req, res) => {
   let boards = await Board.findAll()
@@ -48,7 +60,7 @@ router.get('/:room_id', (req, res) => {
   return Board.findOne({where:{item_id}})
   .then(
     result => {
-      console.log('result:', result)
+      // console.log('result:', result)
       if (result) {
         res.status(200).set('Content-Type', 'application/json').send(result.content)
       } else {

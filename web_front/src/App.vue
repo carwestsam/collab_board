@@ -9,42 +9,7 @@
         <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
       </template>
       <!-- <div id="holder"></div> -->
-      <v-dialog v-model="selectBoardDialog" max-width="500px" persistent>
-          <v-card>
-            <v-card-title>
-              Please Select a Board
-            </v-card-title>
-            <v-card-text>
-              <v-container grid-list-md text-xs-center>
-                <v-layout row wrap>
-                  <v-flex sm6>
-                    <v-card>
-                      <v-card-text>
-                        <v-text-field
-                          name="input-1"
-                          label="Board Id or URL"
-                          id="testing"></v-text-field>
-                        <v-btn color="primary" dark @click.stop="jumpToBoard">Join</v-btn>
-                      </v-card-text>
-                    </v-card>
-                  </v-flex>
-                  <v-flex sm6>
-                    <v-card>
-                      <v-card-text>
-                        <v-text-field
-                          name="input-2"
-                          label="Board Id or URL"
-                          value="Will Random Generate"
-                          disabled></v-text-field>
-                        <v-btn color="primary" dark @click.stop="createBoard">Create New</v-btn>
-                      </v-card-text>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+      <room/>
       </v-app>
   </div>
 </template>
@@ -54,17 +19,10 @@ import Paper from './components/Paper'
 import Sticker from './components/Sticker'
 import Hand from './components/Hand'
 import Group from './components/Group'
-import * as $http from 'superagent'
-import Path from 'path-parser'
+import Room from './components/Room'
 
 export default {
   // name: 'app',
-  data () {
-    return {
-      selectBoardDialog: false,
-      dialog3: false
-    }
-  },
   computed: {
     stickers: function () {
       let stickers = this.$store.getters.stickers.map(sticker => {
@@ -81,37 +39,15 @@ export default {
       return items
     }
   },
-  methods: {
-    jumpToBoard: function () {
-      this.selectBoardDialog = false
-    },
-    createBoard: function () {
-      this.selectBoardDialog = false
-    }
-  },
-  beforeCreate () {
-  },
   mounted () {
     this.$store.commit('initUser')
-    const parser = new Path('/room/:room_id')
-    let room = parser.partialTest(window.location.pathname)
-    if (room) {
-    } else {
-      this.selectBoardDialog = true
-    }
-    console.log('current path')
-    $http.get('http://' + process.env.BACKEND_DOMAIN).then(response => {
-      this.$store.commit('initItems', response.body)
-      console.log('commit')
-    }, error => {
-      console.log('err', error)
-    })
   },
   components: {
     Paper,
     Sticker,
     Group,
-    Hand
+    Hand,
+    Room
   }
 }
 </script>
