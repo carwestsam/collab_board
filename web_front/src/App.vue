@@ -14,6 +14,10 @@
   </div>
 </template>
 
+<style lang="scss">
+@import './directives/resizable.scss'
+</style>
+
 <script>
 import Paper from './components/Paper'
 import Sticker from './components/Sticker'

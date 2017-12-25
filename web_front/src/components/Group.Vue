@@ -2,10 +2,12 @@
   <div
     v-bind:style="styleObject"
     v-bind:class="{select: statusProps.selected}"
-    v-draggable="statusProps.draggable"
     class="group"
+    v-selectable
+    v-draggable="statusProps.draggable"
     v-dropable="drop"
-    v-selectable>
+    v-resizable
+    >
     <div class="group-inner">
       <div
         v-if="!statusProps.editing"
@@ -53,8 +55,8 @@ export default {
   data () {
     return {
       styleProps: {
-        width: 500,
-        height: 500,
+        width: this.group.width || 500,
+        height: this.group.height || 500,
         left: this.group.left || 500,
         top: this.group.top || 500,
         bg_color: this.group.bg_color || 'yellow',
@@ -110,7 +112,7 @@ export default {
   },
   methods: {
     select: function () {
-      console.log('group select')
+      // console.log('group select')
       this.statusProps.selected = true
       this.statusProps.draggable = true
     },
@@ -138,8 +140,20 @@ export default {
       }
     },
     drop: function (event, itemId) {
-      // console.log('group drop', event, targetId)
       this.$store.commit('moveItem', {id: itemId, stack: this.dataProps.id})
+    },
+    onResizing: function (width, height) {
+      if (this.statusProps.selected) {
+        this.styleProps.width = width
+        this.styleProps.height = height
+      }
+    },
+    onResizeStop: function (width, height) {
+      if (this.statusProps.selected) {
+        this.styleProps.width = width
+        this.styleProps.height = height
+        this.$store.commit('resizeItem', {id: this.dataProps.id, width, height})
+      }
     }
   },
   components: {

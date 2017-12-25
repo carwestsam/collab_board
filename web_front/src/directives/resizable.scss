@@ -1,0 +1,18 @@
+.select .resizable-handle {
+  display: block;
+}
+  
+
+.resizable-handle {
+  color: red;
+  background-color: lightgray;
+  box-sizing: border-box;
+  border: 2px solid black;
+  position: absolute;
+  display: none;
+  width: 1em;
+  height: 1em;
+  right: 0;
+  bottom: 0;
+  cursor: nwse-resize;
+}

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import SelectMgr from './selectable'
-import log from '../../../shared_components/log.mjs'
+// import log from '../../../shared_components/log.mjs'
 import _ from 'lodash'
 let selectMgr = SelectMgr.getInstance()
 
@@ -120,7 +120,7 @@ function initDrag (vnode, delegate) {
     event.dataTransfer.setData('text/plain', vnode.context.dataProps.text)
 
     let MouseMove = function (event) {
-      log('move')
+      // log('move')
       if (moved === false) {
         moved = true
       }
@@ -128,7 +128,7 @@ function initDrag (vnode, delegate) {
         let $app = document.getElementById('application')
         targetLeft = $app.scrollLeft + event.clientX - offsetX - 10
         targetTop = $app.scrollTop + event.clientY - offsetY - 10
-        log('move', $app.scrollLeft, $app.scrollTop, targetLeft, targetTop)
+        // log('move', $app.scrollLeft, $app.scrollTop, targetLeft, targetTop)
         // debugger
       }
     }

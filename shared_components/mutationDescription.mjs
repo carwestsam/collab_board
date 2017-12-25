@@ -83,6 +83,28 @@ export let mutationDesciption = {
       }
     }
   },
+  resizeItem: function () {
+    return {
+      forward: (capsule, state, {id, width, height}) => {
+        let {item} = findItemById(state, id)
+        let newId = capsule['newId'] || uuid()
+        capsule['width'] = width
+        capsule['height'] = height
+        capsule['id'] = item.id
+        item.id = capsule['newId'] = newId
+        item.width = width
+        item.height = height
+        updateStack(state, capsule['id'], capsule['newId'])
+      },
+      backward: (capsule, state, {id, width, height}) => {
+        let {item} = findItemById(state, capsule['newId'])
+        item.id = capsule['id']
+        item.width = capsule['width']
+        item.height = capsule['height']
+        updateStack(state, capsule['newId'], capsule['id'])
+      }
+    }
+  },
   addItem: function () {
     return {
       forward: (capsule, state, {type, stack}) => {

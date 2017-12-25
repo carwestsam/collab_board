@@ -17,6 +17,8 @@ module.exports = {
       "text": "Example Group",
       "left": 152,
       "top": 177,
+      "width": 500,
+      "height": 500,
       "stack": "board",
       "styleOffset": true
     },
