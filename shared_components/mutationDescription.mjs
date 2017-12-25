@@ -12,6 +12,7 @@ function findItemById (state, id) {
       }
     }
   }
+  console.log(`could not find item in ${JSON.stringify(state)} by id ${id}`)
 }
 
 function updateStack (state, oldStack, newStack) {
