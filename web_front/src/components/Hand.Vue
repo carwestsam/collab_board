@@ -80,7 +80,7 @@ export default {
   margin-left: auto; 
   margin-right: auto;
   // align: center;
-  z-index:1001;
+  z-index:50;
   .items {
     display: none;
   }

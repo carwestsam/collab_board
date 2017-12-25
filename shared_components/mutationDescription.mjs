@@ -1,6 +1,7 @@
 import uuid from 'uuid/v4'
 import {getRandomColor} from './colorGenerator.mjs'
 import _ from 'lodash'
+import log from './log.mjs'
 
 function findItemById (state, id) {
   for (let i = 0; i < state.items.length; i++) {
@@ -14,6 +15,9 @@ function findItemById (state, id) {
 }
 
 function updateStack (state, oldStack, newStack) {
+  if (!state || !state.items || !state.items.length ) {
+    log('invalid state', state)
+  }
   for (let i = 0; i < state.items.length; i++) {
     if (state.items[i].stack === oldStack) {
       state.items[i].stack = newStack

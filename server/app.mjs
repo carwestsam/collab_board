@@ -12,7 +12,7 @@ import {mutationDesciption} from '../shared_components/mutationDescription'
 import Socket from 'socket.io'
 import room from './router/room'
 
-const io = Socket(httpServer)
+const io = Socket(httpServer, {origins: "board.zhuoyou.cafe:* http://localhost:*"})
 let BoardDict = {}
 let BoardSocketDict = {}
 let SocketBoardDict = {}

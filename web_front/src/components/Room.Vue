@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="selectBoardDialog" max-width="500px" persistent>
+    <v-dialog v-model="selectBoardDialog" max-width="500px" class="dialog" persistent>
       <v-card>
         <v-card-title>
           Please Select a Board
@@ -84,4 +84,7 @@ export default {
 </script>
 
 <style lang="scss">
+.dialog {
+  z-index: 100;
+}
 </style>
