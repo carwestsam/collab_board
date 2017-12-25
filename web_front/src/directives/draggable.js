@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import SelectMgr from './selectable'
+import log from '../../../shared_components/log.mjs'
 import _ from 'lodash'
 let selectMgr = SelectMgr.getInstance()
 
@@ -43,7 +44,7 @@ class DragManager {
     }
     this.dragFunctions[id].dragstart.call($this, event)
   }
-  initDrag () {
+  init () {
     this.dropped = false
   }
   bindDrag (el, vnode) {
@@ -103,7 +104,7 @@ function initDrag (vnode, delegate) {
   let dragStart = function (event) {
     let id = vnode.context.dataProps.id
 
-    dragManager.initDrag()
+    dragManager.init()
     let $this = this
     let moved = false
     let targetLeft = this.style.left
@@ -119,6 +120,7 @@ function initDrag (vnode, delegate) {
     event.dataTransfer.setData('text/plain', vnode.context.dataProps.text)
 
     let MouseMove = function (event) {
+      log('move')
       if (moved === false) {
         moved = true
       }
@@ -126,7 +128,7 @@ function initDrag (vnode, delegate) {
         let $app = document.getElementById('application')
         targetLeft = $app.scrollLeft + event.clientX - offsetX - 10
         targetTop = $app.scrollTop + event.clientY - offsetY - 10
-        // console.log('move', $app.scrollLeft, $app.scrollTop, targetLeft, targetTop)
+        log('move', $app.scrollLeft, $app.scrollTop, targetLeft, targetTop)
         // debugger
       }
     }
@@ -211,14 +213,12 @@ Vue.directive('dropable', {
       let e = event
       callbackFunc.apply(this, [e, id])
 
-      if (dragManager.dropped === true) {
+      if (dragManager.dropped === true && id) {
         dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
         selectMgr.unselectAll()
         // dragManager.removeElementListeners(id, el, ['dragstart'])
       }
       e.stopPropagation()
-
-      // e.preventDefault()
     })
   }
 })
