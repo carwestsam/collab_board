@@ -181,6 +181,7 @@ export default {
       padding-left: 20px;
       padding-right: 20px;
       width: 100%;
+      line-height: 1.5em;
       overflow: hidden;
       // font-size: 32px;
       white-space: nowrap;
@@ -188,8 +189,8 @@ export default {
     }
     .content {
       margin-left: 20px;
-      width: calc(100% - 40px);
-      height: calc(100% - 40px);
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
       // overflow: scroll;
     }
     .input-title {
