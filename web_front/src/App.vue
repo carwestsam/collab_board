@@ -10,7 +10,7 @@
       </template>
       <!-- <div id="holder"></div> -->
       <room/>
-      </v-app>
+    </v-app>
   </div>
 </template>
 

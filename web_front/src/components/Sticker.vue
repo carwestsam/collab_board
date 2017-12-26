@@ -17,18 +17,13 @@
         @keydown.enter="outsideEdit"
         v-model="dataProps.text"
         class="input-overlay"/>
-      
-      <span class="option-btns">
-        <button 
-        v-if="this.statusProps.selected"
-        @mousedown.prevent="intoEdit"
-        class='edit-button'>Edit</button>
-        <button
-          v-if="this.statusProps.selected"
-          @mousedown.prevent="deleteSticker"
-          class="delete-button">
-          Delete
-        </button>
+      <span class="option-btns" v-if="this.statusProps.selected && !this.statusProps.editing">
+        <v-btn color="primary" fab small dark @mousedown.prevent="intoEdit">
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <v-btn color="primary" fab small dark @mousedown.prevent="deleteSticker">
+          <v-icon>delete</v-icon>
+        </v-btn>
       </span>
       </div>
   </div>
@@ -42,8 +37,8 @@ export default {
   data () {
     return {
       styleProps: {
-        width: 100,
-        height: 100,
+        width: 120,
+        height: 120,
         left: this.sticker.left || 100,
         top: this.sticker.top || 100,
         bg_color: this.sticker.bg_color || 'yellow',
@@ -129,11 +124,15 @@ export default {
   background-color: yellow;
   user-select: none;
   font-size: 18px;
-  font-weight: normal;
+  font-weight: 400;
   line-height: 1.2em;
+  text-align: left;
   &.select {
     box-shadow: 0px 0px 2px blue;
     z-index: 20;
+  }
+  .content {
+    padding: 5px;
   }
   .sticker-inner {
     width: 100%;
@@ -151,20 +150,16 @@ export default {
   right: 0;
   bottom: 0;
 }
-.edit-button {
-  display: inline-block;
-}
-.delete-button {
-  display: inline-block;
-}
 .input-overlay {
   position: absolute;
   top: 0;
   left: 0;
   font-size: 18px;
   line-height: 1.2em;
-  text-align: center;
+  // text-align: center;
   z-index: 100;
+  padding: 5px;
+  resize: none;
   background-color: white;
 }
 </style>

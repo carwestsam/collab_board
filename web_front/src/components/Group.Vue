@@ -29,17 +29,13 @@
           <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
         </template>
       </div>
-      <span class="option-btns">
-        <button 
-        v-if="this.statusProps.selected"
-        @mousedown.prevent="intoEdit"
-        class='edit-button'>Edit</button>
-        <button
-          v-if="this.statusProps.selected"
-          @mousedown.prevent="deleteGroup"
-          class="delete-button">
-          Delete
-        </button>
+      <span class="option-btns" v-if="this.statusProps.selected">
+        <v-btn color="primary" fab small dark @mousedown.prevent="intoEdit">
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <v-btn color="primary" fab small dark @mousedown.prevent="deleteGroup">
+          <v-icon>delete</v-icon>
+        </v-btn>
       </span>
     </div>
   </div>
@@ -88,6 +84,8 @@ export default {
         style.float = 'left'
         style.width = '100%'
         style.height = 'auto'
+        style.fontSize = '0.8em'
+        style.textAlign = 'left'
         delete style.left
         delete style.top
       } else {
@@ -168,8 +166,9 @@ export default {
   user-select: none;
   font-size: 32px;
   text-align: left;
-  font-weight: bold;
+  font-weight: 500;
   line-height: 1.2em;
+  text-align: center;
   &.select {
     box-shadow: 0px 0px 10px blue;
     z-index: 20;
@@ -179,20 +178,23 @@ export default {
     height: 100%;
     position: relative;
     .group-name {
+      padding-left: 20px;
+      padding-right: 20px;
       width: 100%;
       overflow: hidden;
-      font-size: 32px;
+      // font-size: 32px;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
     .content {
-      margin-left: 5%;
-      width: 90%;
-      height: 90%;
+      margin-left: 20px;
+      width: calc(100% - 40px);
+      height: calc(100% - 40px);
       // overflow: scroll;
     }
     .input-title {
       font-size: 1em;
+      padding-left: 20px;
     }
   }
 }
@@ -200,11 +202,5 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-}
-.edit-button {
-  display: inline-block;
-}
-.delete-button {
-  display: inline-block;
 }
 </style>

@@ -3,8 +3,8 @@
     <div class='items'>
       <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
       <div class="add-new-item">
-        <button @click="addItem('sticker')">+ Sticker</button>
-        <button @click="addItem('group')">+ Group</button>
+        <v-btn color="primary" dark @click="addItem('sticker')">+ Sticker</v-btn>
+        <v-btn color="primary" dark  @click="addItem('group')">+ Group</v-btn>
       </div>
     </div>
   </div>
@@ -90,15 +90,17 @@ export default {
   margin-right: auto;
   // align: center;
   z-index:50;
+  padding-top: 20px;
+  padding-left: 20px;
   .items {
     display: none;
   }
 
   .add-new-item {
     display: none;
-    background-color: red;
-    width: 100px;
-    height: 100px;
+    background-color: none;
+    width: 120px;
+    height: 120px;
     button {
       font-size: 20px;
       margin-top: 10%;

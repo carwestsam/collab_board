@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="selectBoardDialog" max-width="500px" class="dialog" persistent>
+    <v-dialog v-if="selectBoardDialog" v-model="selectBoardDialog" max-width="500px" class="dialog" persistent>
       <v-card>
         <v-card-title>
           Please Select a Board

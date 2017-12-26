@@ -5,6 +5,7 @@ let cons = Vue.extend({
   template: `<div
     class="resizable-handle"
     @mousedown.stop="onResize">
+    <v-icon>network_cell</v-icon>
   </div>`,
   methods: {
     onResize: function (event) {
