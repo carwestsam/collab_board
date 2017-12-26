@@ -4,8 +4,6 @@ let socketMgr
 
 class SocketManager {
   constructor () {
-    console.log('init socket')
-    console.log('current path', window.location.pathname)
     this.callback = function () {}
     this.socket = io(process.env.BACKEND_DOMAIN)
     this.socket.on('updates', (msg) => {

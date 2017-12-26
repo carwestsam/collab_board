@@ -12,6 +12,7 @@
 <script>
 
 import Sticker from './Sticker'
+import Group from './Group'
 import SelectMgr from '../directives/selectable.js'
 
 export default {
@@ -20,6 +21,13 @@ export default {
       let stickers = this.$store.getters.onHand
       stickers = stickers.map(sticker => { sticker.styleOffset = false; return sticker })
       return stickers
+    },
+    items: function () {
+      let items = this.$store.getters.onHand.map(item => {
+        item.styleOffset = false
+        return item
+      })
+      return items
     }
   },
   methods: {
@@ -34,7 +42,8 @@ export default {
     }
   },
   components: {
-    Sticker
+    Sticker,
+    Group
   }
 }
 </script>

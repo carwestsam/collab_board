@@ -87,6 +87,14 @@ let storeDes = {
         }
       }
     },
+    hasId: (state) => (id) => {
+      for (let i = 0; i < state.items.length; i++) {
+        if (state.items[i].id === id) {
+          return true
+        }
+      }
+      return false
+    },
     items: (state) => (stack = 'board') => {
       return state.items.filter(item => item.stack === stack)
     },

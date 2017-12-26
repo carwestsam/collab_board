@@ -1,12 +1,12 @@
 <template>
   <div
     v-bind:style="styleObject"
-    v-bind:class="{select: statusProps.selected}"
+    v-bind:class="{select: statusProps.selected, resizable: styleProps.styleOffset}"
     class="group"
     v-selectable
     v-draggable="statusProps.draggable"
     v-dropable="drop"
-    v-resizable
+    v-resizable="statusProps.resizable"
     >
     <div class="group-inner">
       <div
@@ -55,8 +55,8 @@ export default {
   data () {
     return {
       styleProps: {
-        width: this.group.width || 500,
-        height: this.group.height || 500,
+        width: this.group.width || 300,
+        height: this.group.height || 300,
         left: this.group.left || 500,
         top: this.group.top || 500,
         bg_color: this.group.bg_color || 'yellow',
@@ -88,7 +88,6 @@ export default {
         style.float = 'left'
         style.width = '100%'
         style.height = 'auto'
-        // style['z-index'] = '1001'
         delete style.left
         delete style.top
       } else {
@@ -112,7 +111,6 @@ export default {
   },
   methods: {
     select: function () {
-      // console.log('group select')
       this.statusProps.selected = true
       this.statusProps.draggable = true
     },
@@ -174,7 +172,7 @@ export default {
   line-height: 1.2em;
   &.select {
     box-shadow: 0px 0px 10px blue;
-    z-index: 100;
+    z-index: 20;
   }
   .group-inner {
     width: 100%;

@@ -73,7 +73,7 @@ export default {
         style.display = 'inline-block'
         style.postion = 'relative'
         style.float = 'left'
-        style['z-index'] = '1001'
+        // style['z-index'] = '1001'
         delete style.left
         delete style.top
       } else {
@@ -133,7 +133,7 @@ export default {
   line-height: 1.2em;
   &.select {
     box-shadow: 0px 0px 2px blue;
-    z-index: 100;
+    z-index: 20;
   }
   .sticker-inner {
     width: 100%;

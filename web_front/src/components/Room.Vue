@@ -59,7 +59,6 @@ export default {
     },
     createBoard: function () {
       $http.post('http://' + process.env.BACKEND_DOMAIN + '/room/create', {name: 'user created board'}).then(response => {
-        console.log(response.body)
         location.href = '/room/' + response.body.item_id
         this.selectBoardDialog = false
       })
@@ -72,9 +71,8 @@ export default {
       $http.get('http://' + process.env.BACKEND_DOMAIN + '/room/' + room.room_id).then(response => {
         this.$store.commit('initItems', response.body)
         SocketManager.getInstance().send('join-room', JSON.stringify(room))
-        console.log('commit')
       }, error => {
-        console.log('err', error)
+        console.error('err', error)
       })
     } else {
       this.selectBoardDialog = true
