@@ -74,7 +74,11 @@ export default {
   }
 }
 
+
 .hand {
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
   display: block;
   position: fixed;
   background-color: gray;
