@@ -124,9 +124,13 @@ function initDrag (vnode, delegate) {
     selectMgr.selectElement(vnode)
 
     event.dataTransfer.effectAllowed = 'copy'
-    event.dataTransfer.setData('text/plain', vnode.context.dataProps.text)
+    if (navigator.userAgent.search('Firefox') >= 0) {
+      event.dataTransfer.setData('application/x-moz-node', vnode.context.dataProps.text)
+    } else {
+      event.dataTransfer.setData('text/plain', vnode.context.dataProps.text)
+    }
 
-    let MouseMove = function (event) {
+    let MouseMove = _.throttle(function (event) {
       if (moved === false) {
         moved = true
       }
@@ -135,7 +139,7 @@ function initDrag (vnode, delegate) {
         targetLeft = $app.scrollLeft + event.clientX - offsetX - 10
         targetTop = $app.scrollTop + event.clientY - offsetY - 10
       }
-    }
+    }, 300)
 
     let MouseUp = function (event) {
       if (dragManager.dropped === false && moved === true) {
@@ -149,12 +153,18 @@ function initDrag (vnode, delegate) {
         selectMgr.unselectAll()
         dragManager.dropped = true
 
-        dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
+        dragManager.removeDocumentListeners(id, ['drag', 'dragend', 'dragover'])
         dragManager.removeElementListeners(id, $this, ['dragstart'])
       }
     }
     delegate.drag = MouseMove
     delegate.dragend = MouseUp
+
+    if (navigator.userAgent.search('Firefox') >= 0) {
+      delegate.dragover = MouseMove
+      document.addEventListener('dragover', MouseMove)      
+    }
+
     document.addEventListener('drag', delegate.drag)
     document.addEventListener('dragend', delegate.dragend)
   }

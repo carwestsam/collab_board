@@ -33,7 +33,6 @@ export default {
   methods: {
     onDrop: function (event) {
       let selectMgr = SelectMgr.getInstance()
-      // debugger
       let id = selectMgr.selected[0].context.dataProps.id
       this.$store.commit('moveItem', {id, stack: 'hand-' + this.$store.getters.userId})
     },
