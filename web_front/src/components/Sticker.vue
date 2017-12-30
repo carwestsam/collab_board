@@ -1,12 +1,11 @@
 <template>
   <div
     v-bind:style="styleObject"
-    v-bind:class="{select: statusProps.selected}"
-    v-draggable="statusProps.draggable"
+    v-bind:class="{select: statusProps.selected, resizable: styleProps.styleOffset}"
     v-selectable="statusProps.selected"
     class="sticker">
     <!-- Work {{dataProps.id.substring(0,6)}} -->
-    <div class="sticker-inner">
+    <div v-draggable="statusProps.draggable" class="sticker-inner">
       <div class="content">
       {{dataProps.text}}
       </div>
@@ -17,21 +16,26 @@
         @keydown.enter="outsideEdit"
         v-model="dataProps.text"
         class="input-overlay"/>
-      <span class="option-btns" v-if="this.statusProps.selected && !this.statusProps.editing">
-        <v-btn color="primary" fab small dark @mousedown.prevent="intoEdit">
-          <v-icon>edit</v-icon>
-        </v-btn>
-        <v-btn color="primary" fab small dark @mousedown.prevent="deleteSticker">
-          <v-icon>delete</v-icon>
-        </v-btn>
-        <v-btn color="primary" fab small dark @mousedown.prevent="deleteSticker">
-          <v-icon>delete</v-icon>
-        </v-btn>
-        <v-btn color="primary" fab small dark @mousedown.prevent="deleteSticker">
-          <v-icon>delete</v-icon>
-        </v-btn>
-      </span>
-      </div>
+    </div>
+    <div class="toolbar-wrapper">
+      <v-toolbar
+        v-if="this.statusProps.selected && !this.statusProps.editing"
+        color="white"
+        floating
+        class="sticker-options"
+        dense
+        >
+          <v-btn color="pink" flat icon>
+            <v-icon>thumb_up</v-icon>
+          </v-btn>
+          <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
+            <v-icon>edit</v-icon>
+          </v-btn>
+          <v-btn color="primary" flat icon @mousedown.prevent="deleteSticker">
+            <v-icon>delete</v-icon>
+          </v-btn>
+        </v-toolbar>
+    </div>
   </div>
 </template>
 <script>
@@ -44,8 +48,10 @@ export default {
   data () {
     return {
       styleProps: {
-        width: 120,
-        height: 120,
+        // width: 120,
+        // height: 120,
+        width: (this.sticker.width || 120),
+        height: (this.sticker.height || 120),
         left: this.sticker.left || 100,
         top: this.sticker.top || 100,
         bg_color: this.sticker.bg_color || 'yellow',
@@ -55,7 +61,8 @@ export default {
       statusProps: {
         selected: false,
         draggable: true,
-        editing: false
+        editing: false,
+        resizable: false
       },
       dataProps: {
         id: this.sticker.id,
@@ -77,7 +84,6 @@ export default {
         style.display = 'inline-block'
         style.postion = 'relative'
         style.float = 'left'
-        // style['z-index'] = '1001'
         delete style.left
         delete style.top
       } else {
@@ -99,10 +105,12 @@ export default {
     select: function () {
       this.statusProps.selected = true
       this.statusProps.draggable = true
+      this.statusProps.resizable = true
     },
     unselect: function () {
       this.statusProps.selected = false
       this.statusProps.draggable = false
+      this.statusProps.resizable = false
     },
     intoEdit: function () {
       this.statusProps.editing = true
@@ -122,6 +130,19 @@ export default {
       if (confirmDelete) {
         this.$store.commit('deleteItem', {id: this.dataProps.id})
       }
+    },
+    onResizing: function (width, height) {
+      if (this.statusProps.selected) {
+        this.styleProps.width = width
+        this.styleProps.height = height
+      }
+    },
+    onResizeStop: function (width, height) {
+      if (this.statusProps.selected) {
+        this.styleProps.width = width
+        this.styleProps.height = height
+        this.$store.commit('resizeItem', {id: this.dataProps.id, width, height})
+      }
     }
   }
 }
@@ -137,7 +158,7 @@ export default {
   line-height: 1.2em;
   text-align: left;
   &.select {
-    box-shadow: 0px 0px 2px blue;
+    box-shadow: 0px 0px 10px blue;
     z-index: 20;
   }
   .content {
@@ -158,6 +179,23 @@ export default {
   position: absolute;
   right: 0;
   bottom: 0;
+}
+.toolbar-wrapper {
+  position: relative;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sticker-options {
+  display: inline-block;
+  margin: 0;
+  right: 0;
+  bottom: 0px;
+  z-index: 50;
 }
 .input-overlay {
   position: absolute;

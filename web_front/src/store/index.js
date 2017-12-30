@@ -21,7 +21,7 @@ let storeDes = {
     user: {
       id: ''
     },
-    scale: 0.5
+    scale: 80
   },
   mutations: {
     initItems: (state, data) => {
@@ -74,7 +74,9 @@ let storeDes = {
       }
     },
     setGlobalScale: (state, scale) => {
-      state.scale = scale
+      if (scale >= 10 && scale <= 100) {
+        state.scale = scale
+      }
     }
   },
   getters: {
@@ -105,7 +107,7 @@ let storeDes = {
     userId: (state) => {
       return state.user.id
     },
-    scale: (state) => state.scale
+    scale: (state) => state.scale / 100.0
   }
 }
 

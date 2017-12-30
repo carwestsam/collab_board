@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import {store} from '../store/index'
 import _ from 'lodash'
 
 let cons = Vue.extend({
@@ -13,22 +14,26 @@ let cons = Vue.extend({
       let pn = this.$parent
       let originDraggable = pe.getAttribute('draggable')
 
-      let initWidth = parseInt(pe.style.width)
-      let initHeight = parseInt(pe.style.height)
+      let initWidth = parseInt(pn.context.styleProps.width)
+      let initHeight = parseInt(pn.context.styleProps.height)
       let initClientX = event.clientX
       let initClientY = event.clientY
 
+      let scale = (value) => {
+        return value / store.getters.scale
+      }
+
       pe.setAttribute('draggable', 'false')
       let onmousemove = function (ev) {
-        let deltaX = ev.clientX - initClientX
-        let deltaY = ev.clientY - initClientY
+        let deltaX = scale(ev.clientX - initClientX)
+        let deltaY = scale(ev.clientY - initClientY)
         if (_.hasIn(pn, 'context.onResizing')) {
           pn.context.onResizing(initWidth + deltaX, initHeight + deltaY)
         }
       }
       let onmouseup = function (ev) {
-        let deltaX = ev.clientX - initClientX
-        let deltaY = ev.clientY - initClientY
+        let deltaX = scale(ev.clientX - initClientX)
+        let deltaY = scale(ev.clientY - initClientY)
         if (_.hasIn(pn, 'context.onResizeStop')) {
           pn.context.onResizeStop(initWidth + deltaX, initHeight + deltaY)
         }

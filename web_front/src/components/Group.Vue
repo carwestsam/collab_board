@@ -29,14 +29,25 @@
           <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
         </template>
       </div>
-      <span class="option-btns" v-if="this.statusProps.selected">
-        <v-btn color="primary" fab small dark @mousedown.prevent="intoEdit">
-          <v-icon>edit</v-icon>
-        </v-btn>
-        <v-btn color="primary" fab small dark @mousedown.prevent="deleteGroup">
-          <v-icon>delete</v-icon>
-        </v-btn>
-      </span>
+      <div class="toolbar-wrapper">
+        <v-toolbar
+          v-if="this.statusProps.selected && !this.statusProps.editing"
+          color="white"
+          floating
+          class="sticker-options"
+          dense
+          >
+            <v-btn color="pink" flat icon>
+              <v-icon>thumb_up</v-icon>
+            </v-btn>
+            <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
+              <v-icon>edit</v-icon>
+            </v-btn>
+            <v-btn color="primary" flat icon @mousedown.prevent="deleteGroup">
+              <v-icon>delete</v-icon>
+            </v-btn>
+          </v-toolbar>
+      </div>
     </div>
   </div>
 </template>
@@ -79,6 +90,7 @@ export default {
         height: this.styleProps.height / defaultGroupFontSize + 'em',
         left: this.styleProps.left / defaultGroupFontSize + 'em',
         top: this.styleProps.top / defaultGroupFontSize + 'em',
+        fontSize: defaultGroupFontSize * this.$store.getters.scale + 'px',
         'background-color': this.styleProps.bg_color
       }
       if (this.styleProps.styleOffset === false) {
@@ -91,6 +103,7 @@ export default {
         style.textAlign = 'left'
         delete style.left
         delete style.top
+        delete style.height
       } else {
         style.position = 'absolute'
       }
@@ -197,10 +210,31 @@ export default {
       // overflow: scroll;
     }
     .input-title {
-      font-size: 1em;
+      font-size: 18px;
+      line-height: 2em;
+      height: 2em;
+      min-width: 300px;
+      background-color: white;
       padding-left: 1.25em;
     }
   }
+}
+.toolbar-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.sticker-options {
+  display: inline-block;
+  margin: 0;
+  right: 0;
+  bottom: 0px;
+  z-index: 50;
 }
 .option-btns {
   position: absolute;

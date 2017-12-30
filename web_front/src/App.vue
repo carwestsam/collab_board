@@ -19,6 +19,7 @@
         >
         <!-- <v-text-field prepend-icon="search" hide-details single-line></v-text-field> -->
         <v-btn icon @click="decreaseScale"><v-icon>zoom_out</v-icon></v-btn>
+        {{Math.floor(this.$store.getters.scale * 100)}}
         <v-btn icon @click="increaseScale"><v-icon>zoom_in</v-icon></v-btn>
         <v-btn icon>
           <v-icon>more_vert</v-icon>
@@ -63,10 +64,10 @@ export default {
   },
   methods: {
     increaseScale: function () {
-      this.$store.commit('setGlobalScale', this.$store.getters.scale + 0.1)
+      this.$store.commit('setGlobalScale', (this.$store.getters.scale * 100) + 10)
     },
     decreaseScale: function () {
-      this.$store.commit('setGlobalScale', this.$store.getters.scale - 0.1)
+      this.$store.commit('setGlobalScale', (this.$store.getters.scale * 100) - 10)
     }
   },
   mounted () {
@@ -117,11 +118,12 @@ body{
   left: auto;
   bottom: 50px;
   right: 50px;
+  font-size: 18px;
 }
 .view-scope {
-  zoom: 1;
+  // zoom: 1;
   // transform: scale(0.4);
-  -moz-transform: scale(0.4);
-  -moz-transform-origin: 0 0;
+  // -moz-transform: scale(0.4);
+  // -moz-transform-origin: 0 0;
 }
 </style>

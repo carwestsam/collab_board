@@ -139,13 +139,11 @@ function initDrag (vnode, delegate) {
         let $app = document.getElementById('application')
         targetLeft = parseInt(($app.scrollLeft + event.clientX - offsetX - 10) / store.getters.scale)
         targetTop = parseInt(($app.scrollTop + event.clientY - offsetY - 10) / store.getters.scale)
-        console.log('l,t:', targetLeft, targetTop)
       }
     }, 200)
 
     let MouseUp = function (event) {
       if (dragManager.dropped === false && moved === true) {
-        console.log('mouseup', targetLeft, targetTop)
         selectMgr.selected[0].context.$store.commit('moveItem',
           {
             id: id,

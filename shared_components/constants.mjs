@@ -1,3 +1,3 @@
 export default {
-  default_font_size: 16
+  default_font_size: 14
 }
