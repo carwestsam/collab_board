@@ -86,7 +86,7 @@ let storeDes = {
     onHand: (state) => {
       return state.items.filter(sticker => sticker.stack === 'hand-' + state.user.id)
     },
-    getStickerById: (state) => (id) => {
+    getItemById: (state) => (id) => {
       for (let i = 0; i < state.items.length; i++) {
         if (state.items[i].id === id) {
           return _.cloneDeep(state.items[i])

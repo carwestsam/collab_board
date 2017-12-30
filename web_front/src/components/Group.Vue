@@ -152,7 +152,19 @@ export default {
       }
     },
     drop: function (event, itemId) {
+      let idx = this.dataProps.id
+      let idy = itemId
+      let objectX = this.$store.getters.getItemById(idx)
+      while (objectX.stack !== 'board' && idx.substring(0, 5) !== 'hand-') {
+        if (objectX.stack === idy) {
+          return false
+        }
+        idx = objectX.stack
+        objectX = this.$store.getters.getItemById(idx)
+      }
+
       this.$store.commit('moveItem', {id: itemId, stack: this.dataProps.id})
+      return true
     },
     onResizing: function (width, height) {
       if (this.statusProps.selected) {

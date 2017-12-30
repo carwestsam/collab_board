@@ -208,8 +208,10 @@ Vue.directive('dropable', {
         if (isDefined(arguments[1]) && _.get(vnode, 'context.dataProps.id', undefined) === arguments[1]) {
           return
         }
-        dragManager.finishDrop()
-        binding.value.apply(this, arguments)
+        // incase some time, drag failed, should not finish Drop
+        if (binding.value.apply(this, arguments)) {
+          dragManager.finishDrop()
+        }
       }
     }
 
