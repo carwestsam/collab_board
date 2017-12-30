@@ -24,12 +24,19 @@
         <v-btn color="primary" fab small dark @mousedown.prevent="deleteSticker">
           <v-icon>delete</v-icon>
         </v-btn>
+        <v-btn color="primary" fab small dark @mousedown.prevent="deleteSticker">
+          <v-icon>delete</v-icon>
+        </v-btn>
+        <v-btn color="primary" fab small dark @mousedown.prevent="deleteSticker">
+          <v-icon>delete</v-icon>
+        </v-btn>
       </span>
       </div>
   </div>
 </template>
 <script>
 import Vue from 'vue'
+import constants from '../../../shared_components/constants.mjs'
 
 export default {
   name: 'sticker',
@@ -42,7 +49,8 @@ export default {
         left: this.sticker.left || 100,
         top: this.sticker.top || 100,
         bg_color: this.sticker.bg_color || 'yellow',
-        styleOffset: typeof this.sticker.styleOffset === 'undefined' ? true : this.sticker.styleOffset
+        styleOffset: typeof this.sticker.styleOffset === 'undefined' ? true : this.sticker.styleOffset,
+        fontSize: constants.default_font_size + 'px'
       },
       statusProps: {
         selected: false,
@@ -58,10 +66,11 @@ export default {
   computed: {
     styleObject: function () {
       let style = {
-        width: this.styleProps.width + 'px',
-        height: this.styleProps.height + 'px',
-        left: this.styleProps.left + 'px',
-        top: this.styleProps.top + 'px',
+        width: this.styleProps.width / constants.default_font_size + 'em',
+        height: this.styleProps.height / constants.default_font_size + 'em',
+        left: this.styleProps.left / constants.default_font_size + 'em',
+        top: this.styleProps.top / constants.default_font_size + 'em',
+        fontSize: constants.default_font_size * this.$store.getters.scale + 'px',
         'background-color': this.styleProps.bg_color
       }
       if (this.styleProps.styleOffset === false) {
@@ -79,8 +88,8 @@ export default {
     inputOverlayStyleObject: function () {
       return {
         display: this.statusProps.editing === true ? 'block' : 'none',
-        width: this.styleProps.width + 'px',
-        height: this.styleProps.height + 'px'
+        width: this.styleProps.width / constants.default_font_size + 'em',
+        height: this.styleProps.height / constants.default_font_size + 'em'
         // left: this.styleProps.left + 'px',
         // top: this.styleProps.top + 'px'
       }
@@ -123,7 +132,7 @@ export default {
   display: block;
   background-color: yellow;
   user-select: none;
-  font-size: 18px;
+  font-size: 1em;
   font-weight: 400;
   line-height: 1.2em;
   text-align: left;
@@ -158,7 +167,7 @@ export default {
   line-height: 1.2em;
   // text-align: center;
   z-index: 100;
-  padding: 5px;
+  padding: 0.35em;
   resize: none;
   background-color: white;
 }

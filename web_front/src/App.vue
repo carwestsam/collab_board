@@ -1,14 +1,29 @@
 <template>
-  <div id="application">
+  <div id="application" v-bind:style="{fontSize}">
     <v-app>
-      <paper/>
       <hand/>
       <!-- <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker> -->
-      <template v-for="item in items" >
-        <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
-        <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
-      </template>
-      <!-- <div id="holder"></div> -->
+      <div class="view-scope">
+        <paper/>
+        <template v-for="item in items" >
+          <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
+          <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
+        </template>
+      </div>
+      <v-toolbar
+        color="white"
+        fixed
+        floating
+        class="toolbar"
+        dense
+        >
+        <!-- <v-text-field prepend-icon="search" hide-details single-line></v-text-field> -->
+        <v-btn icon @click="decreaseScale"><v-icon>zoom_out</v-icon></v-btn>
+        <v-btn icon @click="increaseScale"><v-icon>zoom_in</v-icon></v-btn>
+        <v-btn icon>
+          <v-icon>more_vert</v-icon>
+        </v-btn>
+      </v-toolbar>
       <room/>
     </v-app>
   </div>
@@ -41,6 +56,17 @@ export default {
         return item
       })
       return items
+    },
+    fontSize: function () {
+      return 16 * this.$store.getters.scale + 'px'
+    }
+  },
+  methods: {
+    increaseScale: function () {
+      this.$store.commit('setGlobalScale', this.$store.getters.scale + 0.1)
+    },
+    decreaseScale: function () {
+      this.$store.commit('setGlobalScale', this.$store.getters.scale - 0.1)
     }
   },
   mounted () {
@@ -56,7 +82,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang='scss'>
 *{
   margin: 0;
   border: 0;
@@ -84,5 +110,18 @@ body{
   top: 10px;
   overflow: scroll;
   background-color: pink;
+  // font-size: 16px;  
+}
+.toolbar {
+  top: auto;
+  left: auto;
+  bottom: 50px;
+  right: 50px;
+}
+.view-scope {
+  zoom: 1;
+  // transform: scale(0.4);
+  -moz-transform: scale(0.4);
+  -moz-transform-origin: 0 0;
 }
 </style>

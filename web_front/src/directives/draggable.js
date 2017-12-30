@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import SelectMgr from './selectable'
 import _ from 'lodash'
+import {store} from '../store/index'
 let selectMgr = SelectMgr.getInstance()
 
 let dragManager = null
@@ -136,13 +137,15 @@ function initDrag (vnode, delegate) {
       }
       if (!(event.screenX === 0 && event.screenY === 0)) {
         let $app = document.getElementById('application')
-        targetLeft = $app.scrollLeft + event.clientX - offsetX - 10
-        targetTop = $app.scrollTop + event.clientY - offsetY - 10
+        targetLeft = parseInt(($app.scrollLeft + event.clientX - offsetX - 10) / store.getters.scale)
+        targetTop = parseInt(($app.scrollTop + event.clientY - offsetY - 10) / store.getters.scale)
+        console.log('l,t:', targetLeft, targetTop)
       }
-    }, 300)
+    }, 200)
 
     let MouseUp = function (event) {
       if (dragManager.dropped === false && moved === true) {
+        console.log('mouseup', targetLeft, targetTop)
         selectMgr.selected[0].context.$store.commit('moveItem',
           {
             id: id,
@@ -162,7 +165,7 @@ function initDrag (vnode, delegate) {
 
     if (navigator.userAgent.search('Firefox') >= 0) {
       delegate.dragover = MouseMove
-      document.addEventListener('dragover', MouseMove)      
+      document.addEventListener('dragover', MouseMove)
     }
 
     document.addEventListener('drag', delegate.drag)
@@ -177,8 +180,10 @@ Vue.directive('draggable', {
     if (binding.value === true) {
       dragManager.bindDrag(el, vnode)
     }
+    // console.log('bind')
   },
   update: function (el, binding, vnode, oldVnode) {
+    // console.log('update')
     if (binding.value === true) {
       dragManager.bindDrag(el, vnode)
     }

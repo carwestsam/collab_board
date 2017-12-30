@@ -44,6 +44,9 @@
 import Vue from 'vue'
 import Sticker from './Sticker'
 // import selectMgr from '../directives/selectable'
+import constants from '../../../shared_components/constants.mjs'
+
+let defaultGroupFontSize = 2 * constants.default_font_size
 
 export default {
   name: 'group',
@@ -72,10 +75,10 @@ export default {
   computed: {
     styleObject: function () {
       let style = {
-        width: this.styleProps.width + 'px',
-        height: this.styleProps.height + 'px',
-        left: this.styleProps.left + 'px',
-        top: this.styleProps.top + 'px',
+        width: this.styleProps.width / defaultGroupFontSize + 'em',
+        height: this.styleProps.height / defaultGroupFontSize + 'em',
+        left: this.styleProps.left / defaultGroupFontSize + 'em',
+        top: this.styleProps.top / defaultGroupFontSize + 'em',
         'background-color': this.styleProps.bg_color
       }
       if (this.styleProps.styleOffset === false) {
@@ -164,7 +167,7 @@ export default {
   display: block;
   background-color: yellow;
   user-select: none;
-  font-size: 32px;
+  font-size: 2em;
   text-align: left;
   font-weight: 500;
   line-height: 1.2em;
@@ -178,8 +181,8 @@ export default {
     height: 100%;
     position: relative;
     .group-name {
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-left: 1.25em;
+      padding-right: 1.25em;
       width: 100%;
       line-height: 1.5em;
       overflow: hidden;
@@ -188,14 +191,14 @@ export default {
       text-overflow: ellipsis;
     }
     .content {
-      margin-left: 20px;
-      width: calc(100% - 20px);
-      height: calc(100% - 20px);
+      margin-left: 1.25em;
+      width: calc(100% - 1.25em);
+      height: calc(100% - 1.25em);
       // overflow: scroll;
     }
     .input-title {
       font-size: 1em;
-      padding-left: 20px;
+      padding-left: 1.25em;
     }
   }
 }

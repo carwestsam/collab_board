@@ -20,7 +20,8 @@ let storeDes = {
     items: [],
     user: {
       id: ''
-    }
+    },
+    scale: 0.5
   },
   mutations: {
     initItems: (state, data) => {
@@ -71,6 +72,9 @@ let storeDes = {
       } else {
         state.user.id = userId
       }
+    },
+    setGlobalScale: (state, scale) => {
+      state.scale = scale
     }
   },
   getters: {
@@ -100,7 +104,8 @@ let storeDes = {
     },
     userId: (state) => {
       return state.user.id
-    }
+    },
+    scale: (state) => state.scale
   }
 }
 
@@ -111,5 +116,7 @@ let getStore = function () {
   StateHistoryMgr.getInstance().setState(store.state)
   return store
 }
+
+export let store = getStore()
 
 export default getStore

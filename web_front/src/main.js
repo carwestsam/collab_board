@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import getStore from './store'
+import store from './store'
 import './directives'
 import kb from 'keyboardjs'
 import {StateHistoryMgr} from './store/StateHistoryManager'
@@ -15,7 +15,7 @@ Vue.use(Vuetify)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  store: getStore(),
+  store: store,
   template: '<App/>',
   components: { App },
   mounted: function () {
