@@ -1,7 +1,7 @@
 <template>
   <div class='hand' v-dropable="onDrop">
     <div class='items'>
-      <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker" :scale="1.0"></sticker>
+      <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker" :styleRemoveSize="true" :scale="1.0"></sticker>
       <div class="add-new-item">
         <v-btn color="primary" dark @click="addItem('sticker')">+ Sticker</v-btn>
         <v-btn color="primary" dark  @click="addItem('group')">+ Group</v-btn>
@@ -39,6 +39,7 @@ export default {
       let selectMgr = SelectMgr.getInstance()
       let id = selectMgr.selected[0].context.dataProps.id
       this.$store.commit('moveItem', {id, stack: 'hand-' + this.$store.getters.userId})
+      return true
     },
     addItem: function (type) {
       this.$store.commit('addItem', {type, stack: 'hand-' + this.$store.getters.userId})

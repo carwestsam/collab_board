@@ -65,7 +65,7 @@ import constants from '../../../shared_components/constants.mjs'
 
 export default {
   name: 'sticker',
-  props: ['sticker', 'scale'],
+  props: ['sticker', 'scale', 'styleRemoveSize'],
   data () {
     return {
       styleProps: {
@@ -111,20 +111,25 @@ export default {
       } else {
         style.position = 'absolute'
       }
-      if (this.sticker.styleRemoveSize === true) {
+      if (this.styleRemoveSize === true) {
         style.width = '120px'
         style.height = '120px'
       }
       return style
     },
     inputOverlayStyleObject: function () {
-      return {
+      let style = {
         display: this.statusProps.editing === true ? 'block' : 'none',
         width: this.styleProps.width / constants.default_font_size + 'em',
         height: this.styleProps.height / constants.default_font_size + 'em'
         // left: this.styleProps.left + 'px',
         // top: this.styleProps.top + 'px'
       }
+      if (this.styleRemoveSize === true) {
+        style.width = '120px'
+        style.height = '120px'
+      }
+      return style
     }
   },
   methods: {
@@ -232,6 +237,8 @@ export default {
   left: 0;
   font-size: 18px;
   line-height: 1.2em;
+  width: 120px;
+  height: 120px;
   // text-align: center;
   z-index: 100;
   padding: 0.35em;

@@ -146,7 +146,7 @@ function initDrag (vnode, delegate) {
       if (dragManager.dropped === false && moved === true) {
         selectMgr.selected[0].context.$store.commit('moveItem',
           {
-            id: id,
+            id: selectMgr.selected[0].context.dataProps.id,
             top: parseInt(targetTop),
             left: parseInt(targetLeft),
             stack: 'board'
@@ -154,7 +154,10 @@ function initDrag (vnode, delegate) {
         selectMgr.unselectAll()
         dragManager.dropped = true
 
-        dragManager.removeDocumentListeners(id, ['drag', 'dragend', 'dragover'])
+        dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
+        if (navigator.userAgent.search('Firefox') >= 0) {
+          dragManager.removeDocumentListeners(id, ['dragover'])
+        }
         dragManager.removeElementListeners(id, $this, ['dragstart'])
       }
     }
@@ -178,10 +181,8 @@ Vue.directive('draggable', {
     if (binding.value === true) {
       dragManager.bindDrag(el, vnode)
     }
-    // console.log('bind')
   },
   update: function (el, binding, vnode, oldVnode) {
-    // console.log('update')
     if (binding.value === true) {
       dragManager.bindDrag(el, vnode)
     }
