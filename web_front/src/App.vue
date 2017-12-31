@@ -30,6 +30,7 @@ export default {
     stickers: function () {
       let stickers = this.$store.getters.stickers.map(sticker => {
         sticker.styleOffset = true
+        sticker.styleRemoveSize = false
         return sticker
       })
       return stickers
@@ -37,6 +38,7 @@ export default {
     items: function () {
       let items = this.$store.getters.items().map(item => {
         item.styleOffset = true
+        item.styleRemoveSize = false
         return item
       })
       return items
