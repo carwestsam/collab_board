@@ -1,20 +1,12 @@
 <template>
-  <div id="application" v-bind:style="{fontSize}">
+  <div>
     <v-app>
       <hand/>
       <!-- <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker> -->
-      <div class="view-scope">
-        <paper>
-          <template v-for="item in items" >
-            <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
-            <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
-          </template>
-        </paper>
-      </div>
       <v-toolbar
         color="white"
-        fixed
         floating
+        fixed
         class="toolbar"
         dense
         >
@@ -22,12 +14,40 @@
         <v-btn icon @click="decreaseScale"><v-icon>zoom_out</v-icon></v-btn>
         {{Math.floor(this.$store.getters.scale * 100)}}
         <v-btn icon @click="increaseScale"><v-icon>zoom_in</v-icon></v-btn>
-        <v-btn icon>
-          <v-icon>more_vert</v-icon>
-        </v-btn>
+        <v-menu :close-on-content-click="false" :close-on-click="true" top>
+          <v-btn icon slot="activator">
+            <v-icon>more_vert</v-icon>
+          </v-btn>
+          <v-card class="menu-expand">
+            <v-list>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-switch color="purple"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>Enable FullScreen</v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-switch color="purple"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>Enable Favorate</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-card>
+        </v-menu>
       </v-toolbar>
       <room/>
     </v-app>
+  <div id="application" v-bind:style="{fontSize}">
+    <div class="view-scope">
+      <paper>
+        <template v-for="item in items" >
+          <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
+          <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
+        </template>
+      </paper>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -121,12 +141,25 @@ body{
   bottom: 50px;
   right: 50px;
   font-size: 18px;
+  z-index: 100;
 }
 #app {
-  position: relative;
+  position: absolute;
+  max-width: none;
+  min-width: none;
+  width: 100%;
+  height: 100%;
 }
 .application--wrap{
   min-height: 0;
   // height: 100%;
+}
+.menu-expand {
+  position: relative;
+  left: 0;
+  top: 0;
+  width: auto;
+  z-index: 102;
+  visibility: visible;
 }
 </style>
