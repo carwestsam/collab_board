@@ -89,8 +89,8 @@ export let mutationDesciption = {
       forward: (capsule, state, {id, width, height}) => {
         let {item} = findItemById(state, id)
         let newId = capsule['newId'] || uuid()
-        capsule['width'] = width
-        capsule['height'] = height
+        capsule['width'] = item.width
+        capsule['height'] = item.height
         capsule['id'] = item.id
         item.id = capsule['newId'] = newId
         item.width = width
@@ -122,6 +122,32 @@ export let mutationDesciption = {
       backward: (capsule, state, {type, stack}) => {
         let {idx} = findItemById(state, capsule['newId'])
         state.items.splice(idx, 1)
+      }
+    }
+  },
+  likeItem: function () {
+    return {
+      forward: (capsule, state, {itemId, userId, like}) => {
+        let {item} = findItemById(state, itemId)
+        let newId = capsule['newId'] || uuid()
+        capsule['id'] = itemId
+        capsule['userId'] = userId
+        capsule['like'] = like
+        capsule['item'] = _.cloneDeep(item)
+        item.id = capsule['newId'] = newId
+        if (like) {
+          item['likes'] = _.union(_.get(item, 'likes', []), [userId])     
+        } else {
+          item['likes'] = _.without(_.get(item, 'likes', []), userId)
+        }
+        updateStack(state, capsule['id'], capsule['newId'])
+      },
+      backward: (capsule, state, {itemId, userId, like}) => {
+        let {item} = findItembyId(state, capsule['newId'])
+        if (item) {
+          _.remove(state.items, item => item.id === capsule['newId'])  
+        }
+        state.items.push(_.cloneDeep(capsule['item']))
       }
     }
   }

@@ -1,10 +1,24 @@
 <template>
   <div
-    v-bind:style="styleObject"
+    v-bind:style="{
+      left: styleObject.left || 'none',
+      top: styleObject.top || 'none',
+      width: styleObject.width,
+      height: styleObject.height,
+      display: styleObject.display,
+      position: styleObject.position,
+      fontSize: styleObject.fontSize,
+      float: styleObject.float
+    }"
     v-bind:class="{select: statusProps.selected, resizable: styleProps.styleOffset}"
     v-selectable="statusProps.selected"
     class="sticker">
     <!-- Work {{dataProps.id.substring(0,6)}} -->
+    <div class="absolute-poistion" v-bind:style="{
+        width: styleObject.width,
+        height: styleObject.height,
+        backgroundColor: styleObject.backgroundColor
+      }">
     <div v-draggable="statusProps.draggable" class="sticker-inner">
       <div class="content">
       {{dataProps.text}}
@@ -17,6 +31,12 @@
         v-model="dataProps.text"
         class="input-overlay"/>
     </div>
+    <div v-if="!statusProps.selected && this.$store.getters.displayLike" class="like-display">
+      <div>
+        <v-icon large color="pink" v-bind:style="{fontSize:'1.4em'}">thumb_up</v-icon>
+        <span>{{$store.getters.likes(dataProps.id)}}</span>
+      </div>
+    </div>
     <div class="toolbar-wrapper">
       <v-toolbar
         v-if="this.statusProps.selected && !this.statusProps.editing"
@@ -25,7 +45,7 @@
         class="sticker-options"
         dense
         >
-          <v-btn color="pink" flat icon>
+          <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mouseup.prevent="toggleLike">
             <v-icon>thumb_up</v-icon>
           </v-btn>
           <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
@@ -35,6 +55,7 @@
             <v-icon>delete</v-icon>
           </v-btn>
         </v-toolbar>
+    </div>
     </div>
   </div>
 </template>
@@ -66,7 +87,8 @@ export default {
       },
       dataProps: {
         id: this.sticker.id,
-        text: this.sticker.text
+        text: this.sticker.text,
+        like: this.$store.getters.like(this.sticker.id)
       }
     }
   },
@@ -78,12 +100,14 @@ export default {
         left: this.styleProps.left / constants.default_font_size + 'em',
         top: this.styleProps.top / constants.default_font_size + 'em',
         fontSize: constants.default_font_size * (this.scale || this.$store.getters.scale) + 'px',
-        'background-color': this.styleProps.bg_color
+        backgroundColor: this.styleProps.bg_color
       }
       if (this.styleProps.styleOffset === false) {
         style.display = 'inline-block'
-        style.postion = 'relative'
+        style.position = 'relative'
         style.float = 'left'
+        delete style.left
+        delete style.top
       } else {
         style.position = 'absolute'
       }
@@ -145,13 +169,16 @@ export default {
         this.styleProps.height = height
         this.$store.commit('resizeItem', {id: this.dataProps.id, width, height})
       }
+    },
+    toggleLike: function () {
+      this.$store.commit('likeItem', {itemId: this.dataProps.id, userId: this.$store.getters.userId, like: !this.dataProps.like})
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .sticker {
-  // position: absolute;
+  position: absolute;
   display: block;
   background-color: yellow;
   user-select: none;
@@ -210,5 +237,18 @@ export default {
   padding: 0.35em;
   resize: none;
   background-color: white;
+}
+.like-display {
+  position: absolute;
+  right: 0;
+  bottom: .3em;
+  background-color: white;
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+  padding: .2em 1em;
+  font-weight: 600;
+  line-height: 2em;
+}
+.absolute-poistion {
+  position: absolute;
 }
 </style>

@@ -21,7 +21,8 @@ let storeDes = {
     user: {
       id: ''
     },
-    scale: 80
+    scale: 80,
+    displayLike: false
   },
   mutations: {
     initItems: (state, data) => {
@@ -77,6 +78,9 @@ let storeDes = {
       if (scale >= 10 && scale <= 100) {
         state.scale = scale
       }
+    },
+    setDisplayLike: (state, displayLike) => {
+      state.displayLike = displayLike
     }
   },
   getters: {
@@ -107,7 +111,17 @@ let storeDes = {
     userId: (state) => {
       return state.user.id
     },
-    scale: (state) => state.scale / 100.0
+    scale: (state) => state.scale / 100.0,
+    like: (state) => (id) => {
+      let item = _.find(state.items, item => item.id === id)
+      let result = _.indexOf(_.get(item, 'likes', []), state.user.id) >= 0
+      return result
+    },
+    likes: (state) => (id) => {
+      let item = _.find(state.items, item => item.id === id)
+      return _.get(item, 'likes', []).length
+    },
+    displayLike: (state) => state.displayLike
   }
 }
 

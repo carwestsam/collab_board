@@ -37,9 +37,9 @@
           class="sticker-options"
           dense
           >
-            <v-btn color="pink" flat icon>
+            <!-- <v-btn color="pink" flat icon>
               <v-icon>thumb_up</v-icon>
-            </v-btn>
+            </v-btn> -->
             <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
               <v-icon>edit</v-icon>
             </v-btn>

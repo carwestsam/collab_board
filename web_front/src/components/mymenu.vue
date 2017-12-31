@@ -20,15 +20,15 @@
         </v-btn>
         <v-card class="menu-expand">
           <v-list>
-            <v-list-tile>
+            <!-- <v-list-tile>
               <v-list-tile-action>
                 <v-switch color="purple"></v-switch>
               </v-list-tile-action>
               <v-list-tile-title>Enable FullScreen</v-list-tile-title>
-            </v-list-tile>
+            </v-list-tile> -->
             <v-list-tile>
               <v-list-tile-action>
-                <v-switch color="purple"></v-switch>
+                <v-switch color="purple" v-model="displayLike"></v-switch>
               </v-list-tile-action>
               <v-list-tile-title>Enable Favorate</v-list-tile-title>
             </v-list-tile>
@@ -46,6 +46,16 @@ import Hand from './Hand'
 import Room from './Room'
 
 export default {
+  data () {
+    return {
+      displayLike: this.$store.getters.displayLike
+    }
+  },
+  watch: {
+    displayLike: function (newValue) {
+      this.$store.commit('setDisplayLike', newValue)
+    }
+  },
   methods: {
     increaseScale: function () {
       this.$store.commit('setGlobalScale', (this.$store.getters.scale * 100) + 10)
@@ -59,7 +69,6 @@ export default {
     Hand
   }
 }
-console.log('x')
 </script>
 
 <style lang='scss'>
