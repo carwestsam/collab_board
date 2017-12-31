@@ -4,11 +4,12 @@
       <hand/>
       <!-- <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker> -->
       <div class="view-scope">
-        <paper/>
-        <template v-for="item in items" >
-          <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
-          <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
-        </template>
+        <paper>
+          <template v-for="item in items" >
+            <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
+            <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
+          </template>
+        </paper>
       </div>
       <v-toolbar
         color="white"
@@ -99,16 +100,17 @@ body{
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
-  left: 0;
-  top: 0;
   position: absolute;
   display: block;
   text-align: center;
   color: #2c3e50;
-  width: calc(100% - 20px);
-  height: calc(100% - 20px);
+  // width: calc(100% - 20px);
+  // height: calc(100% - 20px);
+  max-width: calc(100% - 20px);
+  max-height: calc(100% - 20px);
   left: 10px;
   top: 10px;
+  margin: auto;
   overflow: scroll;
   background-color: pink;
   // font-size: 16px;  
@@ -120,10 +122,11 @@ body{
   right: 50px;
   font-size: 18px;
 }
-.view-scope {
-  // zoom: 1;
-  // transform: scale(0.4);
-  // -moz-transform: scale(0.4);
-  // -moz-transform-origin: 0 0;
+#app {
+  position: relative;
+}
+.application--wrap{
+  min-height: 0;
+  // height: 100%;
 }
 </style>
