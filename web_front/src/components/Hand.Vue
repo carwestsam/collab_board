@@ -120,7 +120,7 @@ export default {
 
   &:hover {
     width: 800px;
-    height: 150px;
+    height: 200px;
     background-color: gray;
     opacity: 1;
     // animation-delay: 0.2s; 
