@@ -44,7 +44,7 @@ import constants from '../../../shared_components/constants.mjs'
 
 export default {
   name: 'sticker',
-  props: ['sticker'],
+  props: ['sticker', 'scale'],
   data () {
     return {
       styleProps: {
@@ -77,17 +77,19 @@ export default {
         height: this.styleProps.height / constants.default_font_size + 'em',
         left: this.styleProps.left / constants.default_font_size + 'em',
         top: this.styleProps.top / constants.default_font_size + 'em',
-        fontSize: constants.default_font_size * this.$store.getters.scale + 'px',
+        fontSize: constants.default_font_size * (this.scale || this.$store.getters.scale) + 'px',
         'background-color': this.styleProps.bg_color
       }
       if (this.styleProps.styleOffset === false) {
         style.display = 'inline-block'
         style.postion = 'relative'
         style.float = 'left'
-        delete style.left
-        delete style.top
       } else {
         style.position = 'absolute'
+      }
+      if (this.sticker.styleRemoveSize === true) {
+        style.width = '120px'
+        style.height = '120px'
       }
       return style
     },

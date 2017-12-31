@@ -1,7 +1,7 @@
 <template>
   <div class='hand' v-dropable="onDrop">
     <div class='items'>
-      <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker>
+      <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker" :scale="1.0"></sticker>
       <div class="add-new-item">
         <v-btn color="primary" dark @click="addItem('sticker')">+ Sticker</v-btn>
         <v-btn color="primary" dark  @click="addItem('group')">+ Group</v-btn>
@@ -19,7 +19,11 @@ export default {
   computed: {
     stickers: function () {
       let stickers = this.$store.getters.onHand
-      stickers = stickers.map(sticker => { sticker.styleOffset = false; return sticker })
+      stickers = stickers.map(sticker => {
+        sticker.styleOffset = false
+        sticker.styleRemoveSize = true
+        return sticker
+      })
       return stickers
     },
     items: function () {
