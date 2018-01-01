@@ -209,7 +209,7 @@ export default {
       padding-left: 1.25em;
       padding-right: 1.25em;
       width: 100%;
-      line-height: 1.5em;
+      line-height: 2em;
       overflow: hidden;
       // font-size: 32px;
       white-space: nowrap;
