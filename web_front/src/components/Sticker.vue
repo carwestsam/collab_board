@@ -19,7 +19,7 @@
         height: styleObject.height,
         backgroundColor: styleObject.backgroundColor
       }">
-    <div v-draggable="statusProps.draggable" class="sticker-inner">
+    <div v-draggable="statusProps.draggable" v-bind:style="{backgroundColor: styleObject.backgroundColor}" class="sticker-inner">
       <div class="content">
       {{dataProps.text}}
       </div>
