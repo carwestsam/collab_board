@@ -31,7 +31,7 @@
         v-model="dataProps.text"
         class="input-overlay"/>
     </div>
-    <div v-if="!statusProps.selected && this.$store.getters.displayLike" class="like-display">
+    <div v-if="likeBar" class="like-display">
       <div>
         <v-icon large color="pink" v-bind:style="{fontSize:'1.4em'}">thumb_up</v-icon>
         <span>{{$store.getters.likes(dataProps.id)}}</span>
@@ -130,6 +130,10 @@ export default {
         style.height = '120px'
       }
       return style
+    },
+    likeBar: function () {
+      return !this.statusProps.selected && this.$store.getters.displayLike &&
+        this.$store.getters.likes(this.dataProps.id) > 0
     }
   },
   methods: {
