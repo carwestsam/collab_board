@@ -100,11 +100,12 @@ io.on('connection', function (socket) {
 
   socket.on('mutation', function (msg) {
     let {mutation, capsule, args, direction} = JSON.parse(msg)
-    // console.log('msg:', msg)
-    // console.log('socket.id:', socket.id)
-    // console.log('socketboarddict', SocketBoardDict[socket.id])
-    mutationDesciption[mutation]()[direction].apply(null, [capsule, BoardDict[SocketBoardDict[socket.id]], ...args])
-    socket.broadcast.to(SocketBoardDict[socket.id]).emit('updates', msg)
+    try {
+      mutationDesciption[mutation]()[direction].apply(null, [capsule, BoardDict[SocketBoardDict[socket.id]], ...args])
+      socket.broadcast.to(SocketBoardDict[socket.id]).emit('updates', msg)
+    } catch (e) {
+      console.error('failed on execution reason', e)
+    }
   })
 })
 
