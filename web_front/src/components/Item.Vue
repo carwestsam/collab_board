@@ -3,15 +3,18 @@
   v-bind:class="{select: statusProps.selected}"
   v-selectable="statusProps.selected">
   <div class="item-wrapper">
+
     <div class="content-wrapper" v-draggable="statusProps.draggable" v-bind:style="contentStyle">
       <slot name="content"></slot>
     </div>
+
     <div v-if="likeBar" class="like-wrapper">
       <div>
         <v-icon large color="pink" v-bind:style="{fontSize:'1.4em'}">thumb_up</v-icon>
         <span>{{$store.getters.likes(dataProps.id)}}</span>
       </div>
     </div>
+
     <div class="toolbar-wrapper" v-if="this.statusProps.selected && !this.statusProps.editing">
       <v-toolbar
       slot="toolbar"
@@ -26,6 +29,7 @@
         </v-btn>
       </v-toolbar>
     </div>
+
   </div>
 </div>
 </template>

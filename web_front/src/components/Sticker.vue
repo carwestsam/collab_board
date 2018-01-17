@@ -4,6 +4,7 @@
     :itemStyleObject='this.itemStyleObject'
     :itemOptions='this.itemOptions'
     class="sticker">
+
     <template slot='content'>
       <div class="sticker-inner">
         <div class="content">
@@ -18,14 +19,16 @@
           class="input-overlay"/>
       </div>
     </template>
-      <template slot="toolbar">
-        <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mouseup.prevent="toggleLike">
-          <v-icon>thumb_up</v-icon>
-        </v-btn>
-        <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
-          <v-icon>edit</v-icon>
-        </v-btn>
-      </template>
+
+    <template slot="toolbar">
+      <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mouseup.prevent="toggleLike">
+        <v-icon>thumb_up</v-icon>
+      </v-btn>
+      <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
+        <v-icon>edit</v-icon>
+      </v-btn>
+    </template>
+
   </item>
 </template>
 <script>
@@ -101,7 +104,6 @@ export default {
   methods: {
     intoEdit: function () {
       this.statusProps.editing = true
-      // let self = this
       Vue.nextTick(() => {
         this.$refs.textInput.focus()
       })
