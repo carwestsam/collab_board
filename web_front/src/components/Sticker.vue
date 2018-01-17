@@ -1,67 +1,45 @@
 <template>
-  <div
-    v-bind:style="{
-      left: styleObject.left || 'none',
-      top: styleObject.top || 'none',
-      width: styleObject.width,
-      height: styleObject.height,
-      display: styleObject.display,
-      position: styleObject.position,
-      fontSize: styleObject.fontSize,
-      float: styleObject.float
-    }"
-    v-bind:class="{select: statusProps.selected, resizable: styleProps.styleOffset}"
-    v-selectable="statusProps.selected"
+  <item
+    :uuid='this.dataProps.id'
+    :itemStyleObject='this.itemStyleObject'
+    :itemOptions='this.itemOptions'
     class="sticker">
-    <!-- Work {{dataProps.id.substring(0,6)}} -->
-    <div class="absolute-poistion" v-bind:style="{
-        width: styleObject.width,
-        height: styleObject.height,
+    <div slot='content' v-bind:style="{
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
         backgroundColor: styleObject.backgroundColor
       }">
-    <div v-draggable="statusProps.draggable" v-bind:style="{backgroundColor: styleObject.backgroundColor}" class="sticker-inner">
-      <div class="content">
-      {{dataProps.text}}
-      </div>
-      <textarea
-        ref="textInput"
-        v-bind:style="inputOverlayStyleObject"
-        v-on:blur="outsideEdit"
-        @keydown.enter="outsideEdit"
-        v-model="dataProps.text"
-        class="input-overlay"/>
-    </div>
-    <div v-if="likeBar" class="like-display">
-      <div>
-        <v-icon large color="pink" v-bind:style="{fontSize:'1.4em'}">thumb_up</v-icon>
-        <span>{{$store.getters.likes(dataProps.id)}}</span>
+      <div v-bind:style="{backgroundColor: styleObject.backgroundColor}" class="sticker-inner">
+        <div class="content">
+        {{dataProps.text}}
+        </div>
+        <textarea
+          ref="textInput"
+          v-bind:style="inputOverlayStyleObject"
+          v-on:blur="outsideEdit"
+          @keydown.enter="outsideEdit"
+          v-model="dataProps.text"
+          class="input-overlay"/>
       </div>
     </div>
-    <div class="toolbar-wrapper">
-      <v-toolbar
-        v-if="this.statusProps.selected && !this.statusProps.editing"
-        color="white"
-        floating
-        class="sticker-options"
-        dense
-        >
-          <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mouseup.prevent="toggleLike">
-            <v-icon>thumb_up</v-icon>
-          </v-btn>
-          <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
-            <v-icon>edit</v-icon>
-          </v-btn>
-          <v-btn color="primary" flat icon @mousedown.prevent="deleteSticker">
-            <v-icon>delete</v-icon>
-          </v-btn>
-        </v-toolbar>
-    </div>
-    </div>
-  </div>
+      <template slot="toolbar">
+        <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mouseup.prevent="toggleLike">
+          <v-icon>thumb_up</v-icon>
+        </v-btn>
+        <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <v-btn color="primary" flat icon @mousedown.prevent="deleteSticker">
+          <v-icon>delete</v-icon>
+        </v-btn>
+      </template>
+  </item>
 </template>
 <script>
 import Vue from 'vue'
 import constants from '../../../shared_components/constants.mjs'
+import Item from './Item'
 
 export default {
   name: 'sticker',
@@ -69,8 +47,6 @@ export default {
   data () {
     return {
       styleProps: {
-        // width: 120,
-        // height: 120,
         width: (this.sticker.width || 120),
         height: (this.sticker.height || 120),
         left: this.sticker.left || 100,
@@ -93,6 +69,31 @@ export default {
     }
   },
   computed: {
+    itemOptions: function () {
+      return {
+        displayLike: true,
+        enableOffset: this.styleProps.styleOffset,
+        ignoreScale: !(this.styleRemoveSize || false)
+      }
+    },
+    itemStyleObject: function () {
+      let style = {
+        display: 'block',
+        position: 'absolute',
+        fontSize: constants.default_font_size * (this.scale || this.$store.getters.scale) + 'px',
+        float: 'left'
+      }
+      if (this.styleProps.styleOffset === false) {
+        style.display = 'inline-block'
+        style.position = 'relative'
+        style.float = 'left'
+      }
+      if (this.styleRemoveSize === true) {
+        style.width = '120px'
+        style.height = '120px'
+      }
+      return style
+    },
     styleObject: function () {
       let style = {
         width: this.styleProps.width / constants.default_font_size + 'em',
@@ -122,31 +123,15 @@ export default {
         display: this.statusProps.editing === true ? 'block' : 'none',
         width: this.styleProps.width / constants.default_font_size + 'em',
         height: this.styleProps.height / constants.default_font_size + 'em'
-        // left: this.styleProps.left + 'px',
-        // top: this.styleProps.top + 'px'
       }
       if (this.styleRemoveSize === true) {
         style.width = '120px'
         style.height = '120px'
       }
       return style
-    },
-    likeBar: function () {
-      return !this.statusProps.selected && this.$store.getters.displayLike &&
-        this.$store.getters.likes(this.dataProps.id) > 0
     }
   },
   methods: {
-    select: function () {
-      this.statusProps.selected = true
-      this.statusProps.draggable = true
-      this.statusProps.resizable = true
-    },
-    unselect: function () {
-      this.statusProps.selected = false
-      this.statusProps.draggable = false
-      this.statusProps.resizable = false
-    },
     intoEdit: function () {
       this.statusProps.editing = true
       // let self = this
@@ -182,6 +167,9 @@ export default {
     toggleLike: function () {
       this.$store.commit('likeItem', {itemId: this.dataProps.id, userId: this.$store.getters.userId, like: !this.dataProps.like})
     }
+  },
+  components: {
+    Item
   }
 }
 </script>
@@ -213,28 +201,7 @@ export default {
     }
   }
 }
-.option-btns {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-}
-.toolbar-wrapper {
-  position: relative;
-  left: 0;
-  bottom: -5px;
-  width: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.sticker-options {
-  display: inline-block;
-  margin: 0;
-  right: 0;
-  bottom: 0px;
-  z-index: 50;
-}
+
 .input-overlay {
   position: absolute;
   top: 0;
@@ -248,18 +215,6 @@ export default {
   padding: 0.35em;
   resize: none;
   background-color: white;
-}
-.like-display {
-  position: absolute;
-  right: 0;
-  bottom: .3em;
-  background-color: white;
-  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
-  padding: .2em 1em;
-  font-weight: 600;
-  line-height: 2em;
-}
-.absolute-poistion {
-  position: absolute;
+  box-shadow: 0px 0px 10px blue;
 }
 </style>

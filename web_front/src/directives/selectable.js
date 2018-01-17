@@ -1,5 +1,4 @@
 import Vue from 'vue'
-
 class SelectMgr {
   constructor () {
     this.selected = []
