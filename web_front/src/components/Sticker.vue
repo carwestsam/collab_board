@@ -4,13 +4,8 @@
     :itemStyleObject='this.itemStyleObject'
     :itemOptions='this.itemOptions'
     class="sticker">
-    <div slot='content' v-bind:style="{
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        backgroundColor: styleObject.backgroundColor
-      }">
-      <div v-bind:style="{backgroundColor: styleObject.backgroundColor}" class="sticker-inner">
+    <template slot='content'>
+      <div class="sticker-inner">
         <div class="content">
         {{dataProps.text}}
         </div>
@@ -22,16 +17,13 @@
           v-model="dataProps.text"
           class="input-overlay"/>
       </div>
-    </div>
+    </template>
       <template slot="toolbar">
         <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mouseup.prevent="toggleLike">
           <v-icon>thumb_up</v-icon>
         </v-btn>
         <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
           <v-icon>edit</v-icon>
-        </v-btn>
-        <v-btn color="primary" flat icon @mousedown.prevent="deleteSticker">
-          <v-icon>delete</v-icon>
         </v-btn>
       </template>
   </item>
@@ -51,7 +43,6 @@ export default {
         height: (this.sticker.height || 120),
         left: this.sticker.left || 100,
         top: this.sticker.top || 100,
-        bg_color: this.sticker.bg_color || 'yellow',
         styleOffset: typeof this.sticker.styleOffset === 'undefined' ? true : this.sticker.styleOffset,
         fontSize: constants.default_font_size + 'px'
       },
@@ -94,30 +85,6 @@ export default {
       }
       return style
     },
-    styleObject: function () {
-      let style = {
-        width: this.styleProps.width / constants.default_font_size + 'em',
-        height: this.styleProps.height / constants.default_font_size + 'em',
-        left: this.styleProps.left / constants.default_font_size + 'em',
-        top: this.styleProps.top / constants.default_font_size + 'em',
-        fontSize: constants.default_font_size * (this.scale || this.$store.getters.scale) + 'px',
-        backgroundColor: this.styleProps.bg_color
-      }
-      if (this.styleProps.styleOffset === false) {
-        style.display = 'inline-block'
-        style.position = 'relative'
-        style.float = 'left'
-        delete style.left
-        delete style.top
-      } else {
-        style.position = 'absolute'
-      }
-      if (this.styleRemoveSize === true) {
-        style.width = '120px'
-        style.height = '120px'
-      }
-      return style
-    },
     inputOverlayStyleObject: function () {
       let style = {
         display: this.statusProps.editing === true ? 'block' : 'none',
@@ -143,25 +110,6 @@ export default {
       if (this.statusProps.editing === true) {
         this.statusProps.editing = false
         this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
-      }
-    },
-    deleteSticker: function () {
-      let confirmDelete = confirm('Do you want to delete Sticker: \n' + this.dataProps.text + '\n')
-      if (confirmDelete) {
-        this.$store.commit('deleteItem', {id: this.dataProps.id})
-      }
-    },
-    onResizing: function (width, height) {
-      if (this.statusProps.selected) {
-        this.styleProps.width = width
-        this.styleProps.height = height
-      }
-    },
-    onResizeStop: function (width, height) {
-      if (this.statusProps.selected) {
-        this.styleProps.width = width
-        this.styleProps.height = height
-        this.$store.commit('resizeItem', {id: this.dataProps.id, width, height})
       }
     },
     toggleLike: function () {

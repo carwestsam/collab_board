@@ -3,8 +3,8 @@
   v-bind:class="{select: statusProps.selected}"
   v-selectable="statusProps.selected">
   <div class="item-wrapper">
-    <div class="content-wrapper" v-draggable="statusProps.draggable">
-      <slot name="content" ></slot>
+    <div class="content-wrapper" v-draggable="statusProps.draggable" v-bind:style="contentStyle">
+      <slot name="content"></slot>
     </div>
     <div v-if="likeBar" class="like-wrapper">
       <div>
@@ -21,6 +21,9 @@
       dense
       >
         <slot name="toolbar"></slot>
+        <v-btn color="primary" flat icon @mousedown.prevent="deleteItem">
+          <v-icon>delete</v-icon>
+        </v-btn>
       </v-toolbar>
     </div>
   </div>
@@ -37,7 +40,9 @@ export default {
   data () {
     let item = this.$store.getters.getItemById(this.uuid)
     // console.log('uuid', this.uuid, item, this.itemStyleObject)
+    console.log('bgcolor', item.bg_color)
     return {
+      item,
       styleProps: {
         width: item.width || 120,
         height: item.height || 120,
@@ -52,6 +57,9 @@ export default {
       },
       dataProps: {
         id: this.uuid
+      },
+      contentStyle: {
+        backgroundColor: item.bg_color
       }
     }
   },
@@ -86,6 +94,12 @@ export default {
       this.statusProps.selected = false
       this.statusProps.draggable = false
       this.statusProps.resizable = false
+    },
+    deleteItem: function () {
+      let confirmDelete = confirm('Do you want to delete Sticker: \n' + this.item.text + '\n')
+      if (confirmDelete) {
+        this.$store.commit('deleteItem', {id: this.dataProps.id})
+      }
     }
   }
 }
@@ -111,6 +125,9 @@ export default {
   height: 100%;
 }
 .content-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
   clear: both;
 }
 .toolbar-wrapper {
