@@ -7,7 +7,7 @@
   
   <div class="item-wrapper" >
 
-    <div class="content-wrapper" v-draggable="statusProps.draggable" v-bind:style="contentStyle">
+    <div v-bind:style="contentStyle" class="content-wrapper" v-draggable="statusProps.draggable">
       <slot name="content"></slot>
     </div>
 
@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="toolbar-wrapper" v-bind:style="toolbarStyle" v-if="this.statusProps.selected && !this.statusProps.editing">
+    <div class="toolbar-wrapper" v-if="this.statusProps.selected && !this.statusProps.editing" v-bind:style="toolbarStyle">
       <v-toolbar
       slot="toolbar"
       color="white"
@@ -42,7 +42,7 @@ import _ from 'lodash'
 
 export default {
   name: 'item',
-  props: ['uuid', 'itemid', 'itemStyleObject', 'itemOptions'],
+  props: ['uuid', 'itemid', 'itemStyleObject', 'itemOptions', 'contentStyleObject'],
   data () {
     let item = this.$store.getters.getItemById(this.uuid)
     return {
@@ -62,18 +62,18 @@ export default {
       dataProps: {
         id: this.uuid
       },
-      contentStyle: {
+      contentStyle: _.merge({
         backgroundColor: item.bg_color
-      }
+      }, this.contentStyleObject)
     }
   },
   computed: {
     options: function () {
       return _.merge({
-        displayLike: true,
+        displayLike: false,
         enableOffset: true,
         ignoreScale: false,
-        enableResize: true,
+        enableResize: false,
         toolbarPosition: 'bottom'
       }, this.itemOptions)
     },
@@ -149,7 +149,7 @@ export default {
 .item {
   position: absolute;
   display: block;
-  background-color: yellow;
+  background-color: transparent;
   user-select: none;
   font-size: 1em;
   text-align: left;

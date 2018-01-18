@@ -3,6 +3,7 @@
     :uuid='this.dataProps.id'
     :itemStyleObject='this.itemStyleObject'
     :itemOptions='this.itemOptions'
+    :contentStyleObject='this.contentStyleObject'
     class="sticker">
 
     <template slot='content'>
@@ -59,6 +60,9 @@ export default {
         id: this.sticker.id,
         text: this.sticker.text,
         like: this.$store.getters.like(this.sticker.id)
+      },
+      contentStyleObject: {
+        borderBottomRightRadius: '1.5em 2em'
       }
     }
   },
@@ -75,13 +79,11 @@ export default {
       let style = {
         display: 'block',
         position: 'absolute',
-        fontSize: constants.default_font_size * (this.scale || this.$store.getters.scale) + 'px',
-        float: 'left'
+        fontSize: constants.default_font_size * (this.scale || this.$store.getters.scale) + 'px'
       }
       if (this.styleProps.styleOffset === false) {
         style.display = 'inline-block'
         style.position = 'relative'
-        style.float = 'left'
       }
       if (this.styleRemoveSize === true) {
         style.width = '120px'
@@ -135,6 +137,7 @@ export default {
   line-height: 1.2em;
   text-align: left;
   order:2;
+  border-bottom-right-radius: 1.5em 2em;
   &.select {
     box-shadow: 0px 0px 10px blue;
     z-index: 20;
@@ -146,6 +149,7 @@ export default {
     width: 100%;
     height: 100%;
     position: relative;
+    border-bottom-right-radius: 1.5em 2em;    
     .content {
       width: 100%;
       height: 100%;

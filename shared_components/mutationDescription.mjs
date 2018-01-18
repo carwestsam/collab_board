@@ -2,6 +2,7 @@ import uuid from 'uuid/v4'
 import {getRandomColor} from './colorGenerator.mjs'
 import _ from 'lodash'
 import log from './log.mjs'
+import itemTemplate from './itemTemplates.mjs'
 
 function findItemById (state, id) {
   for (let i = 0; i < state.items.length; i++) {
@@ -111,13 +112,15 @@ export let mutationDesciption = {
       forward: (capsule, state, {type, stack}) => {
         let newId = capsule['newId'] || uuid()
         capsule['newId'] = newId
-        state.items.push({
-          id: newId,
-          type,
-          bg_color: getRandomColor(type),
-          text: 'New ' + type,
-          stack
-        })
+        let bg_color = capsule['bg_color'] = capsule['bg_color'] || getRandomColor(type)
+        state.items.push(itemTemplate({newId, type, bg_color, stack}))
+        // state.items.push({
+        //   id: newId,
+        //   type,
+        //   bg_color,
+        //   text: 'New ' + type,
+        //   stack
+        // })
       },
       backward: (capsule, state, {type, stack}) => {
         let {idx} = findItemById(state, capsule['newId'])

@@ -1,11 +1,12 @@
 <template>
   <div class='hand' v-dropable="onDrop">
+
     <div class='items'>
-      <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker" :styleRemoveSize="true" :scale="1.0"></sticker>
       <div class="add-new-item">
         <v-btn color="primary" dark @click="addItem('sticker')">+ Sticker</v-btn>
         <v-btn color="primary" dark  @click="addItem('group')">+ Group</v-btn>
       </div>
+      <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker" :styleRemoveSize="true" :scale="1.0"></sticker>
     </div>
   </div>
 </template>
@@ -13,6 +14,7 @@
 
 import Sticker from './Sticker'
 import Group from './Group'
+import Item from './Item'
 import SelectMgr from '../directives/selectable.js'
 
 export default {
@@ -47,7 +49,8 @@ export default {
   },
   components: {
     Sticker,
-    Group
+    Group,
+    Item
   }
 }
 </script>
@@ -130,9 +133,14 @@ export default {
       // animation-delay: 1s;
       display: inline-block;
       animation: lastblink .3s;
-    }
-    &  .add-new-item {
-      display: inline-block;
+      // display: flex;
+      width: 750px;
+      height: 170px;
+      overflow: scroll;
+      white-space: nowrap;
+      .add-new-item {
+        display: inline-block;
+      }
     }
   }
 
