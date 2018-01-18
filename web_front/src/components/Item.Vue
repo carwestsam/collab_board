@@ -1,8 +1,11 @@
 <template>
 <div v-bind:style="itemStyle"
-  v-bind:class="{select: statusProps.selected}"
-  v-selectable="statusProps.selected">
-  <div class="item-wrapper">
+  v-bind:class="{select: statusProps.selected, resizable: options.enableResize}"
+  v-selectable="statusProps.selected"
+  v-resizable="statusProps.resizable"
+  class="item">
+  
+  <div class="item-wrapper" >
 
     <div class="content-wrapper" v-draggable="statusProps.draggable" v-bind:style="contentStyle">
       <slot name="content"></slot>
@@ -15,7 +18,7 @@
       </div>
     </div>
 
-    <div class="toolbar-wrapper" v-if="this.statusProps.selected && !this.statusProps.editing">
+    <div class="toolbar-wrapper" v-bind:style="toolbarStyle" v-if="this.statusProps.selected && !this.statusProps.editing">
       <v-toolbar
       slot="toolbar"
       color="white"
@@ -23,13 +26,12 @@
       class="item-options"
       dense
       >
-        <slot name="toolbar"></slot>
+        <slot name="toolbar-options"></slot>
         <v-btn color="primary" flat icon @mousedown.prevent="deleteItem">
           <v-icon>delete</v-icon>
         </v-btn>
       </v-toolbar>
     </div>
-
   </div>
 </div>
 </template>
@@ -43,8 +45,6 @@ export default {
   props: ['uuid', 'itemid', 'itemStyleObject', 'itemOptions'],
   data () {
     let item = this.$store.getters.getItemById(this.uuid)
-    // console.log('uuid', this.uuid, item, this.itemStyleObject)
-    console.log('bgcolor', item.bg_color)
     return {
       item,
       styleProps: {
@@ -57,7 +57,7 @@ export default {
         selected: false,
         draggable: true,
         editing: false,
-        resizable: false
+        resizable: true
       },
       dataProps: {
         id: this.uuid
@@ -68,21 +68,44 @@ export default {
     }
   },
   computed: {
+    options: function () {
+      return _.merge({
+        displayLike: true,
+        enableOffset: true,
+        ignoreScale: false,
+        enableResize: true,
+        toolbarPosition: 'bottom'
+      }, this.itemOptions)
+    },
     itemStyle: function () {
       let style = _.merge({
+        position: this.styleProps.position || 'absolute',
         width: this.styleProps.width / constants.default_font_size + 'em',
         height: this.styleProps.height / constants.default_font_size + 'em',
         left: this.styleProps.left / constants.default_font_size + 'em',
         top: this.styleProps.top / constants.default_font_size + 'em'
       }, this.itemStyleObject)
-      if (this.itemOptions.enableOffset === false) {
+      if (this.options.enableOffset === false) {
         delete style.left
         delete style.top
       }
       return style
     },
+    toolbarStyle: function () {
+      let style = {
+        left: 0,
+        top: 'calc(100% + 5px)'
+      }
+      if (this.options.toolbarPosition === 'tr') {
+        style.top = '0.5em'
+        style.left = 'auto'
+        style.right = '0.5em'
+        style.width = 'auto'
+      }
+      return style
+    },
     likeBar: function () {
-      return this.itemOptions.displayLike === true &&
+      return this.options.displayLike === true &&
             !this.statusProps.selected &&
             this.$store.getters.displayLike &&
             this.$store.getters.likes(this.dataProps.id) > 0
@@ -100,9 +123,22 @@ export default {
       this.statusProps.resizable = false
     },
     deleteItem: function () {
-      let confirmDelete = confirm('Do you want to delete Sticker: \n' + this.item.text + '\n')
+      let confirmDelete = confirm('Do you want to delete Item: \n' + this.item.text + '\n')
       if (confirmDelete) {
         this.$store.commit('deleteItem', {id: this.dataProps.id})
+      }
+    },
+    onResizing: function (width, height) {
+      if (this.statusProps.selected) {
+        this.styleProps.width = width
+        this.styleProps.height = height
+      }
+    },
+    onResizeStop: function (width, height) {
+      if (this.statusProps.selected) {
+        this.styleProps.width = width
+        this.styleProps.height = height
+        this.$store.commit('resizeItem', {id: this.dataProps.id, width, height})
       }
     }
   }
@@ -123,15 +159,15 @@ export default {
   }
 }
 .item-wrapper {
-  clear: both;
   position: relative;
   width: 100%;
   height: 100%;
+  clear: both;  
 }
 .content-wrapper {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: relative;
   clear: both;
 }
 .toolbar-wrapper {

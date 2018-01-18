@@ -20,7 +20,7 @@
       </div>
     </template>
 
-    <template slot="toolbar">
+    <template slot="toolbar-options">
       <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mouseup.prevent="toggleLike">
         <v-icon>thumb_up</v-icon>
       </v-btn>
@@ -67,6 +67,7 @@ export default {
       return {
         displayLike: true,
         enableOffset: this.styleProps.styleOffset,
+        enableResize: false,
         ignoreScale: !(this.styleRemoveSize || false)
       }
     },
@@ -133,6 +134,7 @@ export default {
   font-weight: 400;
   line-height: 1.2em;
   text-align: left;
+  order:2;
   &.select {
     box-shadow: 0px 0px 10px blue;
     z-index: 20;
