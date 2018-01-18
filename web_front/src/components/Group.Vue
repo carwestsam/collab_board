@@ -153,7 +153,8 @@ export default {
   font-weight: 500;
   line-height: 1.2em;
   text-align: center;
-  order: 1;
+  min-height: 2em;
+  order: 2;
   .group-inner {
     width: 100%;
     height: 100%;
@@ -179,9 +180,10 @@ export default {
       // overflow: scroll;
     }
     .input-title {
-      font-size: 18px;
+      font-size: 32px;
       line-height: 2em;
       height: 2em;
+      padding: 1em 0;
       min-width: 300px;
       background-color: white;
       padding-left: 2em;
