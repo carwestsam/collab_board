@@ -79,6 +79,7 @@ export default {
   right: 50px;
   font-size: 18px;
   z-index: 100;
+  user-select: none;
 }
 #app {
   position: absolute;
