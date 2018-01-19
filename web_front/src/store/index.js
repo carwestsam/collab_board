@@ -22,7 +22,8 @@ let storeDes = {
       id: ''
     },
     scale: 80,
-    displayLike: false
+    displayLike: false,
+    leaveNotification: false
   },
   mutations: {
     initItems: (state, data) => {
@@ -81,6 +82,9 @@ let storeDes = {
     },
     setDisplayLike: (state, displayLike) => {
       state.displayLike = displayLike
+    },
+    setOnLeaveNotification: (state, turn = false) => {
+      state.leaveNotification = turn
     }
   },
   getters: {
@@ -121,7 +125,8 @@ let storeDes = {
       let item = _.find(state.items, item => item.id === id)
       return _.get(item, 'likes', []).length
     },
-    displayLike: (state) => state.displayLike
+    displayLike: (state) => state.displayLike,
+    onLeaveNotification: (state) => state.leaveNotification
   }
 }
 

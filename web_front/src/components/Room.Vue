@@ -71,11 +71,29 @@ export default {
       $http.get('http://' + process.env.BACKEND_DOMAIN + '/room/' + room.room_id).then(response => {
         this.$store.commit('initItems', response.body)
         SocketManager.getInstance().send('join-room', JSON.stringify(room))
+        this.$store.commit('setOnLeaveNotification', true)
       }, error => {
         console.error('err', error)
       })
     } else {
       this.selectBoardDialog = true
+    }
+    window.onbeforeunload = (e) => {
+      if (!this.$store.getters.onLeaveNotification) {
+        return
+      }
+      if (!e) {
+        e = window.event
+      }
+      // e.cancelBubble is supported by IE - this will kill the bubbling process.
+      e.cancelBubble = true
+      e.returnValue = 'You sure you want to leave?' // This is displayed on the dialog
+
+      // e.stopPropagation works in Firefox.
+      if (e.stopPropagation) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
     }
   }
 }
