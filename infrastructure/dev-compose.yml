@@ -3,15 +3,18 @@ services:
   web:
     image: cb-nodejs-dev:latest
     ports:
-      - "8080:8080"
+      - "${WEB_LOCAL_PORT}:${WEB_PORT}"
     volumes:
       - ./web_front:/data/web_front
       - ./shared_components:/data/shared_components
     command: bash -c "cd /data/web_front; npm install; npm run dev"
+    environment:
+      PORT: "${WEB_PORT}"
+      SERVER_URL: ${WEB_TO_SERVER_URL}
   socket-server:
     image: cb-nodejs-dev
     ports:
-      - "3000:3000"
+      - "${SERVER_LOCAL_PORT}:${SERVER_PORT}"
     volumes:
       - ./server:/data/server
       - ./shared_components:/data/shared_components
@@ -21,14 +24,14 @@ services:
     links:
       - "db:database"
     environment:
-      DB_URL: "postgresql://postgres:postgres@database:5432/postgres"
-      NODE_ENV: "development"
+      DB_URL: ${SERVER_TO_DB_URL}
+      NODE_ENV: ${ENV_TYPE}
   db:
     image: postgres:9
     restart: always
     ports:
-      - "5433:5432"
+      - "${DB_LOCAL_PORT}:${DB_PORT}"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DBNAME}
