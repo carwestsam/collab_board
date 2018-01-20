@@ -1,0 +1,5 @@
+#!/bin/bash
+
+docker run -v $PWD/web_front:/data/web_front -v $PWD/shared_components:/data/shared_components gen-nodejs bash -c "cd /data/web_front; npm run build"
+
+docker build --no-cache -t prod-web -f ./infrastructure/prod-web.Dockerfile .

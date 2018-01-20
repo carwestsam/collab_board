@@ -1,3 +1,0 @@
-#!/bin/bash
-
-docker build -t cb-server --no-cache -f infrastructure/cb-server.Dockerfile .

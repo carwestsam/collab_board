@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: cb-nodejs-dev:latest
+    image: dev-nodejs:latest
     ports:
       - "${WEB_LOCAL_PORT}:${WEB_PORT}"
     volumes:
@@ -12,7 +12,7 @@ services:
       PORT: "${WEB_PORT}"
       SERVER_URL: ${WEB_TO_SERVER_URL}
   socket-server:
-    image: cb-nodejs-dev
+    image: dev-nodejs:latest
     ports:
       - "${SERVER_LOCAL_PORT}:${SERVER_PORT}"
     volumes:

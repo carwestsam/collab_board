@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker kill dev-server 2>&1
+docker run --name dev-server --rm -d -p 3000:80 -v $PWD/server:/data/server -v $PWD/shared_components:/data/shared_components gen_nodejs /bin/bash -c "cd data/server; npm run start"

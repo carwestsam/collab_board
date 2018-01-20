@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build -t prod-server --no-cache -f infrastructure/prod-server.Dockerfile .
