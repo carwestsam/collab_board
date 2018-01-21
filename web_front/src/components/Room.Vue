@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-if="selectBoardDialog" v-model="selectBoardDialog" max-width="500px" class="dialog" persistent>
+    <v-dialog v-if="selectBoardDialog" v-model="selectBoardDialog" max-width="500px" class="dialog" :persistent="dialogPersistent">
       <v-card>
         <v-card-title>
           Please Select a Board
@@ -50,29 +50,52 @@ import SocketManager from '../store/SocketManager'
 import Path from 'path-parser'
 import * as $http from 'superagent'
 
+function getRoom () {
+  const parser = new Path('/room/:room_id')
+  return parser.partialTest(window.location.pathname)
+}
+
 export default {
   data () {
     return {
-      selectBoardDialog: false,
       boardId: '',
-      boardName: ''
+      boardName: '',
+      dialogPersistent: false
     }
   },
   methods: {
     jumpToBoard: function () {
       location.href = '/room/' + this.boardId
-      this.selectBoardDialog = false
+      this.$store.commit('setDisplayNewBoard', false)
     },
     createBoard: function () {
       $http.post('http://' + process.env.BACKEND_DOMAIN + '/room/create', {name: this.boardName}).then(response => {
         location.href = '/room/' + response.body.item_id
-        this.selectBoardDialog = false
+        this.$store.commit('setDisplayNewBoard', false)
       })
     }
   },
+  computed: {
+    selectBoardDialog: {
+      get: function () {
+        return this.$store.getters.displayNewBoard
+      },
+      set: function () {
+        return this.$store.commit('setDisplayNewBoard', false)
+      }
+    }
+  },
+  watch: {
+    selectBoardDialog: function () {
+      if (getRoom()) {
+        this.dialogPersistent = false
+      } else {
+        this.dialogPersistent = true
+      }
+    }
+  },
   mounted () {
-    const parser = new Path('/room/:room_id')
-    let room = parser.partialTest(window.location.pathname)
+    let room = getRoom()
     if (room) {
       $http.get('http://' + process.env.BACKEND_DOMAIN + '/room/' + room.room_id).then(response => {
         this.$store.commit('initItems', response.body.content)
@@ -83,7 +106,7 @@ export default {
         console.error('err', error)
       })
     } else {
-      this.selectBoardDialog = true
+      this.$store.commit('setDisplayNewBoard', true)
     }
     window.onbeforeunload = (e) => {
       if (!this.$store.getters.onLeaveNotification) {

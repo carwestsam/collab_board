@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => res.json(randomboard))
 app.get('/room/:room_id', (req, res, next) => {
   if (BoardDict[req.params.room_id]) {
-    return res.json(BoardDict[req.params.room_id])
+    return res.json({content:BoardDict[req.params.room_id]})
   } else {
     next()
   }
@@ -75,7 +75,7 @@ io.on('connection', function (socket) {
     } else {
       let board = await room.helper.getRoom(room_id)
       if (board) {
-        BoardDict[room_id] = board
+        BoardDict[room_id] = board.content
         BoardSocketDict[room_id] = [socket.id]
         SocketBoardDict[socket.id] = room_id
         socket.join(room_id)

@@ -130,6 +130,14 @@ let storeDes = {
   }
 }
 
+storeDes.state['displayNewBoard'] = false
+storeDes.mutations['setDisplayNewBoard'] = function (state, data) {
+  state.displayNewBoard = data
+}
+storeDes.getters['displayNewBoard'] = function (state) {
+  return state.displayNewBoard
+}
+
 new VuexConfigGenerator(storeDes).attachMutations(mutationDesciption)
 
 let getStore = function () {

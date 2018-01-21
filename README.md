@@ -39,6 +39,7 @@ cd collab_board
 - [sequelize-cli README](https://github.com/sequelize/cli/blob/master/docs/README.md)
 - [sequelize queryInterface README](http://docs.sequelizejs.com/class/lib/query-interface.js~QueryInterface.html)
 - [KeyboardJS](https://github.com/RobertWHurst/KeyboardJS)
+- [Materialize Icons](https://material.io/icons/)
 - [Vuetify](https://vuetifyjs.com/)
 
 ### This project is inspired by 

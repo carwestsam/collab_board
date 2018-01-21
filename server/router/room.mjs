@@ -10,7 +10,7 @@ function Helper () {
   return {
     getRoom : async (item_id) => {
       let board = await Board.findOne({where: {item_id}})
-      return board ? JSON.parse(board.content) : board
+      return board ? {content:JSON.parse(board.content), name: board.name} : board
     }
   }
 }

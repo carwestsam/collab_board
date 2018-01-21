@@ -14,18 +14,24 @@
       <v-btn icon @click="decreaseScale"><v-icon>zoom_out</v-icon></v-btn>
       {{Math.floor(this.$store.getters.scale * 100)}}
       <v-btn icon @click="increaseScale"><v-icon>zoom_in</v-icon></v-btn>
-      <v-menu :close-on-content-click="false" :close-on-click="true" top>
+      <v-menu :close-on-content-click="true" :close-on-click="true" top>
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
         </v-btn>
         <v-card class="menu-expand">
           <v-list>
-            <!-- <v-list-tile>
+            <v-subheader> General </v-subheader>
+            <v-list-tile @click="openCreateNew" tag="div">
+              <v-list-tile-action> <v-icon>add_to_queue</v-icon> </v-list-tile-action>
+              <v-list-tile-title>Select a Board</v-list-tile-title>
+            </v-list-tile>
+            <v-subheader> Toggles </v-subheader>
+            <v-list-tile>
               <v-list-tile-action>
-                <v-switch color="purple"></v-switch>
+                <v-switch color="purple" v-model="toggleFullScreen"></v-switch>
               </v-list-tile-action>
               <v-list-tile-title>Enable FullScreen</v-list-tile-title>
-            </v-list-tile> -->
+            </v-list-tile>
             <v-list-tile>
               <v-list-tile-action>
                 <v-switch color="purple" v-model="displayLike"></v-switch>
@@ -44,16 +50,25 @@
 <script>
 import Hand from './Hand'
 import Room from './Room'
+import screenfull from 'screenfull'
 
 export default {
   data () {
     return {
-      displayLike: this.$store.getters.displayLike
+      displayLike: this.$store.getters.displayLike,
+      toggleFullScreen: false
     }
   },
   watch: {
     displayLike: function (newValue) {
       this.$store.commit('setDisplayLike', newValue)
+    },
+    toggleFullScreen: function (newValue) {
+      if (newValue) {
+        screenfull.request()
+      } else {
+        screenfull.exit()
+      }
     }
   },
   methods: {
@@ -62,6 +77,9 @@ export default {
     },
     decreaseScale: function () {
       this.$store.commit('setGlobalScale', (this.$store.getters.scale * 100) - 10)
+    },
+    openCreateNew: function () {
+      this.$store.commit('setDisplayNewBoard', true)
     }
   },
   components: {
