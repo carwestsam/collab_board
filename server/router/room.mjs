@@ -1,7 +1,7 @@
 import express from 'express'
 import db from '../models/index'
 import uuid from 'uuid/v4'
-import board_template from '../templates/boards/board_template'
+import templates from '../templates/boards/index'
 
 const router = express.Router()
 const Board = db['Board']
@@ -47,11 +47,14 @@ router.post('/create', async (req, res) => {
         break
       }
     } while (boards.length != 0 )
+    console.log('template object', JSON.stringify(templates))
+    console.log('template name', req.body.template)
     let newBoard = {
       name: req.body.name,
       item_id,
-      content: JSON.stringify(board_template)
+      content: JSON.stringify(templates[req.body.template])
     }
+    console.log('new board', JSON.stringify(newBoard))
     return await Board.create(newBoard).then(()=>{
       return res.status(200).json(newBoard)
     }, err => {

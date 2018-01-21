@@ -1,10 +1,9 @@
 <template>
   <div>
-  <v-app>
+  <!-- <v-app> -->
     <hand/>
     <!-- <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker> -->
     <v-toolbar
-      color="white"
       floating
       fixed
       class="toolbar"
@@ -43,7 +42,7 @@
       </v-menu>
     </v-toolbar>
     <room/>
-  </v-app>
+  <!-- </v-app> -->
   </div>
 </template>
 

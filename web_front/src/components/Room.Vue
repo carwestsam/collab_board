@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-if="selectBoardDialog" v-model="selectBoardDialog" max-width="500px" class="dialog" :persistent="dialogPersistent">
-      <v-card>
+      <v-card flat>
         <v-card-title>
           Please Select a Board
         </v-card-title>
@@ -28,11 +28,11 @@
                       label="Board Name"
                       v-model="boardName"
                       value=""></v-text-field>
-                    <v-text-field
-                      name="input-2"
-                      label="Board Id"
-                      value="Will Random Generate"
-                      disabled></v-text-field>
+                    <v-select
+                      v-bind:items="boardTemplates"
+                      v-model="boardTemplate"
+                      label="select a template"
+                      bottom></v-select>
                     <v-btn color="primary" dark @click.stop="createBoard">Create New</v-btn>
                   </v-card-text>
                 </v-card>
@@ -60,7 +60,13 @@ export default {
     return {
       boardId: '',
       boardName: '',
-      dialogPersistent: false
+      dialogPersistent: false,
+      boardTemplate: 'default',
+      boardTemplates: [
+        {text: 'Tutorial', value: 'tutorial'},
+        {text: 'Empty Retrospect', value: 'empty_retro'},
+        {text: 'Sample Retrospect', value: 'sample_retro'}
+      ]
     }
   },
   methods: {
@@ -69,9 +75,10 @@ export default {
       this.$store.commit('setDisplayNewBoard', false)
     },
     createBoard: function () {
-      $http.post('http://' + process.env.BACKEND_DOMAIN + '/room/create', {name: this.boardName}).then(response => {
+      $http.post('http://' + process.env.BACKEND_DOMAIN + '/room/create', {name: this.boardName, template: this.boardTemplate}).then(response => {
         location.href = '/room/' + response.body.item_id
         this.$store.commit('setDisplayNewBoard', false)
+        this.$store.commit('setOnLeaveNotification', false)
       })
     }
   },
@@ -99,7 +106,9 @@ export default {
     if (room) {
       $http.get('http://' + process.env.BACKEND_DOMAIN + '/room/' + room.room_id).then(response => {
         this.$store.commit('initItems', response.body.content)
-        document.title = response.body.name
+        if (response.body.name) {
+          document.title = response.body.name
+        }
         SocketManager.getInstance().send('join-room', JSON.stringify(room))
         this.$store.commit('setOnLeaveNotification', true)
       }, error => {
@@ -130,7 +139,4 @@ export default {
 </script>
 
 <style lang="scss">
-.dialog {
-  z-index: 100;
-}
 </style>

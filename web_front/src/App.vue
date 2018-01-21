@@ -1,4 +1,5 @@
 <template>
+  <v-app light>
   <div>
   <mymenu/>
   <div id="application" v-bind:style="{fontSize}">
@@ -12,6 +13,7 @@
     </div>
   </div>
   </div>
+  </v-app>
 </template>
 
 <script>
@@ -88,6 +90,9 @@ body{
   margin: auto;
   overflow: scroll;
   background-color: pink;
-  // font-size: 16px;  
+  // font-size: 16px;
+  .a {
+    color: black
+  }
 }
 </style>
