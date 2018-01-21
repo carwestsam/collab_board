@@ -24,6 +24,7 @@ services:
     links:
       - "db:database"
     environment:
+      PORT: ${SERVER_PORT}
       DB_URL: ${SERVER_TO_DB_URL}
       NODE_ENV: ${ENV_TYPE}
   db:

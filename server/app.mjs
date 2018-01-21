@@ -109,5 +109,6 @@ io.on('connection', function (socket) {
   })
 })
 
-httpServer.listen(3000, () => console.log('Example app listening on port 3000'))
+var port = process.env.PORT || 3000
+httpServer.listen(port, () => console.log(`Example app listening on port ${port}`))
 // be aware, it should not be port 80, because it is belongs to a non prod account in container
