@@ -138,6 +138,9 @@ export default {
       height: 170px;
       overflow: scroll;
       white-space: nowrap;
+      .item {
+        white-space: normal;
+      }
       .add-new-item {
         display: inline-block;
       }
