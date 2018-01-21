@@ -68,7 +68,7 @@ router.get('/:room_id', (req, res) => {
   .then(
     result => {
       if (result) {
-        res.status(200).set('Content-Type', 'application/json').send(result.content)
+        res.status(200).set('Content-Type', 'application/json').send(`{"content":${result.content}, "name": "${result.name}"}`)
       } else {
         res.status(404).json({'error':'room not found'})
       }

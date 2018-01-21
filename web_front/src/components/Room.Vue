@@ -11,18 +11,23 @@
               <v-flex sm6>
                 <v-card>
                   <v-card-text>
-                    <v-text-field
-                      name="input-1"
-                      label="Board Id"
-                      id="testing"
-                      v-model="boardId"></v-text-field>
-                    <v-btn color="primary" dark @click.stop="jumpToBoard">Join</v-btn>
+                    Recent BoardX
+                  </v-card-text>
+                </v-card>
+                <v-card>
+                  <v-card-text>
+                    Recent BoardY
                   </v-card-text>
                 </v-card>
               </v-flex>
               <v-flex sm6>
                 <v-card>
                   <v-card-text>
+                    <v-text-field
+                      name="input-name"
+                      label="Board Name"
+                      v-model="boardName"
+                      value=""></v-text-field>
                     <v-text-field
                       name="input-2"
                       label="Board Id"
@@ -49,7 +54,8 @@ export default {
   data () {
     return {
       selectBoardDialog: false,
-      boardId: ''
+      boardId: '',
+      boardName: ''
     }
   },
   methods: {
@@ -58,7 +64,7 @@ export default {
       this.selectBoardDialog = false
     },
     createBoard: function () {
-      $http.post('http://' + process.env.BACKEND_DOMAIN + '/room/create', {name: 'user created board'}).then(response => {
+      $http.post('http://' + process.env.BACKEND_DOMAIN + '/room/create', {name: this.boardName}).then(response => {
         location.href = '/room/' + response.body.item_id
         this.selectBoardDialog = false
       })
@@ -69,7 +75,8 @@ export default {
     let room = parser.partialTest(window.location.pathname)
     if (room) {
       $http.get('http://' + process.env.BACKEND_DOMAIN + '/room/' + room.room_id).then(response => {
-        this.$store.commit('initItems', response.body)
+        this.$store.commit('initItems', response.body.content)
+        document.title = response.body.name
         SocketManager.getInstance().send('join-room', JSON.stringify(room))
         this.$store.commit('setOnLeaveNotification', true)
       }, error => {
