@@ -143,6 +143,7 @@ export default {
       }
       .add-new-item {
         display: inline-block;
+        position: relative;
       }
     }
   }

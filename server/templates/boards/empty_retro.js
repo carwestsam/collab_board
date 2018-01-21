@@ -4,7 +4,7 @@ module.exports = {
       "id": "a8fb79e7-fbc9-4cca-ac71-5d1168b963ca",
       "type": "group",
       "bg_color": "hsl(45.83, 100%, 95%)",
-      "text": "Things goes well",
+      "text": "Things going well",
       "width": 600,
       "height": 450,
       "stack": "board",

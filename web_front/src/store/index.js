@@ -28,7 +28,7 @@ let storeDes = {
   mutations: {
     initItems: (state, data) => {
       if (typeof data !== 'undefined') {
-        state.items = _.cloneDeep(data.items)
+        _.extend(state, data)
         return
       }
       let getRandomInt = obj.getRandomInt

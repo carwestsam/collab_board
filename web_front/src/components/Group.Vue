@@ -80,6 +80,7 @@ export default {
     },
     itemStyleObject: function () {
       let style = {
+        textAlign: 'center'
       }
       if (this.styleProps.styleOffset === false) {
         style.display = 'inline-block'
