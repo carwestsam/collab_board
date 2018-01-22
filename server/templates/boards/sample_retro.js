@@ -611,9 +611,6 @@ module.exports = {
       "top": 2551
     }
   ],
-  "user": {
-    "id": "f17e72e1-24cd-4c55-b79a-7199b317c6a6"
-  },
   "scale": 100,
   "displayLike": true
 }
