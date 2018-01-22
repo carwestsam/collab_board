@@ -61,7 +61,7 @@ export default {
       boardId: '',
       boardName: '',
       dialogPersistent: false,
-      boardTemplate: 'default',
+      boardTemplate: 'tutorial',
       boardTemplates: [
         {text: 'Tutorial', value: 'tutorial'},
         {text: 'Empty Retrospect', value: 'empty_retro'},
