@@ -1,3 +1,9 @@
+<template>
+<div class="paper" v-bind:style="styleObject" v-selectable v-dropable>
+  <slot name="board-items"></slot>
+</div>
+</template>
+
 <script>
 import _ from 'lodash'
 import constants from '../../../shared_components/constants.mjs'

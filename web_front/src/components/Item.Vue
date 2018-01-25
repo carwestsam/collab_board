@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="toolbar-wrapper" v-if="this.statusProps.selected && !this.statusProps.editing" v-bind:style="toolbarStyle">
+    <div class="toolbar-wrapper" @touchstart.stop="forbiddenTouch" v-if="this.statusProps.selected && !this.statusProps.editing" v-bind:style="toolbarStyle">
       <v-toolbar
       slot="toolbar"
       color="white"
@@ -27,7 +27,7 @@
       dense
       >
         <slot name="toolbar-options"></slot>
-        <v-btn color="primary" flat icon @mousedown.prevent="deleteItem">
+        <v-btn color="primary" flat icon @mousedown.prevent="deleteItem" @touchstart="deleteItem">
           <v-icon>delete</v-icon>
         </v-btn>
       </v-toolbar>
@@ -38,6 +38,7 @@
 
 <script>
 import constants from '../../../shared_components/constants.mjs'
+import selectMgr from '../directives/selectable'
 import _ from 'lodash'
 
 export default {
@@ -55,7 +56,7 @@ export default {
       },
       statusProps: {
         selected: false,
-        draggable: true,
+        draggable: !window.MOBILE,
         editing: false,
         resizable: true
       },
@@ -113,13 +114,17 @@ export default {
   },
   methods: {
     select: function () {
+      // console.log(this.dataProps.id, 'select')
       this.statusProps.selected = true
       this.statusProps.draggable = true
       this.statusProps.resizable = true
     },
     unselect: function () {
+      // console.log(this.dataProps.id, 'unselect')
       this.statusProps.selected = false
-      this.statusProps.draggable = false
+      if (window.MOBILE) {
+        this.statusProps.draggable = false
+      }
       this.statusProps.resizable = false
     },
     deleteItem: function () {
@@ -140,6 +145,12 @@ export default {
         this.styleProps.height = height
         this.$store.commit('resizeItem', {id: this.dataProps.id, width, height})
       }
+    },
+    forbiddenTouch: function (event) {
+      // console.log('forbidden touch')
+      event.preventDefault()
+      event.stopPropagation()
+      selectMgr.forbiddenSelectOnce = true
     }
   }
 }

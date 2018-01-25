@@ -2,10 +2,10 @@
   <v-app light>
   <div>
   <mymenu/>
-  <div id="application" v-bind:style="{fontSize}">
+  <div id="application" v-bind:style="{fontSize}" touch-action='none'>
     <div class="view-scope">
       <paper>
-        <template v-for="item in items" >
+        <template v-for="item in items" slot="board-items">
           <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
           <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
         </template>
@@ -38,6 +38,11 @@ export default {
         item.styleRemoveSize = false
         return item
       })
+      // let items = this.$store.getters.items()
+      // for (let i = 0; i < items.length; i += 1) {
+      //   items[i].styleOffset = true
+      //   items[i].styleRemoveSize = false
+      // }
       return items
     },
     fontSize: function () {
@@ -58,7 +63,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import './directives/resizable.scss'
+@import './directives/resizable.scss';
+@import './directives/draggable.scss';
 </style>
 
 <style lang='scss'>

@@ -22,10 +22,10 @@
     </template>
 
     <template slot="toolbar-options">
-      <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mouseup.prevent="toggleLike">
+      <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mousedown.prevent="toggleLike" @touchstart="toggleLike">
         <v-icon>thumb_up</v-icon>
       </v-btn>
-      <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
+      <v-btn color="primary" flat icon @mousedown.prevent="intoEdit" @touchstart="intoEdit">
         <v-icon>edit</v-icon>
       </v-btn>
     </template>
@@ -114,10 +114,15 @@ export default {
     outsideEdit: function () {
       if (this.statusProps.editing === true) {
         this.statusProps.editing = false
-        this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
+        let originText = this.$store.getters.getItemById(this.dataProps.id).text
+        if (originText !== this.dataProps.text) {
+          console.log('originText', originText)
+          this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
+        }
       }
     },
     toggleLike: function () {
+      // console.log('toggle like')
       this.$store.commit('likeItem', {itemId: this.dataProps.id, userId: this.$store.getters.userId, like: !this.dataProps.like})
     }
   },

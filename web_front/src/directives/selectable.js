@@ -2,6 +2,7 @@ import Vue from 'vue'
 class SelectMgr {
   constructor () {
     this.selected = []
+    this.forbiddenSelectOnce = false
   }
   static getInstance () {
     if (selectMgr === null) {
@@ -10,6 +11,10 @@ class SelectMgr {
     return selectMgr
   }
   selectElement (vnode) {
+    if (this.forbiddenSelectOnce === true) {
+      this.forbiddenSelectOnce = false
+      return
+    }
     this.unselectAll()
     this.selected.push(vnode)
     if (typeof vnode.context.select === 'function') {
@@ -31,6 +36,11 @@ let selectMgr = new SelectMgr()
 Vue.directive('selectable', {
   bind: function (el, binding, vnode) {
     el.addEventListener('click', function hoho (event) {
+      if (selectMgr.forbiddenSelectOnce === true) {
+        selectMgr.forbiddenSelectOnce = false
+        event.stopPropagation()
+        return
+      }
       if (typeof vnode.context.statusProps === 'undefined') {
         selectMgr.unselectAll()
         return
@@ -46,6 +56,7 @@ Vue.directive('selectable', {
       }
       if (vnode.context.statusProps.selected === true) {
         if (typeof vnode.context.unselect === 'function') {
+          // console.log('in selectable unselect')
           vnode.context.unselect()
         }
       } else if (vnode.context.statusProps.selected === false) {

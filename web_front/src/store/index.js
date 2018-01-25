@@ -15,6 +15,8 @@ const INIT_ONHAND_STICKER = 0
 const INIT_ONBOARD_GROUP = 1
 const USER_ID_COOKIE = 'Collaborate_board_user_id'
 
+let itemsListHolder = []
+
 let storeDes = {
   state: {
     items: [],
@@ -110,7 +112,14 @@ let storeDes = {
       return false
     },
     items: (state) => (stack = 'board') => {
-      return state.items.filter(item => item.stack === stack)
+      itemsListHolder.splice(0, itemsListHolder.length)
+      for (let i = 0; i < state.items.length; i++) {
+        if (state.items[i].stack === stack) {
+          itemsListHolder.push(state.items[i])
+        }
+      }
+      return itemsListHolder
+      // return state.items.filter(item => item.stack === stack)
     },
     userId: (state) => {
       return state.user.id
