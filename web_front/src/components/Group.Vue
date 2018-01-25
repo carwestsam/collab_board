@@ -34,7 +34,7 @@
     </template>
 
     <template slot='toolbar-options'>
-      <v-btn color="primary" flat icon @mousedown.prevent="intoEdit">
+      <v-btn color="primary" flat icon @mousedown.prevent="intoEdit" @touchstart="intoEdit">
         <v-icon>edit</v-icon>
       </v-btn>
     </template>

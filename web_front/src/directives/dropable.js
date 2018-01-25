@@ -27,6 +27,7 @@ class DropManager {
     delete this.dropFunctions[id]
   }
   drop (id, left, top, ev) {
+    console.log('drop', id, left, top, ev)
     let items = store.getters.allItemsWithStack
     let itemStackDict = {}
     for (let i = 0; i < items.length; i += 1) {
@@ -35,7 +36,8 @@ class DropManager {
     let shoots = []
     _.forEach(this.elements, (el, id) => {
       let rect = el.getBoundingClientRect()
-      if (rect.x < left && rect.y < top && rect.x + rect.width > left && rect.y + rect.height > top) {
+      console.log('rect', rect)
+      if (rect.left < left && rect.top < top && rect.left + rect.width > left && rect.top + rect.height > top) {
         shoots.push({id})
       }
     })
@@ -65,7 +67,8 @@ class DropManager {
         target = id
       }
     }
-    if (target) {
+    console.log('finish drop:', shoots, target)
+    if (target && target !== id) {
       this.dropFunctions[target](ev)
       return true
     } else {
