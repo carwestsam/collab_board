@@ -121,6 +121,11 @@ let storeDes = {
       return itemsListHolder
       // return state.items.filter(item => item.stack === stack)
     },
+    allItemsWithStack: (state) => {
+      return _.map(state.items, item => {
+        return {id: item.id, stack: item.stack}
+      })
+    },
     userId: (state) => {
       return state.user.id
     },

@@ -2,8 +2,8 @@ import DragManager from './draggable'
 import _ from 'lodash'
 import SelectMgr from './selectable'
 import Vue from 'vue'
+import {store} from '../store/index'
 let selectMgr = SelectMgr.getInstance()
-let dragManager = DragManager.getInstance()
 
 let dropManager = null
 
@@ -25,6 +25,52 @@ class DropManager {
   unregisterDrop (id, vnode) {
     this.elements[id].removeEventListener('drop', this.dropFunctions[id])
     delete this.dropFunctions[id]
+  }
+  drop (id, left, top, ev) {
+    let items = store.getters.allItemsWithStack
+    let itemStackDict = {}
+    for (let i = 0; i < items.length; i += 1) {
+      itemStackDict[items[i].id] = {stack: items[i].stack, index: i}
+    }
+    let shoots = []
+    _.forEach(this.elements, (el, id) => {
+      let rect = el.getBoundingClientRect()
+      if (rect.x < left && rect.y < top && rect.x + rect.width > left && rect.y + rect.height > top) {
+        shoots.push({id})
+      }
+    })
+    let target = false
+    let maxRootIndex = -1
+    let maxLayer = -1
+    let maxIndex = -1
+    for (let i = 0; i < shoots.length; i++) {
+      let id = shoots[i].id
+      let item = itemStackDict[id]
+      shoots[i].index = item.index
+      let stack = id
+      let layer = 1
+      while (itemStackDict[stack].stack !== 'board') {
+        stack = itemStackDict[stack].stack
+        layer += 1
+      }
+      shoots[i].rootIndex = itemStackDict[stack].index
+      shoots[i].layer = layer
+
+      if ((shoots[i].rootIndex > maxRootIndex) ||
+          (shoots[i].rootIndex === maxRootIndex && shoots[i].layer > maxLayer) ||
+          (shoots[i].rootIndex === maxRootIndex && shoots[i].layer === maxLayer && shoots[i].index > maxIndex)) {
+        maxRootIndex = shoots[i].rootIndex
+        maxLayer = shoots[i].layer
+        maxIndex = shoots[i].index
+        target = id
+      }
+    }
+    if (target) {
+      this.dropFunctions[target](ev)
+      return true
+    } else {
+      return false
+    }
   }
 }
 
@@ -64,7 +110,7 @@ Vue.directive('dropable', {
         }
         // incase some time, drag failed, should not finish Drop
         if (binding.value.apply(this, arguments)) {
-          dragManager.finishDrop()
+          DragManager.getInstance().finishDrop()
         }
       }
     }
@@ -94,8 +140,8 @@ Vue.directive('dropable', {
       let e = event
       callbackFunc.apply(this, [e, id])
 
-      if (dragManager.dropped === true && id) {
-        dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
+      if (DragManager.getInstance().dropped === true && id) {
+        DragManager.getInstance().removeDocumentListeners(id, ['drag', 'dragend'])
         // console.log('e')
         selectMgr.unselectAll()
       }

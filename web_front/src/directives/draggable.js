@@ -2,6 +2,7 @@ import Vue from 'vue'
 import SelectMgr from './selectable'
 import _ from 'lodash'
 import {store} from '../store/index'
+import DropManager from './dropable'
 let selectMgr = SelectMgr.getInstance()
 
 let dragManager = null
@@ -51,7 +52,6 @@ class DragManager {
   bindDrag (el, vnode) {
     let id = vnode.context.dataProps.id
     if ((isDefined(this.dragFunctions[id]) && _.get(this.dragFunctions, id + '.$el', undefined) !== el)) {
-      console.log('in defined')
       _.get(this.dragFunctions, id + '.$el', undefined).removeEventListener('dragstart',
         _.get(this.dragFunctions, id + '.startBody', undefined))
       delete this.dragFunctions[id]
@@ -154,6 +154,8 @@ function initDrag (vnode, delegate) {
 
     let rect = this.getBoundingClientRect()
 
+    let currentClientX = 0
+    let currentClientY = 0
     let offsetX = clientX - rect.left
     let offsetY = clientY - rect.top
     let diffX = 0
@@ -232,8 +234,8 @@ function initDrag (vnode, delegate) {
       }
       if (!(event.screenX === 0 && event.screenY === 0)) {
         let $app = document.getElementById('application')
-        let currentClientX = event.touches[0].clientX
-        let currentClientY = event.touches[0].clientY
+        currentClientX = event.touches[0].clientX
+        currentClientY = event.touches[0].clientY
         diffX = currentClientX - clientX
         diffY = currentClientY - clientY
 
@@ -260,16 +262,17 @@ function initDrag (vnode, delegate) {
       app.removeChild(placeholder)
       if (dragManager.dropped === false && moved === true) {
         // console.log('diff', Math.abs(diffX) + Math.abs(diffY))
-        if (Math.abs(diffX) + Math.abs(diffY) > 100) {
-          selectMgr.selected[0].context.$store.commit('moveItem',
-            {
+        if (Math.abs(diffX) + Math.abs(diffY) > 100) { // exceed the threshold of movement
+          if (!DropManager.getInstance().drop(selectMgr.selected[0].context.dataProps.id, currentClientX, currentClientY, ev)) {
+            selectMgr.selected[0].context.$store.commit('moveItem', {
               id: selectMgr.selected[0].context.dataProps.id,
               top: parseInt(targetTop),
               left: parseInt(targetLeft),
               stack: 'board'
             })
-          selectMgr.unselectAll()
-          dragManager.dropped = true
+            selectMgr.unselectAll()
+            dragManager.dropped = true
+          }
         } else {
         }
         // console.log('touch UP?', selectMgr.selected[0].context.dataProps.id, targetTop, targetLeft)
@@ -324,8 +327,8 @@ function initDrag (vnode, delegate) {
         dragManager.removeElementListeners(id, $this, ['touchstart'])
         dragManager.removeDocumentListeners(id, ['touchend', 'touchmove'])
         // selectMgr.unselectAll()
-        selectMgr.fobiddenSelectOnce = true
-        dragManager.dropped = false
+        // selectMgr.fobiddenSelectOnce = true
+        // dragManager.dropped = false
       }
     }
 
