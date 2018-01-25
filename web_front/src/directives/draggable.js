@@ -135,8 +135,9 @@ class DragManager {
   }
 }
 
-dragManager = new DragManager()
+dragManager = DragManager.getInstance()
 window.dragManager = dragManager
+export default DragManager
 
 function initDrag (vnode, delegate) {
   let dragStart = function (ev) {
@@ -311,7 +312,6 @@ function initDrag (vnode, delegate) {
         }
         // console.log('touch UP?', selectMgr.selected[0].context.dataProps.id, targetTop, targetLeft)
 
-        dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
         if (navigator.userAgent.search('Firefox') >= 0) {
           dragManager.removeDocumentListeners(id, ['dragover'])
         }
@@ -378,80 +378,6 @@ Vue.directive('draggable', {
     // console.log('unbind drag')
     if (!vnode.context.$store.getters.hasId(getItemId(vnode))) {
       dragManager.removeDragFunction(vnode)
-    }
-  }
-})
-
-let dropFunctions = {}
-
-Vue.directive('dropable', {
-  bind: function (el, binding, vnode) {
-    let callbackFunc = binding.value
-    if (!(typeof callbackFunc === 'function' || typeof callbackFunc === 'undefined')) {
-      console.error('dropable should assign value of funciton or undefined')
-    }
-    if (typeof callbackFunc === 'undefined') {
-      callbackFunc = function () {}
-    } else {
-      callbackFunc = function () {
-        if (isDefined(arguments[1]) && _.get(vnode, 'context.dataProps.id', undefined) === arguments[1]) {
-          return
-        }
-        // incase some time, drag failed, should not finish Drop
-        if (binding.value.apply(this, arguments)) {
-          dragManager.finishDrop()
-        }
-      }
-    }
-
-    let handleOverFunction = function () {
-    }
-    let handleOver = _.throttle(handleOverFunction, 1000)
-
-    el.addEventListener('dragover', function (event) {
-      handleOver()
-      event.preventDefault()
-    })
-    el.addEventListener('dragenter', function () {
-      el.classList.add('dragover')
-    })
-    el.addEventListener('dragleave', function () {
-      el.classList.remove('dragover')
-    })
-
-    let dropHandler = function (event) {
-      el.classList.remove('dragover')
-      let id = ''
-      if (selectMgr.selected.length === 1 && isDeskItem(selectMgr.selected[0])) {
-        id = getItemId(selectMgr.selected[0])
-      }
-
-      let e = event
-      callbackFunc.apply(this, [e, id])
-
-      if (dragManager.dropped === true && id) {
-        dragManager.removeDocumentListeners(id, ['drag', 'dragend'])
-        // console.log('e')
-        selectMgr.unselectAll()
-      }
-      e.stopPropagation()
-    }
-
-    let itemId = _.get(vnode, 'context.dataProps.id', undefined)
-
-    if (itemId) {
-      dropFunctions[itemId] = dropHandler
-    }
-
-    el.addEventListener('drop', dropHandler)
-  },
-
-  unbind: function (el, binding, vnode) {
-    // console.log('unbind drop')
-    let itemId = _.get(vnode, 'context.dataProps.id', undefined)
-    if (itemId) {
-      el.removeEventListener('drop', dropFunctions[itemId])
-      delete dropFunctions[itemId]
     }
   }
 })
