@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source config/test/vars.sh
+docker-compose -f infrastructure/dev-compose.yml -p ${PROJECT_NAME} --project-directory . run socket-server /bin/bash -c "cd /data/server; npm install; npm run test"

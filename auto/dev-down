@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source config/dev/vars.sh
+docker-compose -f infrastructure/dev-compose.yml -p ${PROJECT_NAME} --project-directory . down

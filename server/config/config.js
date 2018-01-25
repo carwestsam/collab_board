@@ -3,6 +3,10 @@ module.exports = {
     "url": process.env.DB_URL,
     "dialect": "postgres"
   },
+  "testing": {
+    "url": process.env.DB_URL,
+    "dialect": "postgres"
+  },
   "production": {
     "url": process.env.DB_URL,
     "dialect": "postgres"
