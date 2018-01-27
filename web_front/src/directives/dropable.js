@@ -7,6 +7,14 @@ let selectMgr = SelectMgr.getInstance()
 
 let dropManager = null
 
+function isRectHit (left, top, rect) {
+  if (rect.left < left && rect.top < top && rect.left + rect.width > left && rect.top + rect.height > top) {
+    return true
+  } else {
+    return false
+  }
+}
+
 class DropManager {
   constructor () {
     this.dropFunctions = {}
@@ -28,6 +36,15 @@ class DropManager {
   }
   drop (id, left, top, ev) {
     console.log('drop', id, left, top, ev)
+    // drop on hand
+    let handId = 'hand-' + store.getters.userId
+    let handRect = this.elements[handId].getBoundingClientRect()
+    if (isRectHit(left, top, handRect)) {
+      this.dropFunctions[handId](ev)
+      return true
+    }
+
+    // drop on board
     let items = store.getters.allItemsWithStack
     let itemStackDict = {}
     for (let i = 0; i < items.length; i += 1) {
@@ -36,7 +53,7 @@ class DropManager {
     let shoots = []
     _.forEach(this.elements, (el, id) => {
       let rect = el.getBoundingClientRect()
-      if (rect.left < left && rect.top < top && rect.left + rect.width > left && rect.top + rect.height > top) {
+      if (isRectHit(left, top, rect)) {
         shoots.push({id})
       }
     })
@@ -152,6 +169,7 @@ Vue.directive('dropable', {
 
     let itemId = _.get(vnode, 'context.dataProps.id', undefined)
 
+    console.log('bind', itemId)
     if (itemId) {
       dropManager.registerDrop(itemId, vnode, el, dropHandler)
     }

@@ -34,8 +34,12 @@ import SelectMgr from '../directives/selectable.js'
 
 export default {
   data () {
+    this.$store.commit('initUser')
     return {
       shiftdown: -1,
+      dataProps: {
+        id: 'hand-' + this.$store.getters.userId
+      },
       styleProps: {
         bottom: 100,
         left: 28

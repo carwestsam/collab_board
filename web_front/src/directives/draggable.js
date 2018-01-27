@@ -300,7 +300,7 @@ function initDrag (vnode, delegate) {
       app.removeChild(placeholder)
       if (dragManager.dropped === false && moved === true) {
         // console.log('diff', Math.abs(diffX) + Math.abs(diffY))
-        if (Math.abs(diffX) + Math.abs(diffY) > 100) {
+        if (Math.abs(diffX) + Math.abs(diffY) > 50) {
           selectMgr.selected[0].context.$store.commit('moveItem',
             {
               id: selectMgr.selected[0].context.dataProps.id,
