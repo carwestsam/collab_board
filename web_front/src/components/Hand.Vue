@@ -1,10 +1,12 @@
 <template>
   <v-card class='hand' v-dropable="onDrop"
     v-resize="onWindowResize"
+    v-bind:class="{'minimum': minimum}"
     v-bind:style="style">
+    <div class="minimum-hand" v-if="minimum"><v-btn fab medium @click="toggleMinimum"><v-icon medium>expand_less</v-icon></v-btn></div>
     <div class="actions" v-fix-move="'lb'">
       <v-layout justify-space-around>
-        <!-- <v-icon medium class="actions-toggle">expand_less</v-icon> -->
+        <v-icon medium class="actions-toggle" v-cs-click="toggleMinimum">expand_more</v-icon>
         <v-icon light large color='gray' class="actions-handle" >drag_handle</v-icon>
         <!-- <v-icon medium class="actions-expand">code</v-icon> -->
       </v-layout>
@@ -35,7 +37,9 @@ import SelectMgr from '../directives/selectable.js'
 export default {
   data () {
     this.$store.commit('initUser')
+    console.log('isMobile', window.MOBILE)
     return {
+      minimum: !!window.MOBILE,
       shiftdown: -1,
       dataProps: {
         id: 'hand-' + this.$store.getters.userId
@@ -64,10 +68,15 @@ export default {
       return items
     },
     style: function () {
-      return {
+      if (this.minimum === true) {
+        return {}
+      }
+
+      let style = {
         left: this.styleProps.left + 'px',
         bottom: this.styleProps.bottom + 'px'
       }
+      return style
     }
   },
   methods: {
@@ -90,6 +99,9 @@ export default {
           this.shiftdown = -1
         }
       }
+    },
+    toggleMinimum: function () {
+      this.minimum = !this.minimum
     }
   },
   components: {
@@ -106,9 +118,19 @@ export default {
   display: block;
   position: fixed;
   z-index: 50;
-  bottom: 50px;
-  left: 40px;
+  bottom: 10px;
+  left: 20px;
   padding-top: 20px;
+
+  &.minimum {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    .actions, .items, .add-new-item {
+      display: none
+    }
+  }
 
   .actions {
     user-select: none;
@@ -121,6 +143,12 @@ export default {
     cursor: move;
     .actions-handle {
       cursor: move;
+    }
+
+    @media all and (min-height: 760px) and (min-width: 600px) {
+      .actions-toggle {
+        display: none;
+      }
     }
     .actions-toggle, .actions-expand {
       cursor: pointer;

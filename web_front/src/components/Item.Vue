@@ -27,7 +27,7 @@
       dense
       >
         <slot name="toolbar-options"></slot>
-        <v-btn color="primary" flat icon @mousedown.prevent="deleteItem" @touchstart="deleteItem">
+        <v-btn color="primary" flat icon v-cs-click="deleteItem">
           <v-icon>delete</v-icon>
         </v-btn>
       </v-toolbar>
