@@ -66,9 +66,9 @@ class DragManager {
           }
           if (ev.touches.length === 1) {
             // console.log('define touchstart function')
-            let app = document.getElementById('application')
-            app.style.touchAction = 'none'
-            app.setAttribute('touch-action', 'none')
+            // let app = document.getEl{{ementById('application')
+            // app.style.touchAction = 'none'
+            // app.setAttribute('touch-action', 'none')
 
             dragManager.onDragStart(id, ev, this)
             ev.preventDefault()       // forbidden browser behaviours, like swipe down refresh

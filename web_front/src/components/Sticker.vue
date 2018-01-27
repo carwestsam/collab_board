@@ -16,6 +16,7 @@
           v-bind:style="inputOverlayStyleObject"
           v-on:blur="outsideEdit"
           @keydown.enter="outsideEdit"
+          @touchstart.stop
           v-model="dataProps.text"
           class="input-overlay"/>
       </div>

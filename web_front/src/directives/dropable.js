@@ -36,7 +36,6 @@ class DropManager {
     let shoots = []
     _.forEach(this.elements, (el, id) => {
       let rect = el.getBoundingClientRect()
-      console.log('rect', rect)
       if (rect.left < left && rect.top < top && rect.left + rect.width > left && rect.top + rect.height > top) {
         shoots.push({id})
       }
@@ -67,7 +66,7 @@ class DropManager {
         target = id
       }
     }
-    console.log('finish drop:', shoots, target)
+    console.log('finish drop:', items, shoots, target)
     if (target && target !== id) {
       this.dropFunctions[target](ev)
       return true

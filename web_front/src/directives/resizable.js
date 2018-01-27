@@ -60,6 +60,12 @@ let cons = Vue.extend({
         return value / store.getters.scale
       }
 
+      let app = document.getElementById('application')
+      app.style.touchAction = 'none'
+      app.setAttribute('touch-action', 'none')
+      event.stopPropagation()
+      event.preventDefault()
+
       let onmousemove = function (ev) {
         deltaX = scale(ev.touches[0].clientX - initClientX)
         deltaY = scale(ev.touches[0].clientY - initClientY)
@@ -74,6 +80,8 @@ let cons = Vue.extend({
           pn.context.onResizeStop(initWidth + deltaX, initHeight + deltaY)
         }
 
+        app.style.touchAction = 'auto'
+        app.setAttribute('touch-action', 'auto')
         document.removeEventListener('touchmove', onmousemove)
         document.removeEventListener('touchend', onmouseup)
       }

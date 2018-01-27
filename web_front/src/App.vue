@@ -95,6 +95,7 @@ body{
   top: 10px;
   margin: auto;
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
   background-color: pink;
   // font-size: 16px;
   .a {

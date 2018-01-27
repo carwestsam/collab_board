@@ -21,6 +21,7 @@
           v-model="dataProps.text"
           v-on:blur="outsideEdit"
           @keydown.enter="outsideEdit"
+          @touchstart.stop
           class="input-title">
           
         <div class="group-content">
