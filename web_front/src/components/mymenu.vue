@@ -97,6 +97,12 @@ export default {
   font-size: 18px;
   z-index: 100;
   user-select: none;
+  @media all and (max-width: 500px){
+    & {
+      bottom: 0;
+      right: 0;
+    }
+  }
 }
 #app {
   position: absolute;

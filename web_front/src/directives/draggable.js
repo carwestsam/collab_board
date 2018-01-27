@@ -260,6 +260,7 @@ function initDrag (vnode, delegate) {
       app.style.touchAction = 'auto'
       app.setAttribute('touch-action', 'auto')
       app.removeChild(placeholder)
+      ev.stopPropagation()
       if (dragManager.dropped === false && moved === true) {
         // console.log('diff', Math.abs(diffX) + Math.abs(diffY))
         if (Math.abs(diffX) + Math.abs(diffY) > 100) { // exceed the threshold of movement

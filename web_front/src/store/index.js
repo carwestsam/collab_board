@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import obj from '../utils/calcUtils.js'
+import calcUtils from '../utils/calcUtils.js'
 import _ from 'lodash'
 import uuid from 'uuid/v4'
 import {VuexConfigGenerator, StateHistoryMgr} from './StateHistoryManager'
 import {mutationDesciption} from '../../../shared_components/mutationDescription.mjs'
 import {getRandomColor} from '../../../shared_components/colorGenerator.mjs'
 import Cookies from 'js-cookie'
+
+let obj = calcUtils()
 
 Vue.use(Vuex)
 
