@@ -16,6 +16,7 @@
           v-bind:style="inputOverlayStyleObject"
           v-on:blur="outsideEdit"
           @keydown.enter="outsideEdit"
+          onfocus="this.selectionStart = this.selectionEnd = this.value.length"
           @touchstart.stop
           v-model="dataProps.text"
           class="input-overlay"/>
@@ -117,7 +118,7 @@ export default {
         this.statusProps.editing = false
         let originText = this.$store.getters.getItemById(this.dataProps.id).text
         if (originText !== this.dataProps.text) {
-          console.log('originText', originText)
+          // console.log('originText', originText)
           this.$store.commit('updateStickerText', {id: this.dataProps.id, text: this.dataProps.text})
         }
       }

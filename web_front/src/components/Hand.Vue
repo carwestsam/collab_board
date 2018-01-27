@@ -3,7 +3,7 @@
     v-resize="onWindowResize"
     v-bind:class="{'minimum': minimum}"
     v-bind:style="style">
-    <div class="minimum-hand" v-if="minimum"><v-btn fab medium @click="toggleMinimum"><v-icon medium>expand_less</v-icon></v-btn></div>
+    <div class="minimum-hand" v-if="minimum"><v-btn fab medium @click="toggleMinimum"><v-icon medium>inbox</v-icon></v-btn></div>
     <div class="actions" v-fix-move="'lb'">
       <v-layout justify-space-around>
         <v-icon medium class="actions-toggle" v-cs-click="toggleMinimum">expand_more</v-icon>
@@ -12,6 +12,7 @@
       </v-layout>
           <v-divider></v-divider>
     </div>
+    <v-layout justify-space-around><v-icon class='inbox-logo'>inbox</v-icon></v-layout>
     <div class='items'>
       <div class="hand-item-wrapper">
         <template>
@@ -37,7 +38,6 @@ import SelectMgr from '../directives/selectable.js'
 export default {
   data () {
     this.$store.commit('initUser')
-    console.log('isMobile', window.MOBILE)
     return {
       minimum: !!window.MOBILE,
       shiftdown: -1,
@@ -118,16 +118,23 @@ export default {
   display: block;
   position: fixed;
   z-index: 50;
-  bottom: 10px;
-  left: 20px;
+  bottom: 60px;
+  left: 60px;
   padding-top: 20px;
+
+  @media all and (max-width: 500px){
+    & {
+      bottom: 10px;
+      left: 20px;
+    }
+  }
 
   &.minimum {
     padding: 0;
     border: none;
     box-shadow: none;
     background-color: transparent;
-    .actions, .items, .add-new-item {
+    .actions, .items, .add-new-item, .inbox-logo {
       display: none
     }
   }
@@ -155,8 +162,19 @@ export default {
     }
   }
 
+  .inbox-logo {
+      position: absolute;
+      top: 30%;      
+      height: 40%;
+      text-align: center;
+      bottom: 0;
+      font-size: 60px;
+      user-select: none;
+    }
+
   .items {
     position: relative;
+    min-height: 60px;
     left: 20px;
     .hand-item-wrapper {
       display: inline-block;

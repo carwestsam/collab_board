@@ -196,7 +196,7 @@ export default {
     margin: 0;
     right: 0;
     bottom: 0px;
-    z-index: 50;
+    z-index: 49;
     .option-btns {
       position: absolute;
       right: 0;

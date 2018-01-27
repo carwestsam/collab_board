@@ -7,10 +7,8 @@ export default function () {
     },
     limitRange: function (value, minimum, maximum) {
       if (value < minimum) {
-        console.log('below')
         return minimum
       } else if (value > maximum) {
-        console.log('exceed')
         return maximum
       } else {
         return value

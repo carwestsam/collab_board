@@ -35,7 +35,7 @@ class DropManager {
     delete this.dropFunctions[id]
   }
   drop (id, left, top, ev) {
-    console.log('drop', id, left, top, ev)
+    // console.log('drop', id, left, top, ev)
     // drop on hand
     let handId = 'hand-' + store.getters.userId
     let handRect = this.elements[handId].getBoundingClientRect()
@@ -83,7 +83,7 @@ class DropManager {
         target = id
       }
     }
-    console.log('finish drop:', items, shoots, target)
+    // console.log('finish drop:', items, shoots, target)
     if (target && target !== id) {
       this.dropFunctions[target](ev)
       return true
@@ -169,7 +169,7 @@ Vue.directive('dropable', {
 
     let itemId = _.get(vnode, 'context.dataProps.id', undefined)
 
-    console.log('bind', itemId)
+    // console.log('bind', itemId)
     if (itemId) {
       dropManager.registerDrop(itemId, vnode, el, dropHandler)
     }

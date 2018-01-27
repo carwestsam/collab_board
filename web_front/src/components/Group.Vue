@@ -189,29 +189,30 @@ export default {
       min-width: 300px;
       background-color: white;
       padding-left: 2em;
+      z-index: 51 !important;
     }
   }
 }
-.toolbar-wrapper {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-.sticker-options {
-  display: inline-block;
-  margin: 0;
-  right: 0;
-  bottom: 0px;
-  z-index: 50;
-}
-.option-btns {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
+// .toolbar-wrapper {
+//   position: absolute;
+//   top: 5px;
+//   right: 5px;
+//   width: 100%;
+//   margin: 0;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-end;
+// }
+// .sticker-options {
+//   display: inline-block;
+//   margin: 0;
+//   right: 0;
+//   bottom: 0px;
+//   z-index: 50;
+// }
+// .option-btns {
+//   position: absolute;
+//   right: 0;
+//   top: 0;
+// }
 </style>
