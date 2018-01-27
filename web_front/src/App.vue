@@ -1,25 +1,24 @@
 <template>
   <v-app light>
-  <div>
-  <mymenu/>
-  <div id="application" v-bind:style="{fontSize}" touch-action='none'>
-    <div class="view-scope">
-      <paper>
-        <template v-for="item in items" slot="board-items">
-          <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
-          <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
-        </template>
-      </paper>
+    <div>
+      <mymenu/>
+      <div id="application" v-bind:style="{fontSize}" touch-action='none'>
+        <div class="view-scope">
+          <paper>
+            <template v-for="item in items" slot="board-items">
+              <sticker v-if="item.type==='sticker'" :key="item.id" :sticker="item"></sticker>
+              <group v-if="item.type==='group'" :key="item.id" :group="item"></group>
+            </template>
+          </paper>
+        </div>
+      </div>
     </div>
-  </div>
-  </div>
   </v-app>
 </template>
 
 <script>
 import Paper from './components/Paper'
 import Sticker from './components/Sticker'
-import Hand from './components/Hand'
 import Group from './components/Group'
 import Mymenu from './components/mymenu'
 
@@ -55,7 +54,6 @@ export default {
   components: {
     Sticker,
     Group,
-    Hand,
     Mymenu,
     Paper
   }

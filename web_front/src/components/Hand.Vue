@@ -1,14 +1,26 @@
 <template>
-  <div class='hand' v-dropable="onDrop">
-
-    <div class='items'>
-      <div class="add-new-item">
-        <v-btn color="primary" dark @click="addItem('sticker')">+ Sticker</v-btn>
-        <v-btn color="primary" dark  @click="addItem('group')">+ Group</v-btn>
-      </div>
-      <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker" :styleRemoveSize="true" :scale="1.0"></sticker>
+  <v-card class='hand' v-dropable="onDrop">
+    <div class="actions">
+      <v-layout justify-space-around>
+        <v-icon medium class="actions-toggle">expand_more</v-icon>
+        <v-icon light medium color='gray' class="actions-handle">drag_handle</v-icon>
+        <v-icon medium class="actions-expand">code</v-icon>
+      </v-layout>
     </div>
-  </div>
+    <div class='items'>
+      <div class="hand-item-wrapper">
+        <template>
+          <div v-for="sticker in stickers" :key="sticker.id" class="hand-item">
+            <sticker :sticker="sticker" :styleRemoveSize="true" :scale="1.0"></sticker>
+          </div>
+        </template>
+      </div>
+    </div>
+    <div class="add-new-item">
+      <v-btn color="primary" dark @click="addItem('sticker')">+ Sticker</v-btn>
+      <v-btn color="primary" dark  @click="addItem('group')">+ Group</v-btn>
+    </div>
+  </v-card>
 </template>
 <script>
 
@@ -57,102 +69,64 @@ export default {
 
 <style lang='scss'>
 
-@keyframes expand { 
-  0% {
-    width:  150px;
-  }
-  70% {
-    width: 200px;
-  }
-  100% {
-    width: 800px;
-  }
-}
-
-@keyframes lastblink {
-  0% {
-    opacity: 0;
-  }
-  99% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-
 .hand {
-  @media screen and (max-width: 500px) {
-    display: none;
-  }
   display: block;
   position: fixed;
-  background-color: gray;
-  opacity: 0.3;
-
-  width: 150px;
-  height: 150px;
-
-  bottom: 20%;
-  left: 0; 
-  right: 0; 
-  margin-left: auto; 
-  margin-right: auto;
-  // align: center;
-  z-index:50;
+  z-index: 100;
+  bottom: 50px;
+  left: 40px;
   padding-top: 20px;
-  padding-left: 20px;
+
+  .actions {
+    position: relative;
+    display: block;
+    left: 0;
+    right: 0;
+    margin: auto;
+    top: -20px;
+    .actions-handle {
+      cursor: move;
+    }
+    .actions-toggle, .actions-expand {
+      cursor: pointer;
+    }
+  }
+
   .items {
-    display: none;
-  }
-
-  .add-new-item {
-    display: none;
-    background-color: none;
-    width: 120px;
-    height: 120px;
-    button {
-      font-size: 20px;
-      margin-top: 10%;
-      margin-left: 5%;
-      width: 90%;
-      float: left;
-    }
-  }
-
-  &:hover {
-    width: 800px;
-    height: 200px;
-    background-color: gray;
-    opacity: 1;
-    // animation-delay: 0.2s; 
-    animation: expand .3s;
-
-    & > .items {
-      // animation-delay: 1s;
+    position: relative;
+    left: 20px;
+    .hand-item-wrapper {
       display: inline-block;
-      animation: lastblink .3s;
-      // display: flex;
-      width: 750px;
-      height: 170px;
-      overflow: scroll;
-      white-space: nowrap;
-      .item {
-        white-space: normal;
+      position: relative;
+      clear: both;
+      &::after {
+          content: "";
+          clear: both;
+          display: table;
       }
-      .add-new-item {
-        display: inline-block;
-        position: relative;
+      .hand-item {
+        display: block;
+        position: absolute;
+        left: 0;
+
+        &:first-child {
+          margin: auto;
+          position: relative;
+          left: 0px;
+          float: left;
+        }
+        &:nth-last-child(1) {
+          left: 70px;
+        }
+        &:nth-last-child(2) {
+          left: 35px;
+        }
+        &:nth-last-child(3) {
+          left: 0;
+        }
       }
     }
-  }
-
-  // &:hover 
-
-  &.dragover {
-    // background-color: #333333;
-    opacity: 1;
   }
 }
+
 </style>
