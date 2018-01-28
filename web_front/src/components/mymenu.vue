@@ -23,13 +23,15 @@
               <v-list-tile-action> <v-icon>add_to_queue</v-icon> </v-list-tile-action>
               <v-list-tile-title>Select a Board</v-list-tile-title>
             </v-list-tile>
-            <v-subheader> Toggles </v-subheader>
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-switch color="purple" v-model="toggleFullScreen"></v-switch>
-              </v-list-tile-action>
-              <v-list-tile-title>Enable FullScreen</v-list-tile-title>
+            <v-list-tile @click="toggleFullScreen" tag="div">
+              <v-list-tile-action> <v-icon>fullscreen</v-icon> </v-list-tile-action>
+              <v-list-tile-title>Into FullScreen</v-list-tile-title>
             </v-list-tile>
+            <v-list-tile v-cs-click="reload" tag="div">
+              <v-list-tile-action> <v-icon>refresh</v-icon> </v-list-tile-action>
+              <v-list-tile-title>Reload Page</v-list-tile-title>
+            </v-list-tile>
+            <v-subheader> Toggles </v-subheader>
             <v-list-tile>
               <v-list-tile-action>
                 <v-switch color="purple" v-model="displayLike"></v-switch>
@@ -55,22 +57,24 @@ export default {
   data () {
     return {
       displayLike: this.$store.getters.displayLike,
-      toggleFullScreen: false
+      fullScreen: false
     }
   },
   watch: {
     displayLike: function (newValue) {
       this.$store.commit('setDisplayLike', newValue)
-    },
-    toggleFullScreen: function (newValue) {
-      if (newValue) {
-        screenfull.request()
-      } else {
-        screenfull.exit()
-      }
     }
   },
   methods: {
+    toggleFullScreen: function () {
+      if (!this.fullScreen) {
+        screenfull.request()
+        this.fullScreen = true
+      } else {
+        this.fullScreen = false
+        screenfull.exit()
+      }
+    },
     increaseScale: function () {
       this.$store.commit('setGlobalScale', (this.$store.getters.scale * 100) + 10)
     },
@@ -79,6 +83,9 @@ export default {
     },
     openCreateNew: function () {
       this.$store.commit('setDisplayNewBoard', true)
+    },
+    reload: function () {
+      location.reload(true)
     }
   },
   components: {
