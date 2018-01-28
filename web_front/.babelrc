@@ -15,7 +15,7 @@
       "plugins": ["istanbul"]
     },
     "production": {
-      "presets": ["minify"]
+      "presets": ["env"]
     }
   }
 }

@@ -1,7 +1,7 @@
 import * as d3_raw from 'd3-color'
 let d3 = d3_raw
 
-if ( d3_raw.default ) {
+if (d3_raw.default) {
   d3 = d3_raw.default
 }
 

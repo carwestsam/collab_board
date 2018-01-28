@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -f ./infrastructure/dev-web.Dockerfile -t dev-web .
+docker build --no-cache -f ./infrastructure/dev-web.Dockerfile -t dev-web .

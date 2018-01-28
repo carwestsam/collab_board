@@ -1,6 +1,6 @@
 {
   "name": "collaborate_board_server",
-  "version": "0.1.0",
+  "version": "0.7.0",
   "description": "server for collab board",
   "main": "app.js",
   "scripts": {

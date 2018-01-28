@@ -17,7 +17,7 @@ function findItemById (state, id) {
 }
 
 function updateStack (state, oldStack, newStack) {
-  if (!state || !state.items || !state.items.length ) {
+  if (!state || !state.items || !state.items.length) {
     log('invalid state', state)
   }
   for (let i = 0; i < state.items.length; i++) {
@@ -139,16 +139,16 @@ export let mutationDesciption = {
         capsule['item'] = _.cloneDeep(item)
         item.id = capsule['newId'] = newId
         if (like) {
-          item['likes'] = _.union(_.get(item, 'likes', []), [userId])     
+          item['likes'] = _.union(_.get(item, 'likes', []), [userId])
         } else {
           item['likes'] = _.without(_.get(item, 'likes', []), userId)
         }
         updateStack(state, capsule['id'], capsule['newId'])
       },
       backward: (capsule, state, {itemId, userId, like}) => {
-        let {item} = findItembyId(state, capsule['newId'])
+        let {item} = findItemById(state, capsule['newId'])
         if (item) {
-          _.remove(state.items, item => item.id === capsule['newId'])  
+          _.remove(state.items, item => item.id === capsule['newId'])
         }
         state.items.push(_.cloneDeep(capsule['item']))
       }

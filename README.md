@@ -28,6 +28,7 @@ cd collab_board
 
 ```bash
 ./auto/dev-nodejs-build   # create nodejs version 8 image for developer local development
+./auto/dev-web-build
 ./auto/dev-start
 # open you browser with url: http://localhost:8080
 ```

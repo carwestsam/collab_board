@@ -57,7 +57,7 @@ class DropManager {
         shoots.push({id})
       }
     })
-    let target = false
+    let target = ''
     let maxRootIndex = -1
     let maxLayer = -1
     let maxIndex = -1
@@ -84,7 +84,7 @@ class DropManager {
       }
     }
     // console.log('finish drop:', items, shoots, target)
-    if (target && target !== id) {
+    if (target.length !== 0 && target !== id) {
       this.dropFunctions[target](ev)
       return true
     } else {

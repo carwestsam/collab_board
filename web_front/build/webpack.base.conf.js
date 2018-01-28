@@ -32,7 +32,8 @@ module.exports = {
         test: /\.(m?js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
-        include: [resolve('src'), resolve('test')],
+        include: [resolve('src'), resolve('test'), resolve('../shared_components')],
+        exclude: [resolve('../shared_components/node_modules')],
         options: {
           formatter: require('eslint-friendly-formatter')
         }
@@ -45,7 +46,8 @@ module.exports = {
       {
         test: /\.m?js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        include: [resolve('src'), resolve('test'), resolve('../shared_components')],
+        exclude: [resolve('../shared_components/node_modules')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
