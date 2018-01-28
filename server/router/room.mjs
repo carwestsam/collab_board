@@ -2,6 +2,7 @@ import express from 'express'
 import db from '../models/index'
 import uuid from 'uuid/v4'
 import templates from '../templates/boards/index'
+import {BoardDict} from '../socketController.mjs'
 
 const router = express.Router()
 const Board = db['Board']
@@ -47,8 +48,8 @@ router.post('/create', async (req, res) => {
         break
       }
     } while (boards.length != 0 )
-    console.log('template object', JSON.stringify(templates))
-    console.log('template name', req.body.template)
+    // console.log('template object', JSON.stringify(templates))
+    // console.log('template name', req.body.template)
     let newBoard = {
       name: req.body.name,
       item_id,
@@ -66,18 +67,25 @@ router.post('/create', async (req, res) => {
 })
 
 router.get('/:room_id', (req, res) => {
-  let item_id = req.params.room_id
-  return Board.findOne({where:{item_id}})
-  .then(
-    result => {
-      if (result) {
-        res.status(200).set('Content-Type', 'application/json').send(`{"content":${result.content}, "name": "${result.name}"}`)
-      } else {
-        res.status(404).json({'error':'room not found'})
-      }
-    }, err => {
-      console.log('error in get rooms', err)
-      res.status(500).send('failed to find room')
-  })
+  let room_id = req.params.room_id
+  // console.log('query ', room_id, JSON.stringify(BoardDict))
+  if (BoardDict[room_id]) {
+    // console.log('hit memory')
+    res.status(200).send({content: BoardDict[room_id]})
+  } else {
+    return Board.findOne({where:{item_id: room_id}})
+    .then(
+      result => {
+        if (result) {
+          res.status(200).set('Content-Type', 'application/json').send(`{"content":${result.content}, "name": "${result.name}"}`)
+        } else {
+          res.status(404).json({'error':'room not found'})
+        }
+      }, err => {
+        console.log('error in get rooms', err)
+        res.status(500).send('failed to find room')
+    })
+  }
+  
 })
 

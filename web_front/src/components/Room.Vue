@@ -105,6 +105,7 @@ export default {
     let room = getRoom()
     if (room) {
       $http.get('http://' + process.env.BACKEND_DOMAIN + '/room/' + room.room_id).then(response => {
+        // console.log('refresh room content', response.body)
         this.$store.commit('initItems', response.body.content)
         if (response.body.name) {
           document.title = response.body.name

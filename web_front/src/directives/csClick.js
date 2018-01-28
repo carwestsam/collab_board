@@ -6,7 +6,9 @@ Vue.directive('cs-click', {
       console.error('should bind cs-click with handler function')
     }
     el.addEventListener('mousedown', function (ev) {
-      binding.value()
+      if (!window.MOBILE) {
+        binding.value()
+      }
       ev.preventDefault()
     })
     el.addEventListener('touchstart', function (ev) {

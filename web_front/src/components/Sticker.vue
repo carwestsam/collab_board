@@ -27,7 +27,7 @@
       <v-btn :color='dataProps.like ? "pink" : "grey"' flat icon @mousedown.prevent="toggleLike" @touchstart="toggleLike">
         <v-icon>thumb_up</v-icon>
       </v-btn>
-      <v-btn color="primary" flat icon @mousedown.prevent="intoEdit" @touchstart="intoEdit">
+      <v-btn color="primary" flat icon v-cs-click="intoEdit">
         <v-icon>edit</v-icon>
       </v-btn>
     </template>
@@ -35,7 +35,6 @@
   </item>
 </template>
 <script>
-import Vue from 'vue'
 import constants from '../../../shared_components/constants.mjs'
 import Item from './Item'
 
@@ -109,9 +108,9 @@ export default {
   methods: {
     intoEdit: function () {
       this.statusProps.editing = true
-      Vue.nextTick(() => {
+      setTimeout(() => {
         this.$refs.textInput.focus()
-      })
+      }, 50)
     },
     outsideEdit: function () {
       if (this.statusProps.editing === true) {

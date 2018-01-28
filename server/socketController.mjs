@@ -1,7 +1,7 @@
 import room from './router/room'
 import {mutationDesciption} from '../shared_components/mutationDescription'
 
-let BoardDict = {}
+export let BoardDict = {}
 let BoardSocketDict = {}
 let SocketBoardDict = {}
 
