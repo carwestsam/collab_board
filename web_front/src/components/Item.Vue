@@ -83,8 +83,8 @@ export default {
         position: this.styleProps.position || 'absolute',
         width: this.styleProps.width / constants.default_font_size + 'em',
         height: this.styleProps.height / constants.default_font_size + 'em',
-        left: this.styleProps.left * this.$store.getters.scale + 'px',
-        top: this.styleProps.top * this.$store.getters.scale + 'px'
+        left: this.styleProps.left / constants.default_font_size + 'em
+        top: this.styleProps.top / constants.default_font_size + 'em'
       }, this.itemStyleObject)
       if (this.options.enableOffset === false) {
         delete style.left
