@@ -182,6 +182,9 @@ export default {
       // overflow: scroll;
     }
     .input-title {
+      position: absolute;
+      left: 0;
+      top: 0;
       font-size: 32px;
       line-height: 2em;
       height: 2em;

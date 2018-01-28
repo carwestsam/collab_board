@@ -2,6 +2,16 @@
   <div>
   <!-- <v-app> -->
     <!-- <sticker v-for="sticker in stickers" :key="sticker.id" :sticker="sticker"></sticker> -->
+    <v-dialog v-model="qrcode" max-width="290">
+      <v-card>
+        <v-card-title class="headline">QR Code</v-card-title>
+        <v-card-text><img width="100%" v-bind:src="qrUrl" /></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary darken-1" flat="flat" @click.native="qrcode = false">Ok</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-toolbar
       floating
       fixed
@@ -10,8 +20,9 @@
       >
       <!-- <v-text-field prepend-icon="search" hide-details single-line></v-text-field> -->
       <v-btn icon @click="decreaseScale"><v-icon>zoom_out</v-icon></v-btn>
-      {{Math.floor(this.$store.getters.scale * 100)}}
+      <!-- {{Math.floor(this.$store.getters.scale * 100)}} -->
       <v-btn icon @click="increaseScale"><v-icon>zoom_in</v-icon></v-btn>
+      <v-btn icon @click.native="qrcode = true"><v-icon>screen_share</v-icon></v-btn>
       <v-menu :close-on-content-click="true" :close-on-click="true" top>
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
@@ -52,10 +63,13 @@
 import Hand from './Hand'
 import Room from './Room'
 import screenfull from 'screenfull'
+import * as $http from 'superagent'
 
 export default {
   data () {
     return {
+      qrcode: false,
+      qrUrl: '',
       displayLike: this.$store.getters.displayLike,
       fullScreen: false
     }
@@ -87,6 +101,13 @@ export default {
     reload: function () {
       location.reload(true)
     }
+  },
+  mounted () {
+    $http.get('http://' + process.env.BACKEND_DOMAIN + '/qr')
+        .query({url: location.href})
+        .then(response => {
+          this.qrUrl = response.text
+        })
   },
   components: {
     Room,

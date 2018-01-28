@@ -10,6 +10,7 @@ const httpServer = http.Server(app)
 import randomboard from './templates/boards/randomboard'
 import Socket from 'socket.io'
 import room from './router/room'
+import qr from './router/qrcode'
 
 const io = Socket(httpServer, {origins: "board.zhuoyou.cafe:* http://localhost:*"})
 let BoardDict = {}
@@ -27,6 +28,7 @@ app.get('/room/:room_id', (req, res, next) => {
   }
 })
 app.use('/room', room.router)
+app.use('/qr/', qr.router)
 
 socketController(io)
 
